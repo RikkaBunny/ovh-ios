@@ -1,4 +1,4 @@
-# OVH · SwiftUI / Flutter 客户端
+# OVH / ovh cp · SwiftUI / Flutter 客户端
 
 新增独立 [Flutter 客户端](flutter/README.md)：iOS、iPad 和 Android 共用 Flutter/Dart 界面，同步接入原有后端与 226 项业务操作描述。底部服务器直接进入实例，首页资源位于活跃队列下方。使用独立应用 ID，可和现有 SwiftUI 版并存；Flutter 版本尚未提交应用商店。
 

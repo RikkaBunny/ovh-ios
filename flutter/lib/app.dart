@@ -38,7 +38,7 @@ class _OVHAppState extends State<OVHApp> {
   Widget build(BuildContext context) => ValueListenableBuilder<String>(
     valueListenable: widget.store.appearance,
     builder: (context, appearance, _) => MaterialApp(
-      title: 'OVH',
+      title: 'ovh cp',
       debugShowCheckedModeBanner: false,
       theme: panelTheme(Brightness.light),
       darkTheme: panelTheme(Brightness.dark),

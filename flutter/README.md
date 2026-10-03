@@ -1,8 +1,8 @@
-# OVH · Flutter 客户端
+# ovh cp · Flutter 客户端
 
-独立的 Flutter/Dart 版本，支持 iPhone、iPad 和 Android，版本 `1.2.0+1`。连接与 React 网页、SwiftUI 客户端相同的 gokele/ovh 后端，沿用黑白主色、灰色分隔、圆角卡片、胶囊按钮和状态色。业务页面全部由 Flutter 绘制；WebView 仅用于 OVH 返回的 HTTPS 远程屏幕。
+独立的 Flutter/Dart 版本，支持 iPhone、iPad 和 Android，版本 `1.3.0+11`。连接与 React 网页、SwiftUI 客户端相同的 gokele/ovh 后端，沿用黑白主色、灰色分隔、圆角卡片、胶囊按钮和状态色。业务页面全部由 Flutter 绘制；WebView 仅用于 OVH 返回的 HTTPS 远程屏幕。
 
-Flutter 与现有 SwiftUI 应用使用独立 ID：iOS Bundle ID 为 `com.hejingcheng.ovhflutter`，Android Application ID 为 `com.hejingcheng.ovh_flutter`，可和原版同时安装。名称和图标仍为 OVH，图标来源见 [BrandAssets](../BrandAssets/README.md)。
+发布版名为 `ovh cp`。iOS 沿用原版 Bundle ID `com.hejingcheng.ovhpocket`，作为现有应用更新；Android Application ID 为 `com.hejingcheng.ovh_flutter`。新版图标基于 OVH 官方标识生成，见 [图标与提示词](../BrandAssets/ovh-cp/README.md)。iOS 升级会迁移原 SwiftUI 连接、账户选择与外观。正式构建与签名说明见 [publishing](publishing/README.md)。
 
 ## 界面预览
 
@@ -57,9 +57,9 @@ flutter build ios --release --no-codesign
 flutter build apk --debug
 ```
 
-只构建 arm64 测试包：`flutter build apk --debug --target-platform=android-arm64 --split-per-abi`。ABI 拆分构建会按 Flutter 规则调整 Android versionCode，源码版本仍为 `1.2.0+1`。
+只构建 arm64 测试包：`flutter build apk --debug --target-platform=android-arm64 --split-per-abi`。ABI 拆分构建会按 Flutter 规则调整 Android versionCode，源码版本仍为 `1.3.0+11`。
 
-真机与商店发布需要选择自己的 Team、Bundle ID 和签名；在 `ios/Runner.xcworkspace` 打开 iOS 工程。Android 当前 release 模板使用开发签名，仅用于本机构建；公开发布前配置自己的上传密钥。仓库不包含签名证书、生产密钥或真实令牌。本次 Flutter 版本未提交应用商店。
+正式签名与发布入口见 [发布说明](publishing/README.md)。Android Release 必须提供私有上传密钥，缺少配置时拒绝构建；正式包不使用调试签名。仓库不包含私钥、生产密钥或真实令牌。iOS 1.3.0（11）已上传 App Store Connect；商店名称更新、提交审核和公开发行仍待后台完成。Android AAB/APK 已生成并签名，Google Play 后台当前未开通，因此尚未上架。状态与验证证据见 [验证记录](验证记录.md)。
 
 ## 测试
 

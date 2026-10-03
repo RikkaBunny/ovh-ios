@@ -1,4 +1,5 @@
 import 'dart:convert';
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -10,6 +11,7 @@ import 'package:ovh_flutter/core/store.dart';
 
 void main() {
   final binding = IntegrationTestWidgetsFlutterBinding.ensureInitialized();
+  var androidSurfaceConverted = false;
   late PanelStore store;
   final control = PanelApi();
   final fixture = Connection.validated(
@@ -45,6 +47,11 @@ void main() {
   }
 
   Future<void> screenshot(WidgetTester tester, String name) async {
+    if (Platform.isAndroid && !androidSurfaceConverted) {
+      await binding.convertFlutterSurfaceToImage();
+      androidSurfaceConverted = true;
+      await tester.pumpAndSettle();
+    }
     await tester.pumpAndSettle();
     await binding.takeScreenshot(name);
   }

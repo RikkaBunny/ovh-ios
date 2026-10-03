@@ -1,5 +1,6 @@
 import Flutter
 import UIKit
+import Security
 
 @main
 @objc class AppDelegate: FlutterAppDelegate, FlutterImplicitEngineDelegate {
@@ -12,5 +13,50 @@ import UIKit
 
   func didInitializeImplicitFlutterEngine(_ engineBridge: FlutterImplicitEngineBridge) {
     GeneratedPluginRegistrant.register(with: engineBridge.pluginRegistry)
+    FlutterMethodChannel(
+      name: "ovh_cp/legacy_connection",
+      binaryMessenger: engineBridge.applicationRegistrar.messenger()
+    ).setMethodCallHandler { call, result in
+      let query: [String: Any] = [
+        kSecClass as String: kSecClassGenericPassword,
+        kSecAttrService as String: "com.hejingcheng.ovhpocket.connection",
+        kSecAttrAccount as String: "panel"
+      ]
+      switch call.method {
+      case "read":
+        var readQuery = query
+        readQuery[kSecReturnData as String] = true
+        readQuery[kSecMatchLimit as String] = kSecMatchLimitOne
+        var item: CFTypeRef?
+        let status = SecItemCopyMatching(readQuery as CFDictionary, &item)
+        if status == errSecItemNotFound { result(nil); return }
+        guard status == errSecSuccess else {
+          result(FlutterError(code: "legacy_keychain", message: "无法读取原版连接信息", details: nil))
+          return
+        }
+        guard let data = item as? Data,
+              let connection = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else {
+          result(FlutterError(code: "legacy_format", message: "原版连接信息格式无效", details: nil))
+          return
+        }
+        result([
+          "address": connection["address"] ?? "",
+          "secret": connection["key"] ?? "",
+          "deviceToken": connection["authentication"] as? String == "deviceToken",
+          "deviceId": connection["deviceID"] ?? NSNull(),
+          "account": UserDefaults.standard.string(forKey: "selectedAccountID") ?? "",
+          "appearance": UserDefaults.standard.string(forKey: "nativeAppearance") ?? "system"
+        ])
+      case "clear":
+        let status = SecItemDelete(query as CFDictionary)
+        if status == errSecSuccess || status == errSecItemNotFound {
+          UserDefaults.standard.removeObject(forKey: "selectedAccountID")
+          result(nil)
+        } else {
+          result(FlutterError(code: "legacy_keychain", message: "无法清除原版连接信息", details: nil))
+        }
+      default: result(FlutterMethodNotImplemented)
+      }
+    }
   }
 }

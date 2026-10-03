@@ -991,7 +991,7 @@ class ConnectionPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const Text(
-                  'OVH · Flutter 1.2.0（1）',
+                  'ovh cp · 1.3.0（11）',
                   style: TextStyle(fontWeight: FontWeight.w600),
                 ),
                 const SizedBox(height: 12),
@@ -1016,8 +1016,8 @@ class ConnectionPage extends StatelessWidget {
                 TextButton(
                   onPressed: () => showLicensePage(
                     context: context,
-                    applicationName: 'OVH',
-                    applicationVersion: 'Flutter 1.2.0',
+                    applicationName: 'ovh cp',
+                    applicationVersion: '1.3.0（11）',
                   ),
                   child: const Text('开源许可'),
                 ),

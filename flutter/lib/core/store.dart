@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'api.dart';
@@ -12,6 +13,7 @@ abstract class Credentials {
 }
 
 class SecureCredentials implements Credentials {
+  static const legacy = MethodChannel('ovh_cp/legacy_connection');
   final storage = const FlutterSecureStorage(
     iOptions: IOSOptions(
       accessibility: KeychainAccessibility.first_unlock_this_device,
@@ -21,16 +23,37 @@ class SecureCredentials implements Credentials {
   @override
   Future<Connection?> read() async {
     final value = await storage.read(key: key);
-    return value == null
-        ? null
-        : Connection.fromJson(object(jsonDecode(value)));
+    if (value != null) return Connection.fromJson(object(jsonDecode(value)));
+    if (defaultTargetPlatform != TargetPlatform.iOS) return null;
+    final previous = await legacy.invokeMapMethod<String, dynamic>('read');
+    if (previous == null) return null;
+    final connection = Connection.fromJson(previous);
+    // Preserve the old credential until the new Keychain write succeeds.
+    await storage.write(key: key, value: jsonEncode(connection.toJson()));
+    final preferences = await SharedPreferences.getInstance();
+    if (!preferences.containsKey('ovh.account')) {
+      await preferences.setString('ovh.account', text(previous['account']));
+    }
+    if (!preferences.containsKey('ovh.appearance')) {
+      await preferences.setString(
+        'ovh.appearance',
+        text(previous['appearance'], 'system'),
+      );
+    }
+    await legacy.invokeMethod<void>('clear');
+    return connection;
   }
 
   @override
   Future<void> save(Connection connection) =>
       storage.write(key: key, value: jsonEncode(connection.toJson()));
   @override
-  Future<void> delete() => storage.delete(key: key);
+  Future<void> delete() async {
+    if (defaultTargetPlatform == TargetPlatform.iOS) {
+      await legacy.invokeMethod<void>('clear');
+    }
+    await storage.delete(key: key);
+  }
 }
 
 class ResourceState {
@@ -87,8 +110,8 @@ class PanelStore extends ChangeNotifier {
   Future<void> restore() async {
     try {
       final preferences = await SharedPreferences.getInstance();
-      appearance.value = preferences.getString('ovh.appearance') ?? 'system';
       connection = await credentials.read();
+      appearance.value = preferences.getString('ovh.appearance') ?? 'system';
       selectedAccount = preferences.getString('ovh.account') ?? '';
       notifyListeners();
       if (connection != null) await refreshOverview();
@@ -111,7 +134,7 @@ class PanelStore extends ChangeNotifier {
     String address,
     String secret, {
     bool pair = false,
-    String deviceName = '手机 · OVH Flutter',
+    String deviceName = '手机 · ovh cp',
   }) async {
     if (connecting) return;
     connecting = true;
