@@ -1,0 +1,5086 @@
+{
+  "commit": "1011569d1d8935eeb028dcf2b48f9ff193b959e3",
+  "operations": [
+    {
+      "id": "GET /health",
+      "title": "连接状态",
+      "group": "后端系统",
+      "scope": "panel",
+      "method": "GET",
+      "path": "/health",
+      "fields": [],
+      "danger": false,
+      "source": "health.go",
+      "handler": "Health"
+    },
+    {
+      "id": "GET /settings",
+      "title": "API 设置",
+      "group": "API 设置",
+      "scope": "panel",
+      "method": "GET",
+      "path": "/settings",
+      "fields": [],
+      "danger": false,
+      "source": "settings.go",
+      "handler": "GetSettings"
+    },
+    {
+      "id": "POST /settings",
+      "title": "API 设置",
+      "group": "API 设置",
+      "scope": "panel",
+      "method": "POST",
+      "path": "/settings",
+      "fields": [
+        {
+          "key": "appKey",
+          "label": "Application Key",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "appSecret",
+          "label": "Application Secret",
+          "kind": "secret",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "consumerKey",
+          "label": "Consumer Key",
+          "kind": "secret",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "endpoint",
+          "label": "API 区域",
+          "kind": "text",
+          "location": "body",
+          "required": false,
+          "choices": [
+            "ovh-eu",
+            "ovh-ca",
+            "ovh-us"
+          ]
+        },
+        {
+          "key": "zone",
+          "label": "账户站点",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "iam",
+          "label": "IAM",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "tgToken",
+          "label": "Telegram Bot Token",
+          "kind": "secret",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "tgChatId",
+          "label": "Telegram Chat ID",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "notifyWebhookUrl",
+          "label": "Webhook 地址",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "defaultRetryInterval",
+          "label": "默认重试间隔（秒）",
+          "kind": "number",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "quickOrderRetryInterval",
+          "label": "快速抢购间隔（秒）",
+          "kind": "number",
+          "location": "body",
+          "required": false
+        }
+      ],
+      "danger": false,
+      "source": "settings.go",
+      "handler": "SaveSettings"
+    },
+    {
+      "id": "POST /verify-auth",
+      "title": "验证 API 凭据",
+      "group": "API 设置",
+      "scope": "panel",
+      "method": "POST",
+      "path": "/verify-auth",
+      "fields": [],
+      "danger": false,
+      "source": "settings.go",
+      "handler": "VerifyAuth"
+    },
+    {
+      "id": "GET /endpoint-config",
+      "title": "区域配置",
+      "group": "API 设置",
+      "scope": "panel",
+      "method": "GET",
+      "path": "/endpoint-config",
+      "fields": [],
+      "danger": false,
+      "source": "settings.go",
+      "handler": "EndpointConfig"
+    },
+    {
+      "id": "GET /logs",
+      "title": "详细日志",
+      "group": "日志",
+      "scope": "panel",
+      "method": "GET",
+      "path": "/logs",
+      "fields": [],
+      "danger": false,
+      "source": "logs.go",
+      "handler": "GetLogs"
+    },
+    {
+      "id": "POST /logs/flush",
+      "title": "同步日志",
+      "group": "日志",
+      "scope": "panel",
+      "method": "POST",
+      "path": "/logs/flush",
+      "fields": [],
+      "danger": false,
+      "source": "logs.go",
+      "handler": "FlushLogs"
+    },
+    {
+      "id": "DELETE /logs",
+      "title": "删除详细日志",
+      "group": "日志",
+      "scope": "panel",
+      "method": "DELETE",
+      "path": "/logs",
+      "fields": [],
+      "danger": true,
+      "source": "logs.go",
+      "handler": "ClearLogs"
+    },
+    {
+      "id": "GET /stats",
+      "title": "系统状态",
+      "group": "API 设置",
+      "scope": "panel",
+      "method": "GET",
+      "path": "/stats",
+      "fields": [],
+      "danger": false,
+      "source": "stats.go",
+      "handler": "GetStats"
+    },
+    {
+      "id": "GET /queue",
+      "title": "抢购队列",
+      "group": "抢购",
+      "scope": "panel",
+      "method": "GET",
+      "path": "/queue",
+      "fields": [],
+      "danger": false,
+      "source": "queue_stub.go",
+      "handler": "GetQueue"
+    },
+    {
+      "id": "GET /queue/timings",
+      "title": "抢购耗时",
+      "group": "抢购",
+      "scope": "panel",
+      "method": "GET",
+      "path": "/queue/timings",
+      "fields": [],
+      "danger": false,
+      "source": "timings.go",
+      "handler": "GetPurchaseTimings"
+    },
+    {
+      "id": "POST /queue",
+      "title": "抢购队列",
+      "group": "抢购",
+      "scope": "panel",
+      "method": "POST",
+      "path": "/queue",
+      "fields": [
+        {
+          "key": "account_id",
+          "label": "下单账户",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "planCode",
+          "label": "机型编码",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "datacenter",
+          "label": "数据中心",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "options",
+          "label": "配置选项",
+          "kind": "list",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "retryInterval",
+          "label": "重试间隔（秒）",
+          "kind": "number",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "autoPay",
+          "label": "自动付款",
+          "kind": "toggle",
+          "location": "body",
+          "required": false
+        }
+      ],
+      "danger": false,
+      "source": "queue.go",
+      "handler": "AddQueueItem"
+    },
+    {
+      "id": "DELETE /queue/clear",
+      "title": "删除清空抢购队列",
+      "group": "抢购",
+      "scope": "panel",
+      "method": "DELETE",
+      "path": "/queue/clear",
+      "fields": [],
+      "danger": true,
+      "source": "queue.go",
+      "handler": "ClearQueue"
+    },
+    {
+      "id": "DELETE /queue/:id",
+      "title": "删除抢购任务",
+      "group": "抢购",
+      "scope": "panel",
+      "method": "DELETE",
+      "path": "/queue/:id",
+      "fields": [
+        {
+          "key": "id",
+          "label": "编号",
+          "kind": "text",
+          "location": "path",
+          "required": true
+        }
+      ],
+      "danger": true,
+      "source": "queue.go",
+      "handler": "RemoveQueueItem"
+    },
+    {
+      "id": "PUT /queue/:id/status",
+      "title": "修改任务状态",
+      "group": "抢购",
+      "scope": "panel",
+      "method": "PUT",
+      "path": "/queue/:id/status",
+      "fields": [
+        {
+          "key": "status",
+          "label": "状态",
+          "kind": "text",
+          "location": "body",
+          "required": false,
+          "choices": [
+            "running",
+            "paused"
+          ]
+        },
+        {
+          "key": "id",
+          "label": "编号",
+          "kind": "text",
+          "location": "path",
+          "required": true
+        }
+      ],
+      "danger": false,
+      "source": "queue.go",
+      "handler": "UpdateQueueStatus"
+    },
+    {
+      "id": "PUT /queue/:id/interval",
+      "title": "修改任务重试间隔",
+      "group": "抢购",
+      "scope": "panel",
+      "method": "PUT",
+      "path": "/queue/:id/interval",
+      "fields": [
+        {
+          "key": "retryInterval",
+          "label": "重试间隔（秒）",
+          "kind": "number",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "id",
+          "label": "编号",
+          "kind": "text",
+          "location": "path",
+          "required": true
+        }
+      ],
+      "danger": false,
+      "source": "queue.go",
+      "handler": "UpdateQueueInterval"
+    },
+    {
+      "id": "GET /purchase-history",
+      "title": "抢购历史",
+      "group": "抢购",
+      "scope": "panel",
+      "method": "GET",
+      "path": "/purchase-history",
+      "fields": [],
+      "danger": false,
+      "source": "queue_stub.go",
+      "handler": "GetPurchaseHistory"
+    },
+    {
+      "id": "DELETE /purchase-history",
+      "title": "删除抢购历史",
+      "group": "抢购",
+      "scope": "panel",
+      "method": "DELETE",
+      "path": "/purchase-history",
+      "fields": [],
+      "danger": true,
+      "source": "queue.go",
+      "handler": "ClearPurchaseHistory"
+    },
+    {
+      "id": "POST /purchase-history/refresh-status",
+      "title": "刷新订单付款状态",
+      "group": "抢购",
+      "scope": "panel",
+      "method": "POST",
+      "path": "/purchase-history/refresh-status",
+      "fields": [],
+      "danger": false,
+      "source": "queue.go",
+      "handler": "RefreshOrderStatuses"
+    },
+    {
+      "id": "GET /monitor/subscriptions",
+      "title": "服务器监控订阅",
+      "group": "监控",
+      "scope": "panel",
+      "method": "GET",
+      "path": "/monitor/subscriptions",
+      "fields": [],
+      "danger": false,
+      "source": "monitor.go",
+      "handler": "GetSubscriptions"
+    },
+    {
+      "id": "POST /monitor/subscriptions",
+      "title": "创建服务器监控订阅",
+      "group": "监控",
+      "scope": "panel",
+      "method": "POST",
+      "path": "/monitor/subscriptions",
+      "fields": [
+        {
+          "key": "planCode",
+          "label": "机型编码",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "datacenters",
+          "label": "数据中心",
+          "kind": "list",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "notifyAvailable",
+          "label": "补货时通知",
+          "kind": "toggle",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "notifyUnavailable",
+          "label": "缺货时通知",
+          "kind": "toggle",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "autoOrder",
+          "label": "自动抢购",
+          "kind": "toggle",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "quantity",
+          "label": "每个机房数量",
+          "kind": "number",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "autoOrderAccountId",
+          "label": "自动抢购账户",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "autoPay",
+          "label": "自动付款",
+          "kind": "toggle",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "options",
+          "label": "配置选项",
+          "kind": "list",
+          "location": "body",
+          "required": false
+        }
+      ],
+      "danger": false,
+      "source": "monitor.go",
+      "handler": "AddSubscription"
+    },
+    {
+      "id": "PUT /monitor/subscriptions/:planCode",
+      "title": "修改服务器监控订阅",
+      "group": "监控",
+      "scope": "panel",
+      "method": "PUT",
+      "path": "/monitor/subscriptions/:planCode",
+      "fields": [
+        {
+          "key": "datacenters",
+          "label": "数据中心",
+          "kind": "list",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "notifyAvailable",
+          "label": "补货时通知",
+          "kind": "toggle",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "notifyUnavailable",
+          "label": "缺货时通知",
+          "kind": "toggle",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "autoOrder",
+          "label": "自动抢购",
+          "kind": "toggle",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "quantity",
+          "label": "每个机房数量",
+          "kind": "number",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "autoOrderAccountId",
+          "label": "自动抢购账户",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "autoPay",
+          "label": "自动付款",
+          "kind": "toggle",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "options",
+          "label": "配置选项",
+          "kind": "list",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "planCode",
+          "label": "机型编码",
+          "kind": "text",
+          "location": "path",
+          "required": true
+        }
+      ],
+      "danger": false,
+      "source": "subscription_edit.go",
+      "handler": "UpdateSubscription"
+    },
+    {
+      "id": "POST /monitor/subscriptions/batch-add-all",
+      "title": "监控全部机型",
+      "group": "监控",
+      "scope": "panel",
+      "method": "POST",
+      "path": "/monitor/subscriptions/batch-add-all",
+      "fields": [
+        {
+          "key": "notifyAvailable",
+          "label": "补货时通知",
+          "kind": "toggle",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "notifyUnavailable",
+          "label": "缺货时通知",
+          "kind": "toggle",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "autoOrder",
+          "label": "自动抢购",
+          "kind": "toggle",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "autoOrderAccountId",
+          "label": "自动抢购账户",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        }
+      ],
+      "danger": false,
+      "source": "monitor.go",
+      "handler": "BatchAddAll"
+    },
+    {
+      "id": "DELETE /monitor/subscriptions/clear",
+      "title": "删除清空服务器订阅",
+      "group": "监控",
+      "scope": "panel",
+      "method": "DELETE",
+      "path": "/monitor/subscriptions/clear",
+      "fields": [],
+      "danger": true,
+      "source": "monitor.go",
+      "handler": "ClearSubscriptions"
+    },
+    {
+      "id": "DELETE /monitor/subscriptions/:planCode",
+      "title": "删除服务器监控订阅",
+      "group": "监控",
+      "scope": "panel",
+      "method": "DELETE",
+      "path": "/monitor/subscriptions/:planCode",
+      "fields": [
+        {
+          "key": "planCode",
+          "label": "机型编码",
+          "kind": "text",
+          "location": "path",
+          "required": true
+        }
+      ],
+      "danger": true,
+      "source": "monitor.go",
+      "handler": "RemoveSubscription"
+    },
+    {
+      "id": "GET /monitor/subscriptions/:planCode/history",
+      "title": "服务器库存变化历史",
+      "group": "监控",
+      "scope": "panel",
+      "method": "GET",
+      "path": "/monitor/subscriptions/:planCode/history",
+      "fields": [
+        {
+          "key": "planCode",
+          "label": "机型编码",
+          "kind": "text",
+          "location": "path",
+          "required": true
+        }
+      ],
+      "danger": false,
+      "source": "monitor.go",
+      "handler": "GetSubscriptionHistory"
+    },
+    {
+      "id": "POST /monitor/start",
+      "title": "启动服务器监控",
+      "group": "监控",
+      "scope": "panel",
+      "method": "POST",
+      "path": "/monitor/start",
+      "fields": [],
+      "danger": false,
+      "source": "monitor.go",
+      "handler": "StartMonitor"
+    },
+    {
+      "id": "POST /monitor/stop",
+      "title": "停止服务器监控",
+      "group": "监控",
+      "scope": "panel",
+      "method": "POST",
+      "path": "/monitor/stop",
+      "fields": [],
+      "danger": false,
+      "source": "monitor.go",
+      "handler": "StopMonitor"
+    },
+    {
+      "id": "GET /monitor/status",
+      "title": "服务器监控状态",
+      "group": "监控",
+      "scope": "panel",
+      "method": "GET",
+      "path": "/monitor/status",
+      "fields": [],
+      "danger": false,
+      "source": "monitor.go",
+      "handler": "GetMonitorStatus"
+    },
+    {
+      "id": "PUT /monitor/interval",
+      "title": "修改服务器检查间隔",
+      "group": "监控",
+      "scope": "panel",
+      "method": "PUT",
+      "path": "/monitor/interval",
+      "fields": [
+        {
+          "key": "interval",
+          "label": "检查间隔（秒）",
+          "kind": "number",
+          "location": "body",
+          "required": true
+        }
+      ],
+      "danger": false,
+      "source": "monitor.go",
+      "handler": "SetMonitorInterval"
+    },
+    {
+      "id": "POST /monitor/test-notification",
+      "title": "测试通知",
+      "group": "通知通道",
+      "scope": "panel",
+      "method": "POST",
+      "path": "/monitor/test-notification",
+      "fields": [],
+      "danger": false,
+      "source": "monitor.go",
+      "handler": "TestNotification"
+    },
+    {
+      "id": "GET /notify/channels",
+      "title": "通知通道",
+      "group": "通知通道",
+      "scope": "panel",
+      "method": "GET",
+      "path": "/notify/channels",
+      "fields": [
+        {
+          "key": "verify",
+          "label": "验证凭据",
+          "kind": "text",
+          "location": "query",
+          "required": false
+        }
+      ],
+      "danger": false,
+      "source": "monitor.go",
+      "handler": "GetNotifyChannels"
+    },
+    {
+      "id": "GET /telegram/verify",
+      "title": "验证 Telegram",
+      "group": "通知通道",
+      "scope": "panel",
+      "method": "GET",
+      "path": "/telegram/verify",
+      "fields": [],
+      "danger": false,
+      "source": "monitor.go",
+      "handler": "VerifyTelegram"
+    },
+    {
+      "id": "GET /telegram/poller",
+      "title": "Telegram 状态",
+      "group": "通知通道",
+      "scope": "panel",
+      "method": "GET",
+      "path": "/telegram/poller",
+      "fields": [],
+      "danger": false,
+      "source": "telegram_poll.go",
+      "handler": "GetTelegramPollerStatus"
+    },
+    {
+      "id": "POST /accounts/:id/proxy-test",
+      "title": "测试代理连通",
+      "group": "OVH 账户",
+      "scope": "panel",
+      "method": "POST",
+      "path": "/accounts/:id/proxy-test",
+      "fields": [
+        {
+          "key": "id",
+          "label": "编号",
+          "kind": "text",
+          "location": "path",
+          "required": true
+        }
+      ],
+      "danger": false,
+      "source": "proxy.go",
+      "handler": "TestAccountProxy"
+    },
+    {
+      "id": "POST /accounts/:id/proxy-check",
+      "title": "检测代理出口",
+      "group": "OVH 账户",
+      "scope": "panel",
+      "method": "POST",
+      "path": "/accounts/:id/proxy-check",
+      "fields": [
+        {
+          "key": "id",
+          "label": "编号",
+          "kind": "text",
+          "location": "path",
+          "required": true
+        }
+      ],
+      "danger": false,
+      "source": "proxy.go",
+      "handler": "CheckAccountProxy"
+    },
+    {
+      "id": "GET /accounts/proxy-status",
+      "title": "代理状态",
+      "group": "OVH 账户",
+      "scope": "panel",
+      "method": "GET",
+      "path": "/accounts/proxy-status",
+      "fields": [],
+      "danger": false,
+      "source": "proxy.go",
+      "handler": "ProxyStatus"
+    },
+    {
+      "id": "GET /servers",
+      "title": "服务器列表",
+      "group": "抢购",
+      "scope": "panel",
+      "method": "GET",
+      "path": "/servers",
+      "fields": [
+        {
+          "key": "showApiServers",
+          "label": "包含 API 机型",
+          "kind": "text",
+          "location": "query",
+          "required": false
+        },
+        {
+          "key": "forceRefresh",
+          "label": "强制刷新",
+          "kind": "text",
+          "location": "query",
+          "required": false
+        }
+      ],
+      "danger": false,
+      "source": "servers.go",
+      "handler": "GetServers"
+    },
+    {
+      "id": "POST /servers/:planCode/price",
+      "title": "配置价格",
+      "group": "抢购",
+      "scope": "panel",
+      "method": "POST",
+      "path": "/servers/:planCode/price",
+      "fields": [
+        {
+          "key": "account_id",
+          "label": "下单账户",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "datacenter",
+          "label": "数据中心",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "options",
+          "label": "配置选项",
+          "kind": "list",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "planCode",
+          "label": "机型编码",
+          "kind": "text",
+          "location": "path",
+          "required": true
+        }
+      ],
+      "danger": false,
+      "source": "servers.go",
+      "handler": "ServerPrice"
+    },
+    {
+      "id": "GET /cache/info",
+      "title": "缓存状态",
+      "group": "缓存管理",
+      "scope": "panel",
+      "method": "GET",
+      "path": "/cache/info",
+      "fields": [],
+      "danger": false,
+      "source": "servers.go",
+      "handler": "CacheInfo"
+    },
+    {
+      "id": "POST /cache/clear",
+      "title": "清理缓存",
+      "group": "缓存管理",
+      "scope": "panel",
+      "method": "POST",
+      "path": "/cache/clear",
+      "fields": [
+        {
+          "key": "type",
+          "label": "类型",
+          "kind": "text",
+          "location": "body",
+          "required": false,
+          "choices": [
+            "memory",
+            "sqlite",
+            "all"
+          ]
+        }
+      ],
+      "danger": false,
+      "source": "servers.go",
+      "handler": "ClearCache"
+    },
+    {
+      "id": "GET /catalog",
+      "title": "产品目录",
+      "group": "缓存管理",
+      "scope": "panel",
+      "method": "GET",
+      "path": "/catalog",
+      "fields": [
+        {
+          "key": "subsidiary",
+          "label": "账户站点",
+          "kind": "text",
+          "location": "query",
+          "required": false
+        },
+        {
+          "key": "forceRefresh",
+          "label": "强制刷新",
+          "kind": "text",
+          "location": "query",
+          "required": false
+        }
+      ],
+      "danger": false,
+      "source": "catalog.go",
+      "handler": "GetCatalog"
+    },
+    {
+      "id": "GET /system/metrics",
+      "title": "系统资源",
+      "group": "后端系统",
+      "scope": "panel",
+      "method": "GET",
+      "path": "/system/metrics",
+      "fields": [],
+      "danger": false,
+      "source": "system_metrics.go",
+      "handler": "GetSystemMetrics"
+    },
+    {
+      "id": "GET /version",
+      "title": "后端版本",
+      "group": "后端系统",
+      "scope": "panel",
+      "method": "GET",
+      "path": "/version",
+      "fields": [],
+      "danger": false,
+      "source": "version.go",
+      "handler": "GetVersion"
+    },
+    {
+      "id": "POST /app/pairing-codes",
+      "title": "生成配对码",
+      "group": "App 配对",
+      "scope": "panel",
+      "method": "POST",
+      "path": "/app/pairing-codes",
+      "fields": [],
+      "danger": false,
+      "source": "appair.go",
+      "handler": "CreatePairingCode"
+    },
+    {
+      "id": "GET /app/devices",
+      "title": "配对设备",
+      "group": "App 配对",
+      "scope": "panel",
+      "method": "GET",
+      "path": "/app/devices",
+      "fields": [],
+      "danger": false,
+      "source": "appair.go",
+      "handler": "ListAppDevices"
+    },
+    {
+      "id": "DELETE /app/devices/:id",
+      "title": "删除配对设备",
+      "group": "App 配对",
+      "scope": "panel",
+      "method": "DELETE",
+      "path": "/app/devices/:id",
+      "fields": [
+        {
+          "key": "id",
+          "label": "编号",
+          "kind": "text",
+          "location": "path",
+          "required": true
+        }
+      ],
+      "danger": true,
+      "source": "appair.go",
+      "handler": "RevokeAppDevice"
+    },
+    {
+      "id": "GET /version/check-update",
+      "title": "检查后端更新",
+      "group": "后端系统",
+      "scope": "panel",
+      "method": "GET",
+      "path": "/version/check-update",
+      "fields": [],
+      "danger": false,
+      "source": "version.go",
+      "handler": "CheckUpdate"
+    },
+    {
+      "id": "POST /version/update",
+      "title": "更新后端",
+      "group": "后端系统",
+      "scope": "panel",
+      "method": "POST",
+      "path": "/version/update",
+      "fields": [],
+      "danger": false,
+      "source": "selfupdate.go",
+      "handler": "SelfUpdate"
+    },
+    {
+      "id": "GET /version/update/status",
+      "title": "后端更新进度",
+      "group": "后端系统",
+      "scope": "panel",
+      "method": "GET",
+      "path": "/version/update/status",
+      "fields": [],
+      "danger": false,
+      "source": "selfupdate.go",
+      "handler": "GetUpdateStatus"
+    },
+    {
+      "id": "GET /accounts",
+      "title": "OVH 账户",
+      "group": "OVH 账户",
+      "scope": "panel",
+      "method": "GET",
+      "path": "/accounts",
+      "fields": [],
+      "danger": false,
+      "source": "accounts.go",
+      "handler": "ListAccounts"
+    },
+    {
+      "id": "GET /accounts/:id",
+      "title": "OVH 账户",
+      "group": "OVH 账户",
+      "scope": "panel",
+      "method": "GET",
+      "path": "/accounts/:id",
+      "fields": [
+        {
+          "key": "id",
+          "label": "编号",
+          "kind": "text",
+          "location": "path",
+          "required": true
+        }
+      ],
+      "danger": false,
+      "source": "accounts.go",
+      "handler": "GetAccountByID"
+    },
+    {
+      "id": "POST /accounts",
+      "title": "创建OVH 账户",
+      "group": "OVH 账户",
+      "scope": "panel",
+      "method": "POST",
+      "path": "/accounts",
+      "fields": [
+        {
+          "key": "name",
+          "label": "名称",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "endpoint",
+          "label": "API 区域",
+          "kind": "text",
+          "location": "body",
+          "required": false,
+          "choices": [
+            "ovh-eu",
+            "ovh-ca",
+            "ovh-us"
+          ]
+        },
+        {
+          "key": "zone",
+          "label": "账户站点",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "appKey",
+          "label": "Application Key",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "appSecret",
+          "label": "Application Secret",
+          "kind": "secret",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "consumerKey",
+          "label": "Consumer Key",
+          "kind": "secret",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "iam",
+          "label": "IAM",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "setDefault",
+          "label": "设为默认账户",
+          "kind": "toggle",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "proxyUrl",
+          "label": "代理地址",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "fingerprint",
+          "label": "浏览器指纹",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "id",
+          "label": "编号",
+          "kind": "text",
+          "location": "path",
+          "required": true
+        }
+      ],
+      "danger": false,
+      "source": "accounts.go",
+      "handler": "CreateAccount"
+    },
+    {
+      "id": "PUT /accounts/:id",
+      "title": "修改OVH 账户",
+      "group": "OVH 账户",
+      "scope": "panel",
+      "method": "PUT",
+      "path": "/accounts/:id",
+      "fields": [
+        {
+          "key": "name",
+          "label": "名称",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "endpoint",
+          "label": "API 区域",
+          "kind": "text",
+          "location": "body",
+          "required": false,
+          "choices": [
+            "ovh-eu",
+            "ovh-ca",
+            "ovh-us"
+          ]
+        },
+        {
+          "key": "zone",
+          "label": "账户站点",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "appKey",
+          "label": "Application Key",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "appSecret",
+          "label": "Application Secret",
+          "kind": "secret",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "consumerKey",
+          "label": "Consumer Key",
+          "kind": "secret",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "iam",
+          "label": "IAM",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "setDefault",
+          "label": "设为默认账户",
+          "kind": "toggle",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "proxyUrl",
+          "label": "代理地址",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "fingerprint",
+          "label": "浏览器指纹",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "id",
+          "label": "编号",
+          "kind": "text",
+          "location": "path",
+          "required": true
+        }
+      ],
+      "danger": false,
+      "source": "accounts.go",
+      "handler": "UpdateAccount"
+    },
+    {
+      "id": "DELETE /accounts/:id",
+      "title": "删除OVH 账户",
+      "group": "OVH 账户",
+      "scope": "panel",
+      "method": "DELETE",
+      "path": "/accounts/:id",
+      "fields": [
+        {
+          "key": "id",
+          "label": "编号",
+          "kind": "text",
+          "location": "path",
+          "required": true
+        }
+      ],
+      "danger": true,
+      "source": "accounts.go",
+      "handler": "DeleteAccountByID"
+    },
+    {
+      "id": "POST /accounts/:id/set-default",
+      "title": "设为默认账户",
+      "group": "OVH 账户",
+      "scope": "panel",
+      "method": "POST",
+      "path": "/accounts/:id/set-default",
+      "fields": [
+        {
+          "key": "id",
+          "label": "编号",
+          "kind": "text",
+          "location": "path",
+          "required": true
+        }
+      ],
+      "danger": false,
+      "source": "accounts.go",
+      "handler": "SetDefaultAccountByID"
+    },
+    {
+      "id": "POST /accounts/:id/verify",
+      "title": "验证凭据",
+      "group": "OVH 账户",
+      "scope": "panel",
+      "method": "POST",
+      "path": "/accounts/:id/verify",
+      "fields": [
+        {
+          "key": "id",
+          "label": "编号",
+          "kind": "text",
+          "location": "path",
+          "required": true
+        }
+      ],
+      "danger": false,
+      "source": "accounts.go",
+      "handler": "VerifyAccount"
+    },
+    {
+      "id": "POST /queue/quick-order",
+      "title": "快速抢购",
+      "group": "抢购",
+      "scope": "panel",
+      "method": "POST",
+      "path": "/queue/quick-order",
+      "fields": [
+        {
+          "key": "account_id",
+          "label": "下单账户",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "planCode",
+          "label": "机型编码",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "datacenter",
+          "label": "数据中心",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "options",
+          "label": "配置选项",
+          "kind": "list",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "fromMonitor",
+          "label": "来自监控",
+          "kind": "toggle",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "skipDuplicateCheck",
+          "label": "跳过重复检查",
+          "kind": "toggle",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "autoPay",
+          "label": "自动付款",
+          "kind": "toggle",
+          "location": "body",
+          "required": false
+        }
+      ],
+      "danger": false,
+      "source": "quick_order.go",
+      "handler": "QuickOrder"
+    },
+    {
+      "id": "GET /server-control/list",
+      "title": "服务器列表",
+      "group": "API 设置",
+      "scope": "panel",
+      "method": "GET",
+      "path": "/server-control/list",
+      "fields": [],
+      "danger": false,
+      "source": "server_control_basic.go",
+      "handler": "ListMyServers"
+    },
+    {
+      "id": "GET /server-control/aliases",
+      "title": "服务器别名",
+      "group": "API 设置",
+      "scope": "panel",
+      "method": "GET",
+      "path": "/server-control/aliases",
+      "fields": [],
+      "danger": false,
+      "source": "server_aliases.go",
+      "handler": "ListServerAliases"
+    },
+    {
+      "id": "PUT /server-control/:service_name/alias",
+      "title": "修改服务器别名",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "PUT",
+      "path": "/server-control/:service_name/alias",
+      "fields": [
+        {
+          "key": "alias",
+          "label": "别名",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        }
+      ],
+      "danger": false,
+      "source": "server_aliases.go",
+      "handler": "SetServerAlias"
+    },
+    {
+      "id": "DELETE /server-control/:service_name/alias",
+      "title": "删除服务器别名",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "DELETE",
+      "path": "/server-control/:service_name/alias",
+      "fields": [],
+      "danger": true,
+      "source": "server_aliases.go",
+      "handler": "DeleteServerAlias"
+    },
+    {
+      "id": "GET /server-control/order-mapping",
+      "title": "订单对应关系",
+      "group": "API 设置",
+      "scope": "panel",
+      "method": "GET",
+      "path": "/server-control/order-mapping",
+      "fields": [
+        {
+          "key": "forceRefresh",
+          "label": "强制刷新",
+          "kind": "text",
+          "location": "query",
+          "required": false
+        }
+      ],
+      "danger": false,
+      "source": "order_mapping.go",
+      "handler": "GetOrderMapping"
+    },
+    {
+      "id": "GET /server-control/:service_name/retraction",
+      "title": "撤回订单",
+      "group": "维护",
+      "scope": "dedicated",
+      "method": "GET",
+      "path": "/server-control/:service_name/retraction",
+      "fields": [],
+      "danger": true,
+      "source": "server_control_retraction.go",
+      "handler": "GetRetraction"
+    },
+    {
+      "id": "POST /server-control/:service_name/retraction",
+      "title": "撤回订单",
+      "group": "维护",
+      "scope": "dedicated",
+      "method": "POST",
+      "path": "/server-control/:service_name/retraction",
+      "fields": [
+        {
+          "key": "reason",
+          "label": "原因",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "comment",
+          "label": "备注",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "confirm",
+          "label": "确认执行",
+          "kind": "toggle",
+          "location": "body",
+          "required": false
+        }
+      ],
+      "danger": true,
+      "source": "server_control_retraction.go",
+      "handler": "PostRetraction"
+    },
+    {
+      "id": "POST /server-control/:service_name/reboot",
+      "title": "重启",
+      "group": "电源",
+      "scope": "dedicated",
+      "method": "POST",
+      "path": "/server-control/:service_name/reboot",
+      "fields": [],
+      "danger": false,
+      "source": "server_control_basic.go",
+      "handler": "Reboot"
+    },
+    {
+      "id": "GET /server-control/:service_name/templates",
+      "title": "操作系统模板",
+      "group": "电源",
+      "scope": "dedicated",
+      "method": "GET",
+      "path": "/server-control/:service_name/templates",
+      "fields": [],
+      "danger": false,
+      "source": "server_control_basic.go",
+      "handler": "GetOSTemplates"
+    },
+    {
+      "id": "POST /server-control/:service_name/install",
+      "title": "重装系统",
+      "group": "电源",
+      "scope": "dedicated",
+      "method": "POST",
+      "path": "/server-control/:service_name/install",
+      "fields": [
+        {
+          "key": "templateName",
+          "label": "系统模板",
+          "kind": "text",
+          "location": "body",
+          "required": true
+        },
+        {
+          "key": "customHostname",
+          "label": "主机名",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "useProxmox9Zfs",
+          "label": "Proxmox 9 ZFS 分区",
+          "kind": "toggle",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "partitionSchemeName",
+          "label": "分区方案",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "storageConfig",
+          "label": "存储配置",
+          "kind": "objects",
+          "location": "body",
+          "required": false,
+          "children": [
+            {
+              "key": "diskGroupId",
+              "label": "磁盘组 ID",
+              "kind": "number",
+              "location": "body",
+              "required": false
+            },
+            {
+              "key": "hardwareRaid",
+              "label": "硬件 RAID",
+              "kind": "objects",
+              "location": "body",
+              "required": false,
+              "children": [
+                {
+                  "key": "raidLevel",
+                  "label": "RAID 级别",
+                  "kind": "number",
+                  "location": "body",
+                  "required": false
+                },
+                {
+                  "key": "disks",
+                  "label": "磁盘数量",
+                  "kind": "number",
+                  "location": "body",
+                  "required": false
+                },
+                {
+                  "key": "arrays",
+                  "label": "阵列数",
+                  "kind": "number",
+                  "location": "body",
+                  "required": false
+                },
+                {
+                  "key": "spares",
+                  "label": "备用磁盘数",
+                  "kind": "number",
+                  "location": "body",
+                  "required": false
+                }
+              ]
+            },
+            {
+              "key": "partitioning",
+              "label": "分区配置",
+              "kind": "object",
+              "location": "body",
+              "required": false,
+              "children": [
+                {
+                  "key": "layout",
+                  "label": "分区布局",
+                  "kind": "objects",
+                  "location": "body",
+                  "required": false,
+                  "children": [
+                    {
+                      "key": "mountPoint",
+                      "label": "挂载点",
+                      "kind": "text",
+                      "location": "body",
+                      "required": true
+                    },
+                    {
+                      "key": "fileSystem",
+                      "label": "文件系统",
+                      "kind": "text",
+                      "location": "body",
+                      "required": true
+                    },
+                    {
+                      "key": "size",
+                      "label": "size",
+                      "kind": "number",
+                      "location": "body",
+                      "required": false
+                    },
+                    {
+                      "key": "raidLevel",
+                      "label": "RAID 级别",
+                      "kind": "number",
+                      "location": "body",
+                      "required": false
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "key": "zfsRaidLevel",
+          "label": "ZFS RAID 级别",
+          "kind": "number",
+          "location": "body",
+          "required": false,
+          "choices": [
+            "0",
+            "1",
+            "5",
+            "6",
+            "7",
+            "10"
+          ]
+        },
+        {
+          "key": "zfsVzSize",
+          "label": "ZFS 数据分区大小（MB）",
+          "kind": "number",
+          "location": "body",
+          "required": false
+        }
+      ],
+      "danger": true,
+      "source": "server_control_basic.go",
+      "handler": "InstallOS"
+    },
+    {
+      "id": "GET /server-control/:service_name/install/status",
+      "title": "安装进度",
+      "group": "电源",
+      "scope": "dedicated",
+      "method": "GET",
+      "path": "/server-control/:service_name/install/status",
+      "fields": [],
+      "danger": true,
+      "source": "server_control_basic.go",
+      "handler": "GetInstallStatus"
+    },
+    {
+      "id": "GET /server-control/:service_name/tasks",
+      "title": "任务列表",
+      "group": "维护",
+      "scope": "dedicated",
+      "method": "GET",
+      "path": "/server-control/:service_name/tasks",
+      "fields": [],
+      "danger": false,
+      "source": "server_control_basic.go",
+      "handler": "GetServerTasks"
+    },
+    {
+      "id": "GET /server-control/:service_name/tasks/:task_id/available-timeslots",
+      "title": "可预约时间",
+      "group": "维护",
+      "scope": "dedicated",
+      "method": "GET",
+      "path": "/server-control/:service_name/tasks/:task_id/available-timeslots",
+      "fields": [
+        {
+          "key": "task_id",
+          "label": "任务 ID",
+          "kind": "text",
+          "location": "path",
+          "required": true
+        },
+        {
+          "key": "periodStart",
+          "label": "开始日期",
+          "kind": "date",
+          "location": "query",
+          "required": false
+        },
+        {
+          "key": "periodEnd",
+          "label": "结束日期",
+          "kind": "date",
+          "location": "query",
+          "required": false
+        }
+      ],
+      "danger": false,
+      "source": "server_control_basic.go",
+      "handler": "GetTaskAvailableTimeslots"
+    },
+    {
+      "id": "POST /server-control/:service_name/tasks/:task_id/schedule",
+      "title": "预约任务时间",
+      "group": "维护",
+      "scope": "dedicated",
+      "method": "POST",
+      "path": "/server-control/:service_name/tasks/:task_id/schedule",
+      "fields": [
+        {
+          "key": "wantedBeginingDate",
+          "label": "预约开始时间",
+          "kind": "date",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "hasPerformedBackup",
+          "label": "已完成备份",
+          "kind": "toggle",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "task_id",
+          "label": "任务 ID",
+          "kind": "text",
+          "location": "path",
+          "required": true
+        }
+      ],
+      "danger": false,
+      "source": "server_control_basic.go",
+      "handler": "ScheduleTaskTimeslot"
+    },
+    {
+      "id": "GET /server-control/:service_name/rescue",
+      "title": "救援模式",
+      "group": "电源",
+      "scope": "dedicated",
+      "method": "GET",
+      "path": "/server-control/:service_name/rescue",
+      "fields": [],
+      "danger": false,
+      "source": "server_control_rescue.go",
+      "handler": "GetRescueStatus"
+    },
+    {
+      "id": "POST /server-control/:service_name/rescue",
+      "title": "救援模式",
+      "group": "电源",
+      "scope": "dedicated",
+      "method": "POST",
+      "path": "/server-control/:service_name/rescue",
+      "fields": [
+        {
+          "key": "email",
+          "label": "邮箱",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "sshKey",
+          "label": "SSH 公钥",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "bootId",
+          "label": "启动选项",
+          "kind": "number",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "confirm",
+          "label": "确认执行",
+          "kind": "toggle",
+          "location": "body",
+          "required": false
+        }
+      ],
+      "danger": false,
+      "source": "server_control_rescue.go",
+      "handler": "EnterRescue"
+    },
+    {
+      "id": "POST /server-control/:service_name/rescue/exit",
+      "title": "退出救援模式",
+      "group": "电源",
+      "scope": "dedicated",
+      "method": "POST",
+      "path": "/server-control/:service_name/rescue/exit",
+      "fields": [
+        {
+          "key": "confirm",
+          "label": "确认执行",
+          "kind": "toggle",
+          "location": "body",
+          "required": false
+        }
+      ],
+      "danger": false,
+      "source": "server_control_rescue.go",
+      "handler": "ExitRescue"
+    },
+    {
+      "id": "GET /server-control/:service_name/boot",
+      "title": "启动配置",
+      "group": "电源",
+      "scope": "dedicated",
+      "method": "GET",
+      "path": "/server-control/:service_name/boot",
+      "fields": [],
+      "danger": false,
+      "source": "server_control_boot.go",
+      "handler": "GetBootConfig"
+    },
+    {
+      "id": "PUT /server-control/:service_name/boot/:boot_id",
+      "title": "修改启动配置",
+      "group": "电源",
+      "scope": "dedicated",
+      "method": "PUT",
+      "path": "/server-control/:service_name/boot/:boot_id",
+      "fields": [
+        {
+          "key": "boot_id",
+          "label": "启动选项 ID",
+          "kind": "text",
+          "location": "path",
+          "required": true
+        }
+      ],
+      "danger": false,
+      "source": "server_control_boot.go",
+      "handler": "SetBootConfig"
+    },
+    {
+      "id": "GET /server-control/:service_name/monitoring",
+      "title": "硬件监控",
+      "group": "电源",
+      "scope": "dedicated",
+      "method": "GET",
+      "path": "/server-control/:service_name/monitoring",
+      "fields": [],
+      "danger": false,
+      "source": "server_control_boot.go",
+      "handler": "GetMonitoringStatus"
+    },
+    {
+      "id": "PUT /server-control/:service_name/monitoring",
+      "title": "修改硬件监控",
+      "group": "电源",
+      "scope": "dedicated",
+      "method": "PUT",
+      "path": "/server-control/:service_name/monitoring",
+      "fields": [
+        {
+          "key": "monitoring",
+          "label": "硬件监控",
+          "kind": "toggle",
+          "location": "body",
+          "required": true
+        }
+      ],
+      "danger": false,
+      "source": "server_control_boot.go",
+      "handler": "SetMonitoringStatus"
+    },
+    {
+      "id": "GET /server-control/:service_name/boot-mode",
+      "title": "启动模式",
+      "group": "电源",
+      "scope": "dedicated",
+      "method": "GET",
+      "path": "/server-control/:service_name/boot-mode",
+      "fields": [],
+      "danger": false,
+      "source": "server_control_boot.go",
+      "handler": "GetBootModes"
+    },
+    {
+      "id": "PUT /server-control/:service_name/boot-mode",
+      "title": "修改启动模式",
+      "group": "电源",
+      "scope": "dedicated",
+      "method": "PUT",
+      "path": "/server-control/:service_name/boot-mode",
+      "fields": [
+        {
+          "key": "bootId",
+          "label": "启动选项",
+          "kind": "number",
+          "location": "body",
+          "required": false
+        }
+      ],
+      "danger": false,
+      "source": "server_control_boot.go",
+      "handler": "ChangeBootMode"
+    },
+    {
+      "id": "GET /server-control/:service_name/hardware",
+      "title": "硬件信息",
+      "group": "维护",
+      "scope": "dedicated",
+      "method": "GET",
+      "path": "/server-control/:service_name/hardware",
+      "fields": [],
+      "danger": false,
+      "source": "server_control_hardware.go",
+      "handler": "GetHardwareInfo"
+    },
+    {
+      "id": "GET /server-control/:service_name/network-specs",
+      "title": "网络规格",
+      "group": "概览",
+      "scope": "dedicated",
+      "method": "GET",
+      "path": "/server-control/:service_name/network-specs",
+      "fields": [],
+      "danger": false,
+      "source": "server_control_hardware.go",
+      "handler": "GetNetworkSpecs"
+    },
+    {
+      "id": "GET /server-control/:service_name/ips",
+      "title": "IP 地址",
+      "group": "概览",
+      "scope": "dedicated",
+      "method": "GET",
+      "path": "/server-control/:service_name/ips",
+      "fields": [],
+      "danger": false,
+      "source": "server_control_hardware.go",
+      "handler": "GetServerIPs"
+    },
+    {
+      "id": "GET /server-control/:service_name/reverse",
+      "title": "反向 DNS",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "GET",
+      "path": "/server-control/:service_name/reverse",
+      "fields": [],
+      "danger": false,
+      "source": "server_control_hardware.go",
+      "handler": "GetReverseDNS"
+    },
+    {
+      "id": "POST /server-control/:service_name/reverse",
+      "title": "反向 DNS",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "POST",
+      "path": "/server-control/:service_name/reverse",
+      "fields": [
+        {
+          "key": "ip",
+          "label": "IP 地址",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "reverse",
+          "label": "反向 DNS 域名",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        }
+      ],
+      "danger": false,
+      "source": "server_control_hardware.go",
+      "handler": "SetReverseDNS"
+    },
+    {
+      "id": "DELETE /server-control/:service_name/reverse/:ip",
+      "title": "删除反向 DNS",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "DELETE",
+      "path": "/server-control/:service_name/reverse/:ip",
+      "fields": [
+        {
+          "key": "ip",
+          "label": "IP 地址",
+          "kind": "text",
+          "location": "path",
+          "required": true
+        }
+      ],
+      "danger": true,
+      "source": "server_control_hardware.go",
+      "handler": "DeleteReverseDNS"
+    },
+    {
+      "id": "GET /server-control/:service_name/serviceinfo",
+      "title": "续费信息",
+      "group": "概览",
+      "scope": "dedicated",
+      "method": "GET",
+      "path": "/server-control/:service_name/serviceinfo",
+      "fields": [],
+      "danger": false,
+      "source": "server_control_hardware.go",
+      "handler": "GetServiceInfo"
+    },
+    {
+      "id": "PUT /server-control/:service_name/serviceinfo/renewal",
+      "title": "修改续费策略",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "PUT",
+      "path": "/server-control/:service_name/serviceinfo/renewal",
+      "fields": [
+        {
+          "key": "mode",
+          "label": "续费模式",
+          "kind": "text",
+          "location": "body",
+          "required": false,
+          "choices": [
+            "auto",
+            "manual"
+          ]
+        },
+        {
+          "key": "period",
+          "label": "续费周期（月）",
+          "kind": "number",
+          "location": "body",
+          "required": false
+        }
+      ],
+      "danger": false,
+      "source": "server_control_hardware.go",
+      "handler": "UpdateServiceRenewal"
+    },
+    {
+      "id": "GET /server-control/:service_name/engagement",
+      "title": "合同期",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "GET",
+      "path": "/server-control/:service_name/engagement",
+      "fields": [],
+      "danger": false,
+      "source": "server_control_engagement.go",
+      "handler": "GetEngagement"
+    },
+    {
+      "id": "GET /server-control/:service_name/engagement/available",
+      "title": "可选合同期",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "GET",
+      "path": "/server-control/:service_name/engagement/available",
+      "fields": [],
+      "danger": false,
+      "source": "server_control_engagement.go",
+      "handler": "GetEngagementAvailable"
+    },
+    {
+      "id": "GET /server-control/:service_name/engagement/request",
+      "title": "合同期变更",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "GET",
+      "path": "/server-control/:service_name/engagement/request",
+      "fields": [],
+      "danger": false,
+      "source": "server_control_engagement.go",
+      "handler": "GetEngagementRequest"
+    },
+    {
+      "id": "POST /server-control/:service_name/engagement/request",
+      "title": "合同期变更",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "POST",
+      "path": "/server-control/:service_name/engagement/request",
+      "fields": [
+        {
+          "key": "pricingMode",
+          "label": "合同套餐",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        }
+      ],
+      "danger": false,
+      "source": "server_control_engagement.go",
+      "handler": "CreateEngagementRequest"
+    },
+    {
+      "id": "DELETE /server-control/:service_name/engagement/request",
+      "title": "删除合同期变更",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "DELETE",
+      "path": "/server-control/:service_name/engagement/request",
+      "fields": [],
+      "danger": true,
+      "source": "server_control_engagement.go",
+      "handler": "DeleteEngagementRequest"
+    },
+    {
+      "id": "PUT /server-control/:service_name/engagement/end-rule",
+      "title": "修改合同到期策略",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "PUT",
+      "path": "/server-control/:service_name/engagement/end-rule",
+      "fields": [
+        {
+          "key": "strategy",
+          "label": "合同到期策略",
+          "kind": "text",
+          "location": "body",
+          "required": false,
+          "choices": [
+            "REACTIVATE_ENGAGEMENT",
+            "STOP_ENGAGEMENT_FALLBACK_DEFAULT_PRICE",
+            "STOP_ENGAGEMENT_KEEP_PRICE",
+            "CANCEL_SERVICE"
+          ]
+        },
+        {
+          "key": "confirm",
+          "label": "确认执行",
+          "kind": "toggle",
+          "location": "body",
+          "required": false
+        }
+      ],
+      "danger": false,
+      "source": "server_control_engagement.go",
+      "handler": "UpdateEngagementEndRule"
+    },
+    {
+      "id": "GET /server-control/:service_name/mitigation",
+      "title": "DDoS 防护",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "GET",
+      "path": "/server-control/:service_name/mitigation",
+      "fields": [],
+      "danger": false,
+      "source": "server_control_mitigation.go",
+      "handler": "GetMitigation"
+    },
+    {
+      "id": "POST /server-control/:service_name/mitigation/:ip",
+      "title": "DDoS 防护",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "POST",
+      "path": "/server-control/:service_name/mitigation/:ip",
+      "fields": [
+        {
+          "key": "ip",
+          "label": "IP 地址",
+          "kind": "text",
+          "location": "path",
+          "required": true
+        },
+        {
+          "key": "block",
+          "label": "IP 段",
+          "kind": "text",
+          "location": "query",
+          "required": false
+        }
+      ],
+      "danger": false,
+      "source": "server_control_mitigation.go",
+      "handler": "EnableMitigation"
+    },
+    {
+      "id": "DELETE /server-control/:service_name/mitigation/:ip",
+      "title": "删除DDoS 防护",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "DELETE",
+      "path": "/server-control/:service_name/mitigation/:ip",
+      "fields": [
+        {
+          "key": "ip",
+          "label": "IP 地址",
+          "kind": "text",
+          "location": "path",
+          "required": true
+        },
+        {
+          "key": "block",
+          "label": "IP 段",
+          "kind": "text",
+          "location": "query",
+          "required": false
+        }
+      ],
+      "danger": true,
+      "source": "server_control_mitigation.go",
+      "handler": "DisableMitigation"
+    },
+    {
+      "id": "POST /server-control/:service_name/change-contact",
+      "title": "修改联系人",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "POST",
+      "path": "/server-control/:service_name/change-contact",
+      "fields": [
+        {
+          "key": "contactAdmin",
+          "label": "管理联系人",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "contactTech",
+          "label": "技术联系人",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "contactBilling",
+          "label": "账单联系人",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        }
+      ],
+      "danger": false,
+      "source": "server_control_hardware.go",
+      "handler": "ChangeContact"
+    },
+    {
+      "id": "GET /server-control/:service_name/interventions",
+      "title": "维护记录",
+      "group": "维护",
+      "scope": "dedicated",
+      "method": "GET",
+      "path": "/server-control/:service_name/interventions",
+      "fields": [],
+      "danger": false,
+      "source": "server_control_hardware.go",
+      "handler": "GetInterventions"
+    },
+    {
+      "id": "GET /server-control/:service_name/interventions/:intervention_id",
+      "title": "维护记录",
+      "group": "维护",
+      "scope": "dedicated",
+      "method": "GET",
+      "path": "/server-control/:service_name/interventions/:intervention_id",
+      "fields": [
+        {
+          "key": "intervention_id",
+          "label": "维护 ID",
+          "kind": "text",
+          "location": "path",
+          "required": true
+        }
+      ],
+      "danger": false,
+      "source": "server_control_hardware.go",
+      "handler": "GetInterventionDetail"
+    },
+    {
+      "id": "GET /server-control/:service_name/planned-interventions",
+      "title": "计划维护",
+      "group": "维护",
+      "scope": "dedicated",
+      "method": "GET",
+      "path": "/server-control/:service_name/planned-interventions",
+      "fields": [],
+      "danger": false,
+      "source": "server_control_hardware.go",
+      "handler": "GetPlannedInterventions"
+    },
+    {
+      "id": "GET /server-control/:service_name/planned-interventions/:intervention_id",
+      "title": "计划维护",
+      "group": "维护",
+      "scope": "dedicated",
+      "method": "GET",
+      "path": "/server-control/:service_name/planned-interventions/:intervention_id",
+      "fields": [
+        {
+          "key": "intervention_id",
+          "label": "维护 ID",
+          "kind": "text",
+          "location": "path",
+          "required": true
+        }
+      ],
+      "danger": false,
+      "source": "server_control_hardware.go",
+      "handler": "GetPlannedInterventionDetail"
+    },
+    {
+      "id": "POST /server-control/:service_name/hardware/replace",
+      "title": "硬件更换",
+      "group": "维护",
+      "scope": "dedicated",
+      "method": "POST",
+      "path": "/server-control/:service_name/hardware/replace",
+      "fields": [
+        {
+          "key": "componentType",
+          "label": "故障组件",
+          "kind": "text",
+          "location": "body",
+          "required": false,
+          "choices": [
+            "hardDiskDrive",
+            "memory",
+            "cooling"
+          ]
+        },
+        {
+          "key": "comment",
+          "label": "备注",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "disks",
+          "label": "磁盘数量",
+          "kind": "objects",
+          "location": "body",
+          "required": false,
+          "children": [
+            {
+              "key": "disk_serial",
+              "label": "硬盘序列号",
+              "kind": "text",
+              "location": "body",
+              "required": true
+            },
+            {
+              "key": "slot_id",
+              "label": "硬盘槽位",
+              "kind": "number",
+              "location": "body",
+              "required": false
+            }
+          ]
+        },
+        {
+          "key": "inverse",
+          "label": "更换未列出的磁盘",
+          "kind": "toggle",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "details",
+          "label": "故障详情",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "slots",
+          "label": "内存槽位",
+          "kind": "list",
+          "location": "body",
+          "required": false
+        }
+      ],
+      "danger": true,
+      "source": "server_control_hardware.go",
+      "handler": "HardwareReplace"
+    },
+    {
+      "id": "GET /server-control/:service_name/hardware-raid-profiles",
+      "title": "RAID 配置",
+      "group": "维护",
+      "scope": "dedicated",
+      "method": "GET",
+      "path": "/server-control/:service_name/hardware-raid-profiles",
+      "fields": [],
+      "danger": false,
+      "source": "server_control_hardware.go",
+      "handler": "GetHardwareRaidProfiles"
+    },
+    {
+      "id": "GET /server-control/:service_name/hardware-disk-info",
+      "title": "磁盘信息",
+      "group": "维护",
+      "scope": "dedicated",
+      "method": "GET",
+      "path": "/server-control/:service_name/hardware-disk-info",
+      "fields": [],
+      "danger": false,
+      "source": "server_control_hardware.go",
+      "handler": "GetHardwareDiskInfo"
+    },
+    {
+      "id": "GET /server-control/:service_name/partition-schemes",
+      "title": "分区方案",
+      "group": "维护",
+      "scope": "dedicated",
+      "method": "GET",
+      "path": "/server-control/:service_name/partition-schemes",
+      "fields": [
+        {
+          "key": "templateName",
+          "label": "系统模板",
+          "kind": "text",
+          "location": "query",
+          "required": false
+        }
+      ],
+      "danger": false,
+      "source": "server_control_hardware.go",
+      "handler": "GetPartitionSchemes"
+    },
+    {
+      "id": "GET /server-control/:service_name/network-interfaces",
+      "title": "网卡接口",
+      "group": "概览",
+      "scope": "dedicated",
+      "method": "GET",
+      "path": "/server-control/:service_name/network-interfaces",
+      "fields": [],
+      "danger": false,
+      "source": "server_control_network.go",
+      "handler": "GetNetworkInterfaces"
+    },
+    {
+      "id": "GET /server-control/:service_name/mrtg",
+      "title": "流量监控",
+      "group": "概览",
+      "scope": "dedicated",
+      "method": "GET",
+      "path": "/server-control/:service_name/mrtg",
+      "fields": [
+        {
+          "key": "period",
+          "label": "续费周期（月）",
+          "kind": "text",
+          "location": "query",
+          "required": false,
+          "choices": [
+            "hourly",
+            "daily",
+            "weekly",
+            "monthly",
+            "yearly"
+          ]
+        },
+        {
+          "key": "type",
+          "label": "类型",
+          "kind": "text",
+          "location": "query",
+          "required": false,
+          "choices": [
+            "traffic:download",
+            "traffic:upload",
+            "packets:download",
+            "packets:upload",
+            "errors:download",
+            "errors:upload"
+          ]
+        }
+      ],
+      "danger": false,
+      "source": "server_control_network.go",
+      "handler": "GetMRTGData"
+    },
+    {
+      "id": "POST /server-control/:service_name/ola/aggregation",
+      "title": "聚合网络接口",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "POST",
+      "path": "/server-control/:service_name/ola/aggregation",
+      "fields": [
+        {
+          "key": "name",
+          "label": "名称",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "virtualNetworkInterfaces",
+          "label": "虚拟网卡列表",
+          "kind": "list",
+          "location": "body",
+          "required": false
+        }
+      ],
+      "danger": false,
+      "source": "server_control_network.go",
+      "handler": "ConfigureOLAAggregation"
+    },
+    {
+      "id": "POST /server-control/:service_name/ola/reset",
+      "title": "重置网络聚合",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "POST",
+      "path": "/server-control/:service_name/ola/reset",
+      "fields": [
+        {
+          "key": "virtualNetworkInterface",
+          "label": "虚拟网卡",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        }
+      ],
+      "danger": true,
+      "source": "server_control_network.go",
+      "handler": "ResetOLAConfiguration"
+    },
+    {
+      "id": "POST /server-control/:service_name/ola/group",
+      "title": "分组网络接口",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "POST",
+      "path": "/server-control/:service_name/ola/group",
+      "fields": [
+        {
+          "key": "name",
+          "label": "名称",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "virtualNetworkInterfaces",
+          "label": "虚拟网卡列表",
+          "kind": "list",
+          "location": "body",
+          "required": false
+        }
+      ],
+      "danger": false,
+      "source": "server_control_network.go",
+      "handler": "OLAGroup"
+    },
+    {
+      "id": "POST /server-control/:service_name/ola/ungroup",
+      "title": "取消网络分组",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "POST",
+      "path": "/server-control/:service_name/ola/ungroup",
+      "fields": [
+        {
+          "key": "virtualNetworkInterface",
+          "label": "虚拟网卡",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        }
+      ],
+      "danger": true,
+      "source": "server_control_network.go",
+      "handler": "OLAUngroup"
+    },
+    {
+      "id": "GET /server-control/:service_name/console",
+      "title": "远程控制台",
+      "group": "电源",
+      "scope": "dedicated",
+      "method": "GET",
+      "path": "/server-control/:service_name/console",
+      "fields": [
+        {
+          "key": "type",
+          "label": "类型",
+          "kind": "text",
+          "location": "query",
+          "required": false
+        },
+        {
+          "key": "sshKey",
+          "label": "SSH 公钥",
+          "kind": "text",
+          "location": "query",
+          "required": false
+        }
+      ],
+      "danger": false,
+      "source": "server_control_network.go",
+      "handler": "GetIPMIConsole"
+    },
+    {
+      "id": "GET /server-control/:service_name/ipmi-types",
+      "title": "IPMI 访问方式",
+      "group": "电源",
+      "scope": "dedicated",
+      "method": "GET",
+      "path": "/server-control/:service_name/ipmi-types",
+      "fields": [],
+      "danger": false,
+      "source": "server_control_network.go",
+      "handler": "GetIPMIAccessTypes"
+    },
+    {
+      "id": "GET /server-control/:service_name/statistics",
+      "title": "统计信息",
+      "group": "概览",
+      "scope": "dedicated",
+      "method": "GET",
+      "path": "/server-control/:service_name/statistics",
+      "fields": [
+        {
+          "key": "period",
+          "label": "续费周期（月）",
+          "kind": "text",
+          "location": "query",
+          "required": false,
+          "choices": [
+            "hourly",
+            "daily",
+            "weekly",
+            "monthly",
+            "yearly"
+          ]
+        },
+        {
+          "key": "type",
+          "label": "类型",
+          "kind": "text",
+          "location": "query",
+          "required": false,
+          "choices": [
+            "traffic:download",
+            "traffic:upload",
+            "packets:download",
+            "packets:upload",
+            "errors:download",
+            "errors:upload"
+          ]
+        }
+      ],
+      "danger": false,
+      "source": "server_control_network.go",
+      "handler": "GetTrafficStatistics"
+    },
+    {
+      "id": "GET /server-control/:service_name/network-stats",
+      "title": "网络统计",
+      "group": "概览",
+      "scope": "dedicated",
+      "method": "GET",
+      "path": "/server-control/:service_name/network-stats",
+      "fields": [],
+      "danger": false,
+      "source": "server_control_network.go",
+      "handler": "GetNetworkInterfaceStats"
+    },
+    {
+      "id": "GET /server-control/:service_name/burst",
+      "title": "突发带宽",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "GET",
+      "path": "/server-control/:service_name/burst",
+      "fields": [],
+      "danger": false,
+      "source": "server_control_features.go",
+      "handler": "GetBurst"
+    },
+    {
+      "id": "PUT /server-control/:service_name/burst",
+      "title": "修改突发带宽",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "PUT",
+      "path": "/server-control/:service_name/burst",
+      "fields": [
+        {
+          "key": "status",
+          "label": "状态",
+          "kind": "text",
+          "location": "body",
+          "required": false,
+          "choices": [
+            "active",
+            "inactive",
+            "inactiveLocked"
+          ]
+        }
+      ],
+      "danger": false,
+      "source": "server_control_features.go",
+      "handler": "UpdateBurst"
+    },
+    {
+      "id": "GET /server-control/:service_name/firewall",
+      "title": "硬件防火墙",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "GET",
+      "path": "/server-control/:service_name/firewall",
+      "fields": [],
+      "danger": false,
+      "source": "server_control_features.go",
+      "handler": "GetFirewall"
+    },
+    {
+      "id": "PUT /server-control/:service_name/firewall",
+      "title": "修改硬件防火墙",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "PUT",
+      "path": "/server-control/:service_name/firewall",
+      "fields": [
+        {
+          "key": "enabled",
+          "label": "启用",
+          "kind": "toggle",
+          "location": "body",
+          "required": false
+        }
+      ],
+      "danger": false,
+      "source": "server_control_features.go",
+      "handler": "UpdateFirewall"
+    },
+    {
+      "id": "GET /server-control/:service_name/backup-ftp",
+      "title": "FTP 备份",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "GET",
+      "path": "/server-control/:service_name/backup-ftp",
+      "fields": [],
+      "danger": false,
+      "source": "server_control_features.go",
+      "handler": "GetBackupFTP"
+    },
+    {
+      "id": "POST /server-control/:service_name/backup-ftp",
+      "title": "FTP 备份",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "POST",
+      "path": "/server-control/:service_name/backup-ftp",
+      "fields": [],
+      "danger": false,
+      "source": "server_control_features.go",
+      "handler": "ActivateBackupFTP"
+    },
+    {
+      "id": "DELETE /server-control/:service_name/backup-ftp",
+      "title": "删除FTP 备份",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "DELETE",
+      "path": "/server-control/:service_name/backup-ftp",
+      "fields": [],
+      "danger": true,
+      "source": "server_control_features.go",
+      "handler": "DeleteBackupFTP"
+    },
+    {
+      "id": "GET /server-control/:service_name/backup-ftp/access",
+      "title": "FTP 访问权限",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "GET",
+      "path": "/server-control/:service_name/backup-ftp/access",
+      "fields": [],
+      "danger": false,
+      "source": "server_control_features.go",
+      "handler": "GetBackupFTPAccess"
+    },
+    {
+      "id": "POST /server-control/:service_name/backup-ftp/access",
+      "title": "FTP 访问权限",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "POST",
+      "path": "/server-control/:service_name/backup-ftp/access",
+      "fields": [
+        {
+          "key": "ipBlock",
+          "label": "IP 段",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "ftp",
+          "label": "FTP",
+          "kind": "toggle",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "nfs",
+          "label": "NFS",
+          "kind": "toggle",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "cifs",
+          "label": "CIFS",
+          "kind": "toggle",
+          "location": "body",
+          "required": false
+        }
+      ],
+      "danger": false,
+      "source": "server_control_features.go",
+      "handler": "AddBackupFTPAccess"
+    },
+    {
+      "id": "DELETE /server-control/:service_name/backup-ftp/access",
+      "title": "删除FTP 访问权限",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "DELETE",
+      "path": "/server-control/:service_name/backup-ftp/access",
+      "fields": [
+        {
+          "key": "ipBlock",
+          "label": "IP 段",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        }
+      ],
+      "danger": true,
+      "source": "server_control_features.go",
+      "handler": "DeleteBackupFTPAccess"
+    },
+    {
+      "id": "DELETE /server-control/:service_name/backup-ftp/access/:ip_block",
+      "title": "删除FTP 访问权限",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "DELETE",
+      "path": "/server-control/:service_name/backup-ftp/access/:ip_block",
+      "fields": [
+        {
+          "key": "ipBlock",
+          "label": "IP 段",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "ip_block",
+          "label": "IP 段",
+          "kind": "text",
+          "location": "path",
+          "required": true
+        }
+      ],
+      "danger": true,
+      "source": "server_control_features.go",
+      "handler": "DeleteBackupFTPAccess"
+    },
+    {
+      "id": "POST /server-control/:service_name/backup-ftp/password",
+      "title": "重置 FTP 密码",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "POST",
+      "path": "/server-control/:service_name/backup-ftp/password",
+      "fields": [],
+      "danger": false,
+      "source": "server_control_features.go",
+      "handler": "ChangeBackupFTPPassword"
+    },
+    {
+      "id": "GET /server-control/:service_name/backup-ftp/authorizable-blocks",
+      "title": "可授权 IP 段",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "GET",
+      "path": "/server-control/:service_name/backup-ftp/authorizable-blocks",
+      "fields": [],
+      "danger": false,
+      "source": "server_control_features.go",
+      "handler": "GetBackupFTPAuthorizableBlocks"
+    },
+    {
+      "id": "GET /server-control/:service_name/backup-cloud",
+      "title": "云备份",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "GET",
+      "path": "/server-control/:service_name/backup-cloud",
+      "fields": [],
+      "danger": false,
+      "source": "server_control_features.go",
+      "handler": "GetBackupCloud"
+    },
+    {
+      "id": "GET /server-control/:service_name/backup-cloud/offer-details",
+      "title": "云备份套餐",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "GET",
+      "path": "/server-control/:service_name/backup-cloud/offer-details",
+      "fields": [],
+      "danger": false,
+      "source": "server_control_features.go",
+      "handler": "GetBackupCloudOfferDetails"
+    },
+    {
+      "id": "POST /server-control/:service_name/backup-cloud",
+      "title": "云备份",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "POST",
+      "path": "/server-control/:service_name/backup-cloud",
+      "fields": [
+        {
+          "key": "cloudProjectId",
+          "label": "云项目 ID",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "projectDescription",
+          "label": "云项目描述",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        }
+      ],
+      "danger": false,
+      "source": "server_control_features.go",
+      "handler": "ActivateBackupCloud"
+    },
+    {
+      "id": "DELETE /server-control/:service_name/backup-cloud",
+      "title": "删除云备份",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "DELETE",
+      "path": "/server-control/:service_name/backup-cloud",
+      "fields": [],
+      "danger": true,
+      "source": "server_control_features.go",
+      "handler": "DeleteBackupCloud"
+    },
+    {
+      "id": "POST /server-control/:service_name/backup-cloud/password",
+      "title": "重置云备份密码",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "POST",
+      "path": "/server-control/:service_name/backup-cloud/password",
+      "fields": [],
+      "danger": false,
+      "source": "server_control_features.go",
+      "handler": "ChangeBackupCloudPassword"
+    },
+    {
+      "id": "GET /server-control/:service_name/secondary-dns",
+      "title": "辅助 DNS",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "GET",
+      "path": "/server-control/:service_name/secondary-dns",
+      "fields": [],
+      "danger": false,
+      "source": "server_control_misc.go",
+      "handler": "GetSecondaryDNS"
+    },
+    {
+      "id": "POST /server-control/:service_name/secondary-dns",
+      "title": "创建辅助 DNS",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "POST",
+      "path": "/server-control/:service_name/secondary-dns",
+      "fields": [
+        {
+          "key": "domain",
+          "label": "域名",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        }
+      ],
+      "danger": false,
+      "source": "server_control_misc.go",
+      "handler": "AddSecondaryDNS"
+    },
+    {
+      "id": "DELETE /server-control/:service_name/secondary-dns/:domain",
+      "title": "删除辅助 DNS",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "DELETE",
+      "path": "/server-control/:service_name/secondary-dns/:domain",
+      "fields": [
+        {
+          "key": "domain",
+          "label": "域名",
+          "kind": "text",
+          "location": "path",
+          "required": true
+        }
+      ],
+      "danger": true,
+      "source": "server_control_misc.go",
+      "handler": "DeleteSecondaryDNS"
+    },
+    {
+      "id": "GET /server-control/:service_name/virtual-mac",
+      "title": "虚拟 MAC",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "GET",
+      "path": "/server-control/:service_name/virtual-mac",
+      "fields": [],
+      "danger": false,
+      "source": "server_control_misc.go",
+      "handler": "GetVirtualMACList"
+    },
+    {
+      "id": "POST /server-control/:service_name/virtual-mac",
+      "title": "创建虚拟 MAC",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "POST",
+      "path": "/server-control/:service_name/virtual-mac",
+      "fields": [
+        {
+          "key": "ipAddress",
+          "label": "IP 地址",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "type",
+          "label": "类型",
+          "kind": "text",
+          "location": "body",
+          "required": false,
+          "choices": [
+            "ovh",
+            "vmware"
+          ]
+        },
+        {
+          "key": "virtualMachineName",
+          "label": "虚拟机名称",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        }
+      ],
+      "danger": false,
+      "source": "server_control_misc.go",
+      "handler": "CreateVirtualMAC"
+    },
+    {
+      "id": "GET /server-control/:service_name/virtual-network-interface",
+      "title": "虚拟网卡",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "GET",
+      "path": "/server-control/:service_name/virtual-network-interface",
+      "fields": [],
+      "danger": false,
+      "source": "server_control_misc.go",
+      "handler": "GetVirtualNetworkInterfaces"
+    },
+    {
+      "id": "GET /server-control/:service_name/vrack",
+      "title": "vRack",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "GET",
+      "path": "/server-control/:service_name/vrack",
+      "fields": [],
+      "danger": false,
+      "source": "server_control_misc.go",
+      "handler": "GetVRackList"
+    },
+    {
+      "id": "DELETE /server-control/:service_name/vrack/:vrack",
+      "title": "删除vRack",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "DELETE",
+      "path": "/server-control/:service_name/vrack/:vrack",
+      "fields": [
+        {
+          "key": "vrack",
+          "label": "vRack 名称",
+          "kind": "text",
+          "location": "path",
+          "required": true
+        }
+      ],
+      "danger": true,
+      "source": "server_control_misc.go",
+      "handler": "RemoveFromVRack"
+    },
+    {
+      "id": "GET /server-control/:service_name/orderable/bandwidth",
+      "title": "可选带宽",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "GET",
+      "path": "/server-control/:service_name/orderable/bandwidth",
+      "fields": [],
+      "danger": false,
+      "source": "server_control_misc.go",
+      "handler": "GetOrderableBandwidth"
+    },
+    {
+      "id": "GET /server-control/:service_name/orderable/traffic",
+      "title": "可选流量",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "GET",
+      "path": "/server-control/:service_name/orderable/traffic",
+      "fields": [],
+      "danger": false,
+      "source": "server_control_misc.go",
+      "handler": "GetOrderableTraffic"
+    },
+    {
+      "id": "GET /server-control/:service_name/orderable/ip",
+      "title": "可选 IP",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "GET",
+      "path": "/server-control/:service_name/orderable/ip",
+      "fields": [],
+      "danger": false,
+      "source": "server_control_misc.go",
+      "handler": "GetOrderableIP"
+    },
+    {
+      "id": "GET /server-control/:service_name/options",
+      "title": "附加服务",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "GET",
+      "path": "/server-control/:service_name/options",
+      "fields": [],
+      "danger": false,
+      "source": "server_control_misc.go",
+      "handler": "GetServerOptions"
+    },
+    {
+      "id": "GET /server-control/:service_name/ip-specs",
+      "title": "IP 规格",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "GET",
+      "path": "/server-control/:service_name/ip-specs",
+      "fields": [],
+      "danger": false,
+      "source": "server_control_misc.go",
+      "handler": "GetIPSpecs"
+    },
+    {
+      "id": "GET /server-control/:service_name/ip/can-be-moved-to",
+      "title": "IP 可迁移目标",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "GET",
+      "path": "/server-control/:service_name/ip/can-be-moved-to",
+      "fields": [
+        {
+          "key": "ip",
+          "label": "IP 地址",
+          "kind": "text",
+          "location": "query",
+          "required": false
+        }
+      ],
+      "danger": false,
+      "source": "server_control_misc.go",
+      "handler": "GetIPCanBeMovedTo"
+    },
+    {
+      "id": "GET /server-control/:service_name/ip/country-available",
+      "title": "IP 可用国家",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "GET",
+      "path": "/server-control/:service_name/ip/country-available",
+      "fields": [],
+      "danger": false,
+      "source": "server_control_misc.go",
+      "handler": "GetIPCountryAvailable"
+    },
+    {
+      "id": "POST /server-control/:service_name/ip/move",
+      "title": "迁移 IP",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "POST",
+      "path": "/server-control/:service_name/ip/move",
+      "fields": [
+        {
+          "key": "ip",
+          "label": "IP 地址",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        }
+      ],
+      "danger": false,
+      "source": "server_control_misc.go",
+      "handler": "MoveIP"
+    },
+    {
+      "id": "GET /server-control/:service_name/ongoing",
+      "title": "进行中的操作",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "GET",
+      "path": "/server-control/:service_name/ongoing",
+      "fields": [],
+      "danger": false,
+      "source": "server_control_misc.go",
+      "handler": "GetOngoingTasks"
+    },
+    {
+      "id": "GET /server-control/:service_name/license/windows/compliant",
+      "title": "Windows 授权兼容性",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "GET",
+      "path": "/server-control/:service_name/license/windows/compliant",
+      "fields": [],
+      "danger": false,
+      "source": "server_control_misc.go",
+      "handler": "GetCompliantWindowsVersions"
+    },
+    {
+      "id": "GET /server-control/:service_name/license/windows-sql/compliant",
+      "title": "SQL Server 授权兼容性",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "GET",
+      "path": "/server-control/:service_name/license/windows-sql/compliant",
+      "fields": [],
+      "danger": false,
+      "source": "server_control_misc.go",
+      "handler": "GetCompliantWindowsSqlVersions"
+    },
+    {
+      "id": "PUT /server-control/:service_name/termination-policy",
+      "title": "修改服务终止策略",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "PUT",
+      "path": "/server-control/:service_name/termination-policy",
+      "fields": [
+        {
+          "key": "policy",
+          "label": "终止策略",
+          "kind": "text",
+          "location": "body",
+          "required": false,
+          "choices": [
+            "empty",
+            "terminateAtExpirationDate",
+            "terminateAtEngagementDate"
+          ]
+        }
+      ],
+      "danger": false,
+      "source": "termination_policy.go",
+      "handler": "UpdateTerminationPolicy"
+    },
+    {
+      "id": "POST /server-control/:service_name/terminate",
+      "title": "立即终止服务",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "POST",
+      "path": "/server-control/:service_name/terminate",
+      "fields": [],
+      "danger": true,
+      "source": "server_control_misc.go",
+      "handler": "TerminateService"
+    },
+    {
+      "id": "POST /server-control/:service_name/confirm-termination",
+      "title": "确认终止服务",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "POST",
+      "path": "/server-control/:service_name/confirm-termination",
+      "fields": [
+        {
+          "key": "token",
+          "label": "确认令牌",
+          "kind": "secret",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "reason",
+          "label": "原因",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "futureUse",
+          "label": "未来用途",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "commentary",
+          "label": "备注",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        }
+      ],
+      "danger": false,
+      "source": "server_control_misc.go",
+      "handler": "ConfirmTermination"
+    },
+    {
+      "id": "GET /server-control/:service_name/spla",
+      "title": "SPLA 授权",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "GET",
+      "path": "/server-control/:service_name/spla",
+      "fields": [],
+      "danger": false,
+      "source": "server_control_misc.go",
+      "handler": "GetSPLAList"
+    },
+    {
+      "id": "POST /server-control/:service_name/spla",
+      "title": "SPLA 授权",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "POST",
+      "path": "/server-control/:service_name/spla",
+      "fields": [
+        {
+          "key": "type",
+          "label": "类型",
+          "kind": "text",
+          "location": "body",
+          "required": false,
+          "choices": [
+            "os",
+            "sqlstd",
+            "sqlweb"
+          ]
+        },
+        {
+          "key": "serialNumber",
+          "label": "序列号",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        }
+      ],
+      "danger": false,
+      "source": "server_control_misc.go",
+      "handler": "CreateSPLA"
+    },
+    {
+      "id": "GET /server-control/:service_name/bios-settings",
+      "title": "BIOS 设置",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "GET",
+      "path": "/server-control/:service_name/bios-settings",
+      "fields": [],
+      "danger": false,
+      "source": "server_control_misc.go",
+      "handler": "GetBIOSSettings"
+    },
+    {
+      "id": "GET /server-control/:service_name/bios-settings/sgx",
+      "title": "SGX 配置",
+      "group": "高级",
+      "scope": "dedicated",
+      "method": "GET",
+      "path": "/server-control/:service_name/bios-settings/sgx",
+      "fields": [],
+      "danger": false,
+      "source": "server_control_misc.go",
+      "handler": "GetBIOSSettingsSGX"
+    },
+    {
+      "id": "GET /vps-control/list",
+      "title": "VPS 列表",
+      "group": "API 设置",
+      "scope": "panel",
+      "method": "GET",
+      "path": "/vps-control/list",
+      "fields": [],
+      "danger": false,
+      "source": "vps_control_basic.go",
+      "handler": "ListVps"
+    },
+    {
+      "id": "GET /vps-control/:service_name/info",
+      "title": "实例信息",
+      "group": "概览",
+      "scope": "vps",
+      "method": "GET",
+      "path": "/vps-control/:service_name/info",
+      "fields": [],
+      "danger": false,
+      "source": "vps_control_basic.go",
+      "handler": "GetVpsInfo"
+    },
+    {
+      "id": "GET /vps-control/:service_name/status",
+      "title": "运行状态",
+      "group": "概览",
+      "scope": "vps",
+      "method": "GET",
+      "path": "/vps-control/:service_name/status",
+      "fields": [],
+      "danger": false,
+      "source": "vps_control_basic.go",
+      "handler": "GetVpsServiceStatus"
+    },
+    {
+      "id": "GET /vps-control/:service_name/serviceinfo",
+      "title": "续费信息",
+      "group": "概览",
+      "scope": "vps",
+      "method": "GET",
+      "path": "/vps-control/:service_name/serviceinfo",
+      "fields": [],
+      "danger": false,
+      "source": "vps_control_basic.go",
+      "handler": "GetVpsServiceInfo"
+    },
+    {
+      "id": "PUT /vps-control/:service_name/serviceinfo/renewal",
+      "title": "修改续费策略",
+      "group": "高级",
+      "scope": "vps",
+      "method": "PUT",
+      "path": "/vps-control/:service_name/serviceinfo/renewal",
+      "fields": [
+        {
+          "key": "mode",
+          "label": "续费模式",
+          "kind": "text",
+          "location": "body",
+          "required": false,
+          "choices": [
+            "auto",
+            "manual"
+          ]
+        },
+        {
+          "key": "period",
+          "label": "续费周期（月）",
+          "kind": "number",
+          "location": "body",
+          "required": false
+        }
+      ],
+      "danger": false,
+      "source": "vps_control_basic.go",
+      "handler": "UpdateVpsRenewal"
+    },
+    {
+      "id": "GET /vps-control/:service_name/ips",
+      "title": "IP 地址",
+      "group": "概览",
+      "scope": "vps",
+      "method": "GET",
+      "path": "/vps-control/:service_name/ips",
+      "fields": [],
+      "danger": false,
+      "source": "vps_control_basic.go",
+      "handler": "GetVpsIps"
+    },
+    {
+      "id": "PUT /vps-control/:service_name/ips/:ip/reverse",
+      "title": "修改IP 地址",
+      "group": "高级",
+      "scope": "vps",
+      "method": "PUT",
+      "path": "/vps-control/:service_name/ips/:ip/reverse",
+      "fields": [
+        {
+          "key": "reverse",
+          "label": "反向 DNS 域名",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "ip",
+          "label": "IP 地址",
+          "kind": "text",
+          "location": "path",
+          "required": true
+        }
+      ],
+      "danger": false,
+      "source": "vps_control_basic.go",
+      "handler": "SetVpsIpReverse"
+    },
+    {
+      "id": "GET /vps-control/:service_name/datacenter",
+      "title": "数据中心",
+      "group": "概览",
+      "scope": "vps",
+      "method": "GET",
+      "path": "/vps-control/:service_name/datacenter",
+      "fields": [],
+      "danger": false,
+      "source": "vps_control_basic.go",
+      "handler": "GetVpsDatacenter"
+    },
+    {
+      "id": "POST /vps-control/:service_name/start",
+      "title": "开机",
+      "group": "电源",
+      "scope": "vps",
+      "method": "POST",
+      "path": "/vps-control/:service_name/start",
+      "fields": [],
+      "danger": false,
+      "source": "vps_control_power.go",
+      "handler": "VpsStart"
+    },
+    {
+      "id": "POST /vps-control/:service_name/stop",
+      "title": "关机",
+      "group": "电源",
+      "scope": "vps",
+      "method": "POST",
+      "path": "/vps-control/:service_name/stop",
+      "fields": [],
+      "danger": false,
+      "source": "vps_control_power.go",
+      "handler": "VpsStop"
+    },
+    {
+      "id": "POST /vps-control/:service_name/reboot",
+      "title": "重启",
+      "group": "电源",
+      "scope": "vps",
+      "method": "POST",
+      "path": "/vps-control/:service_name/reboot",
+      "fields": [],
+      "danger": false,
+      "source": "vps_control_power.go",
+      "handler": "VpsReboot"
+    },
+    {
+      "id": "POST /vps-control/:service_name/console",
+      "title": "远程控制台",
+      "group": "电源",
+      "scope": "vps",
+      "method": "POST",
+      "path": "/vps-control/:service_name/console",
+      "fields": [],
+      "danger": false,
+      "source": "vps_control_power.go",
+      "handler": "VpsGetConsoleUrl"
+    },
+    {
+      "id": "POST /vps-control/:service_name/password",
+      "title": "重置密码",
+      "group": "高级",
+      "scope": "vps",
+      "method": "POST",
+      "path": "/vps-control/:service_name/password",
+      "fields": [],
+      "danger": false,
+      "source": "vps_control_power.go",
+      "handler": "VpsSetPassword"
+    },
+    {
+      "id": "GET /vps-control/:service_name/current-os",
+      "title": "当前操作系统",
+      "group": "电源",
+      "scope": "vps",
+      "method": "GET",
+      "path": "/vps-control/:service_name/current-os",
+      "fields": [],
+      "danger": false,
+      "source": "vps_control_install.go",
+      "handler": "GetVpsCurrentOS"
+    },
+    {
+      "id": "GET /vps-control/:service_name/templates",
+      "title": "操作系统模板",
+      "group": "电源",
+      "scope": "vps",
+      "method": "GET",
+      "path": "/vps-control/:service_name/templates",
+      "fields": [],
+      "danger": false,
+      "source": "vps_control_install.go",
+      "handler": "GetVpsTemplates"
+    },
+    {
+      "id": "POST /vps-control/:service_name/reinstall",
+      "title": "重装系统",
+      "group": "电源",
+      "scope": "vps",
+      "method": "POST",
+      "path": "/vps-control/:service_name/reinstall",
+      "fields": [
+        {
+          "key": "templateId",
+          "label": "系统模板 ID",
+          "kind": "text",
+          "location": "body",
+          "required": true
+        },
+        {
+          "key": "sshKey",
+          "label": "SSH 公钥",
+          "kind": "list",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "doNotSendPassword",
+          "label": "不发送密码邮件",
+          "kind": "toggle",
+          "location": "body",
+          "required": false
+        }
+      ],
+      "danger": true,
+      "source": "vps_control_install.go",
+      "handler": "ReinstallVps"
+    },
+    {
+      "id": "GET /vps-control/:service_name/tasks",
+      "title": "任务列表",
+      "group": "维护",
+      "scope": "vps",
+      "method": "GET",
+      "path": "/vps-control/:service_name/tasks",
+      "fields": [],
+      "danger": false,
+      "source": "vps_control_install.go",
+      "handler": "GetVpsTasks"
+    },
+    {
+      "id": "GET /vps-control/:service_name/tasks/:task_id",
+      "title": "任务列表",
+      "group": "维护",
+      "scope": "vps",
+      "method": "GET",
+      "path": "/vps-control/:service_name/tasks/:task_id",
+      "fields": [
+        {
+          "key": "task_id",
+          "label": "任务 ID",
+          "kind": "text",
+          "location": "path",
+          "required": true
+        }
+      ],
+      "danger": false,
+      "source": "vps_control_install.go",
+      "handler": "GetVpsTaskDetail"
+    },
+    {
+      "id": "GET /vps-control/:service_name/snapshot",
+      "title": "快照",
+      "group": "高级",
+      "scope": "vps",
+      "method": "GET",
+      "path": "/vps-control/:service_name/snapshot",
+      "fields": [],
+      "danger": false,
+      "source": "vps_control_snapshot.go",
+      "handler": "GetVpsSnapshot"
+    },
+    {
+      "id": "POST /vps-control/:service_name/snapshot",
+      "title": "创建快照",
+      "group": "高级",
+      "scope": "vps",
+      "method": "POST",
+      "path": "/vps-control/:service_name/snapshot",
+      "fields": [
+        {
+          "key": "description",
+          "label": "描述",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        }
+      ],
+      "danger": false,
+      "source": "vps_control_snapshot.go",
+      "handler": "CreateVpsSnapshot"
+    },
+    {
+      "id": "PUT /vps-control/:service_name/snapshot",
+      "title": "修改快照",
+      "group": "高级",
+      "scope": "vps",
+      "method": "PUT",
+      "path": "/vps-control/:service_name/snapshot",
+      "fields": [
+        {
+          "key": "description",
+          "label": "描述",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        }
+      ],
+      "danger": false,
+      "source": "vps_control_snapshot.go",
+      "handler": "UpdateVpsSnapshotDescription"
+    },
+    {
+      "id": "POST /vps-control/:service_name/snapshot/revert",
+      "title": "恢复快照",
+      "group": "高级",
+      "scope": "vps",
+      "method": "POST",
+      "path": "/vps-control/:service_name/snapshot/revert",
+      "fields": [],
+      "danger": true,
+      "source": "vps_control_snapshot.go",
+      "handler": "RevertVpsSnapshot"
+    },
+    {
+      "id": "DELETE /vps-control/:service_name/snapshot",
+      "title": "删除快照",
+      "group": "高级",
+      "scope": "vps",
+      "method": "DELETE",
+      "path": "/vps-control/:service_name/snapshot",
+      "fields": [],
+      "danger": true,
+      "source": "vps_control_snapshot.go",
+      "handler": "DeleteVpsSnapshot"
+    },
+    {
+      "id": "POST /vps-control/:service_name/change-contact",
+      "title": "修改联系人",
+      "group": "高级",
+      "scope": "vps",
+      "method": "POST",
+      "path": "/vps-control/:service_name/change-contact",
+      "fields": [
+        {
+          "key": "contactAdmin",
+          "label": "管理联系人",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "contactTech",
+          "label": "技术联系人",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "contactBilling",
+          "label": "账单联系人",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        }
+      ],
+      "danger": false,
+      "source": "vps_control_misc.go",
+      "handler": "ChangeVpsContact"
+    },
+    {
+      "id": "PUT /vps-control/:service_name/termination-policy",
+      "title": "修改服务终止策略",
+      "group": "高级",
+      "scope": "vps",
+      "method": "PUT",
+      "path": "/vps-control/:service_name/termination-policy",
+      "fields": [
+        {
+          "key": "policy",
+          "label": "终止策略",
+          "kind": "text",
+          "location": "body",
+          "required": false,
+          "choices": [
+            "empty",
+            "terminateAtExpirationDate",
+            "terminateAtEngagementDate"
+          ]
+        }
+      ],
+      "danger": false,
+      "source": "termination_policy.go",
+      "handler": "UpdateVpsTerminationPolicy"
+    },
+    {
+      "id": "POST /vps-control/:service_name/terminate",
+      "title": "立即终止服务",
+      "group": "高级",
+      "scope": "vps",
+      "method": "POST",
+      "path": "/vps-control/:service_name/terminate",
+      "fields": [],
+      "danger": true,
+      "source": "vps_control_misc.go",
+      "handler": "TerminateVps"
+    },
+    {
+      "id": "POST /vps-control/:service_name/confirm-termination",
+      "title": "确认终止服务",
+      "group": "高级",
+      "scope": "vps",
+      "method": "POST",
+      "path": "/vps-control/:service_name/confirm-termination",
+      "fields": [
+        {
+          "key": "token",
+          "label": "确认令牌",
+          "kind": "secret",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "reason",
+          "label": "原因",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "commentary",
+          "label": "备注",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        }
+      ],
+      "danger": false,
+      "source": "vps_control_misc.go",
+      "handler": "ConfirmVpsTermination"
+    },
+    {
+      "id": "GET /vps-control/:service_name/secondary-dns",
+      "title": "辅助 DNS",
+      "group": "高级",
+      "scope": "vps",
+      "method": "GET",
+      "path": "/vps-control/:service_name/secondary-dns",
+      "fields": [],
+      "danger": false,
+      "source": "vps_control_misc.go",
+      "handler": "GetVpsSecondaryDns"
+    },
+    {
+      "id": "POST /vps-control/:service_name/secondary-dns",
+      "title": "创建辅助 DNS",
+      "group": "高级",
+      "scope": "vps",
+      "method": "POST",
+      "path": "/vps-control/:service_name/secondary-dns",
+      "fields": [
+        {
+          "key": "domain",
+          "label": "域名",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "ip",
+          "label": "IP 地址",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        }
+      ],
+      "danger": false,
+      "source": "vps_control_misc.go",
+      "handler": "AddVpsSecondaryDns"
+    },
+    {
+      "id": "DELETE /vps-control/:service_name/secondary-dns/:domain",
+      "title": "删除辅助 DNS",
+      "group": "高级",
+      "scope": "vps",
+      "method": "DELETE",
+      "path": "/vps-control/:service_name/secondary-dns/:domain",
+      "fields": [
+        {
+          "key": "domain",
+          "label": "域名",
+          "kind": "text",
+          "location": "path",
+          "required": true
+        }
+      ],
+      "danger": true,
+      "source": "vps_control_misc.go",
+      "handler": "DeleteVpsSecondaryDns"
+    },
+    {
+      "id": "GET /vps-control/:service_name/options",
+      "title": "附加服务",
+      "group": "高级",
+      "scope": "vps",
+      "method": "GET",
+      "path": "/vps-control/:service_name/options",
+      "fields": [],
+      "danger": false,
+      "source": "vps_control_misc.go",
+      "handler": "GetVpsOptions"
+    },
+    {
+      "id": "DELETE /vps-control/:service_name/options/:option",
+      "title": "删除附加服务",
+      "group": "高级",
+      "scope": "vps",
+      "method": "DELETE",
+      "path": "/vps-control/:service_name/options/:option",
+      "fields": [
+        {
+          "key": "option",
+          "label": "附加服务",
+          "kind": "text",
+          "location": "path",
+          "required": true
+        }
+      ],
+      "danger": true,
+      "source": "vps_control_misc.go",
+      "handler": "DeleteVpsOption"
+    },
+    {
+      "id": "GET /vps-control/:service_name/automated-backup",
+      "title": "自动备份",
+      "group": "高级",
+      "scope": "vps",
+      "method": "GET",
+      "path": "/vps-control/:service_name/automated-backup",
+      "fields": [],
+      "danger": false,
+      "source": "vps_control_misc.go",
+      "handler": "GetVpsAutomatedBackup"
+    },
+    {
+      "id": "GET /vps-control/:service_name/engagement",
+      "title": "合同期",
+      "group": "高级",
+      "scope": "vps",
+      "method": "GET",
+      "path": "/vps-control/:service_name/engagement",
+      "fields": [],
+      "danger": false,
+      "source": "vps_control_engagement.go",
+      "handler": "GetVpsEngagement"
+    },
+    {
+      "id": "GET /vps-control/:service_name/engagement/available",
+      "title": "可选合同期",
+      "group": "高级",
+      "scope": "vps",
+      "method": "GET",
+      "path": "/vps-control/:service_name/engagement/available",
+      "fields": [],
+      "danger": false,
+      "source": "vps_control_engagement.go",
+      "handler": "GetVpsEngagementAvailable"
+    },
+    {
+      "id": "GET /vps-control/:service_name/engagement/request",
+      "title": "合同期变更",
+      "group": "高级",
+      "scope": "vps",
+      "method": "GET",
+      "path": "/vps-control/:service_name/engagement/request",
+      "fields": [],
+      "danger": false,
+      "source": "vps_control_engagement.go",
+      "handler": "GetVpsEngagementRequest"
+    },
+    {
+      "id": "POST /vps-control/:service_name/engagement/request",
+      "title": "合同期变更",
+      "group": "高级",
+      "scope": "vps",
+      "method": "POST",
+      "path": "/vps-control/:service_name/engagement/request",
+      "fields": [
+        {
+          "key": "pricingMode",
+          "label": "合同套餐",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        }
+      ],
+      "danger": false,
+      "source": "vps_control_engagement.go",
+      "handler": "CreateVpsEngagementRequest"
+    },
+    {
+      "id": "DELETE /vps-control/:service_name/engagement/request",
+      "title": "删除合同期变更",
+      "group": "高级",
+      "scope": "vps",
+      "method": "DELETE",
+      "path": "/vps-control/:service_name/engagement/request",
+      "fields": [],
+      "danger": true,
+      "source": "vps_control_engagement.go",
+      "handler": "DeleteVpsEngagementRequest"
+    },
+    {
+      "id": "PUT /vps-control/:service_name/engagement/end-rule",
+      "title": "修改合同到期策略",
+      "group": "高级",
+      "scope": "vps",
+      "method": "PUT",
+      "path": "/vps-control/:service_name/engagement/end-rule",
+      "fields": [
+        {
+          "key": "strategy",
+          "label": "合同到期策略",
+          "kind": "text",
+          "location": "body",
+          "required": false,
+          "choices": [
+            "REACTIVATE_ENGAGEMENT",
+            "STOP_ENGAGEMENT_FALLBACK_DEFAULT_PRICE",
+            "STOP_ENGAGEMENT_KEEP_PRICE",
+            "CANCEL_SERVICE"
+          ]
+        },
+        {
+          "key": "confirm",
+          "label": "确认执行",
+          "kind": "toggle",
+          "location": "body",
+          "required": false
+        }
+      ],
+      "danger": false,
+      "source": "vps_control_engagement.go",
+      "handler": "UpdateVpsEngagementEndRule"
+    },
+    {
+      "id": "GET /vps-control/:service_name/mitigation",
+      "title": "DDoS 防护",
+      "group": "高级",
+      "scope": "vps",
+      "method": "GET",
+      "path": "/vps-control/:service_name/mitigation",
+      "fields": [],
+      "danger": false,
+      "source": "vps_control_mitigation.go",
+      "handler": "GetVpsMitigation"
+    },
+    {
+      "id": "POST /vps-control/:service_name/mitigation/:ip",
+      "title": "DDoS 防护",
+      "group": "高级",
+      "scope": "vps",
+      "method": "POST",
+      "path": "/vps-control/:service_name/mitigation/:ip",
+      "fields": [
+        {
+          "key": "ip",
+          "label": "IP 地址",
+          "kind": "text",
+          "location": "path",
+          "required": true
+        },
+        {
+          "key": "block",
+          "label": "IP 段",
+          "kind": "text",
+          "location": "query",
+          "required": false
+        }
+      ],
+      "danger": false,
+      "source": "vps_control_mitigation.go",
+      "handler": "EnableVpsMitigation"
+    },
+    {
+      "id": "DELETE /vps-control/:service_name/mitigation/:ip",
+      "title": "删除DDoS 防护",
+      "group": "高级",
+      "scope": "vps",
+      "method": "DELETE",
+      "path": "/vps-control/:service_name/mitigation/:ip",
+      "fields": [
+        {
+          "key": "ip",
+          "label": "IP 地址",
+          "kind": "text",
+          "location": "path",
+          "required": true
+        },
+        {
+          "key": "block",
+          "label": "IP 段",
+          "kind": "text",
+          "location": "query",
+          "required": false
+        }
+      ],
+      "danger": true,
+      "source": "vps_control_mitigation.go",
+      "handler": "DisableVpsMitigation"
+    },
+    {
+      "id": "GET /vps-monitor/models",
+      "title": "VPS 机型",
+      "group": "监控",
+      "scope": "panel",
+      "method": "GET",
+      "path": "/vps-monitor/models",
+      "fields": [
+        {
+          "key": "subsidiary",
+          "label": "账户站点",
+          "kind": "text",
+          "location": "query",
+          "required": false
+        },
+        {
+          "key": "accountId",
+          "label": "账户",
+          "kind": "text",
+          "location": "query",
+          "required": false
+        }
+      ],
+      "danger": false,
+      "source": "vps_models.go",
+      "handler": "GetVPSModels"
+    },
+    {
+      "id": "GET /vps-monitor/subscriptions",
+      "title": "VPS 补货订阅",
+      "group": "监控",
+      "scope": "panel",
+      "method": "GET",
+      "path": "/vps-monitor/subscriptions",
+      "fields": [],
+      "danger": false,
+      "source": "vps_monitor.go",
+      "handler": "GetVPSSubscriptions"
+    },
+    {
+      "id": "POST /vps-monitor/subscriptions",
+      "title": "创建VPS 补货订阅",
+      "group": "监控",
+      "scope": "panel",
+      "method": "POST",
+      "path": "/vps-monitor/subscriptions",
+      "fields": [
+        {
+          "key": "planCode",
+          "label": "机型编码",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "ovhSubsidiary",
+          "label": "账户站点",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "datacenters",
+          "label": "数据中心",
+          "kind": "list",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "monitorLinux",
+          "label": "监控 Linux",
+          "kind": "toggle",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "monitorWindows",
+          "label": "监控 Windows",
+          "kind": "toggle",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "notifyAvailable",
+          "label": "补货时通知",
+          "kind": "toggle",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "notifyUnavailable",
+          "label": "缺货时通知",
+          "kind": "toggle",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "autoOrderAccountId",
+          "label": "自动抢购账户",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "autoOrder",
+          "label": "自动抢购",
+          "kind": "toggle",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "quantity",
+          "label": "每个机房数量",
+          "kind": "number",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "os",
+          "label": "操作系统",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "autoPay",
+          "label": "自动付款",
+          "kind": "toggle",
+          "location": "body",
+          "required": false
+        }
+      ],
+      "danger": false,
+      "source": "vps_monitor.go",
+      "handler": "AddVPSSubscription"
+    },
+    {
+      "id": "PUT /vps-monitor/subscriptions/:subscription_id",
+      "title": "修改VPS 监控订阅",
+      "group": "监控",
+      "scope": "panel",
+      "method": "PUT",
+      "path": "/vps-monitor/subscriptions/:subscription_id",
+      "fields": [
+        {
+          "key": "ovhSubsidiary",
+          "label": "账户站点",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "datacenters",
+          "label": "数据中心",
+          "kind": "list",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "monitorLinux",
+          "label": "监控 Linux",
+          "kind": "toggle",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "monitorWindows",
+          "label": "监控 Windows",
+          "kind": "toggle",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "notifyAvailable",
+          "label": "补货时通知",
+          "kind": "toggle",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "notifyUnavailable",
+          "label": "缺货时通知",
+          "kind": "toggle",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "autoOrderAccountId",
+          "label": "自动抢购账户",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "autoOrder",
+          "label": "自动抢购",
+          "kind": "toggle",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "quantity",
+          "label": "每个机房数量",
+          "kind": "number",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "os",
+          "label": "操作系统",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "autoPay",
+          "label": "自动付款",
+          "kind": "toggle",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "subscription_id",
+          "label": "订阅 ID",
+          "kind": "text",
+          "location": "path",
+          "required": true
+        }
+      ],
+      "danger": false,
+      "source": "subscription_edit.go",
+      "handler": "UpdateVPSSubscription"
+    },
+    {
+      "id": "DELETE /vps-monitor/subscriptions/clear",
+      "title": "删除清空 VPS 订阅",
+      "group": "监控",
+      "scope": "panel",
+      "method": "DELETE",
+      "path": "/vps-monitor/subscriptions/clear",
+      "fields": [],
+      "danger": true,
+      "source": "vps_monitor.go",
+      "handler": "ClearVPSSubscriptions"
+    },
+    {
+      "id": "DELETE /vps-monitor/subscriptions/:subscription_id",
+      "title": "删除VPS 监控订阅",
+      "group": "监控",
+      "scope": "panel",
+      "method": "DELETE",
+      "path": "/vps-monitor/subscriptions/:subscription_id",
+      "fields": [
+        {
+          "key": "subscription_id",
+          "label": "订阅 ID",
+          "kind": "text",
+          "location": "path",
+          "required": true
+        }
+      ],
+      "danger": true,
+      "source": "vps_monitor.go",
+      "handler": "RemoveVPSSubscription"
+    },
+    {
+      "id": "GET /vps-monitor/subscriptions/:subscription_id/history",
+      "title": "VPS 库存变化历史",
+      "group": "监控",
+      "scope": "panel",
+      "method": "GET",
+      "path": "/vps-monitor/subscriptions/:subscription_id/history",
+      "fields": [
+        {
+          "key": "subscription_id",
+          "label": "订阅 ID",
+          "kind": "text",
+          "location": "path",
+          "required": true
+        }
+      ],
+      "danger": false,
+      "source": "vps_monitor.go",
+      "handler": "GetVPSSubscriptionHistory"
+    },
+    {
+      "id": "POST /vps-monitor/start",
+      "title": "启动 VPS 监控",
+      "group": "监控",
+      "scope": "panel",
+      "method": "POST",
+      "path": "/vps-monitor/start",
+      "fields": [],
+      "danger": false,
+      "source": "vps_monitor.go",
+      "handler": "StartVPSMonitor"
+    },
+    {
+      "id": "POST /vps-monitor/stop",
+      "title": "停止 VPS 监控",
+      "group": "监控",
+      "scope": "panel",
+      "method": "POST",
+      "path": "/vps-monitor/stop",
+      "fields": [],
+      "danger": false,
+      "source": "vps_monitor.go",
+      "handler": "StopVPSMonitor"
+    },
+    {
+      "id": "GET /vps-monitor/status",
+      "title": "VPS 监控状态",
+      "group": "监控",
+      "scope": "panel",
+      "method": "GET",
+      "path": "/vps-monitor/status",
+      "fields": [],
+      "danger": false,
+      "source": "vps_monitor.go",
+      "handler": "GetVPSMonitorStatus"
+    },
+    {
+      "id": "PUT /vps-monitor/interval",
+      "title": "修改VPS 检查间隔",
+      "group": "监控",
+      "scope": "panel",
+      "method": "PUT",
+      "path": "/vps-monitor/interval",
+      "fields": [
+        {
+          "key": "interval",
+          "label": "检查间隔（秒）",
+          "kind": "number",
+          "location": "body",
+          "required": false
+        }
+      ],
+      "danger": false,
+      "source": "vps_monitor.go",
+      "handler": "SetVPSMonitorInterval"
+    },
+    {
+      "id": "POST /vps-monitor/check/:plan_code",
+      "title": "检查 VPS 库存",
+      "group": "监控",
+      "scope": "panel",
+      "method": "POST",
+      "path": "/vps-monitor/check/:plan_code",
+      "fields": [
+        {
+          "key": "ovhSubsidiary",
+          "label": "账户站点",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "accountId",
+          "label": "账户",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "plan_code",
+          "label": "机型编码",
+          "kind": "text",
+          "location": "path",
+          "required": true
+        }
+      ],
+      "danger": false,
+      "source": "vps_monitor.go",
+      "handler": "ManualCheckVPS"
+    },
+    {
+      "id": "GET /ovh/account/info",
+      "title": "账户资料",
+      "group": "账户管理",
+      "scope": "panel",
+      "method": "GET",
+      "path": "/ovh/account/info",
+      "fields": [],
+      "danger": false,
+      "source": "account.go",
+      "handler": "GetAccountInfo"
+    },
+    {
+      "id": "GET /ovh/account/refunds",
+      "title": "退款记录",
+      "group": "账户管理",
+      "scope": "panel",
+      "method": "GET",
+      "path": "/ovh/account/refunds",
+      "fields": [],
+      "danger": false,
+      "source": "account.go",
+      "handler": "GetAccountRefunds"
+    },
+    {
+      "id": "GET /ovh/account/credit-balance",
+      "title": "账户余额",
+      "group": "账户管理",
+      "scope": "panel",
+      "method": "GET",
+      "path": "/ovh/account/credit-balance",
+      "fields": [],
+      "danger": false,
+      "source": "account.go",
+      "handler": "GetCreditBalance"
+    },
+    {
+      "id": "GET /ovh/account/email-history",
+      "title": "邮件记录",
+      "group": "账户管理",
+      "scope": "panel",
+      "method": "GET",
+      "path": "/ovh/account/email-history",
+      "fields": [],
+      "danger": false,
+      "source": "account.go",
+      "handler": "GetEmailHistory"
+    },
+    {
+      "id": "GET /ovh/contact-change-requests",
+      "title": "联系人变更",
+      "group": "账户管理",
+      "scope": "panel",
+      "method": "GET",
+      "path": "/ovh/contact-change-requests",
+      "fields": [],
+      "danger": false,
+      "source": "account.go",
+      "handler": "GetContactChangeRequests"
+    },
+    {
+      "id": "GET /ovh/contact-change-requests/:task_id",
+      "title": "联系人变更详情",
+      "group": "账户管理",
+      "scope": "panel",
+      "method": "GET",
+      "path": "/ovh/contact-change-requests/:task_id",
+      "fields": [
+        {
+          "key": "task_id",
+          "label": "任务 ID",
+          "kind": "text",
+          "location": "path",
+          "required": true
+        }
+      ],
+      "danger": false,
+      "source": "account.go",
+      "handler": "GetContactChangeRequestDetail"
+    },
+    {
+      "id": "POST /ovh/contact-change-requests/:task_id/accept",
+      "title": "联系人变更接受",
+      "group": "账户管理",
+      "scope": "panel",
+      "method": "POST",
+      "path": "/ovh/contact-change-requests/:task_id/accept",
+      "fields": [
+        {
+          "key": "token",
+          "label": "确认令牌",
+          "kind": "secret",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "task_id",
+          "label": "任务 ID",
+          "kind": "text",
+          "location": "path",
+          "required": true
+        }
+      ],
+      "danger": false,
+      "source": "account.go",
+      "handler": "AcceptContactChangeRequest"
+    },
+    {
+      "id": "POST /ovh/contact-change-requests/:task_id/refuse",
+      "title": "联系人变更拒绝",
+      "group": "账户管理",
+      "scope": "panel",
+      "method": "POST",
+      "path": "/ovh/contact-change-requests/:task_id/refuse",
+      "fields": [
+        {
+          "key": "token",
+          "label": "确认令牌",
+          "kind": "secret",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "task_id",
+          "label": "任务 ID",
+          "kind": "text",
+          "location": "path",
+          "required": true
+        }
+      ],
+      "danger": false,
+      "source": "account.go",
+      "handler": "RefuseContactChangeRequest"
+    },
+    {
+      "id": "POST /ovh/contact-change-requests/:task_id/resend-email",
+      "title": "联系人变更重发邮件",
+      "group": "账户管理",
+      "scope": "panel",
+      "method": "POST",
+      "path": "/ovh/contact-change-requests/:task_id/resend-email",
+      "fields": [
+        {
+          "key": "task_id",
+          "label": "任务 ID",
+          "kind": "text",
+          "location": "path",
+          "required": true
+        }
+      ],
+      "danger": false,
+      "source": "account.go",
+      "handler": "ResendContactChangeEmail"
+    },
+    {
+      "id": "GET /ovh/account/sub-accounts",
+      "title": "子账户",
+      "group": "账户管理",
+      "scope": "panel",
+      "method": "GET",
+      "path": "/ovh/account/sub-accounts",
+      "fields": [],
+      "danger": false,
+      "source": "account.go",
+      "handler": "GetSubAccounts"
+    },
+    {
+      "id": "GET /ovh/account/bills",
+      "title": "账单",
+      "group": "账户管理",
+      "scope": "panel",
+      "method": "GET",
+      "path": "/ovh/account/bills",
+      "fields": [],
+      "danger": false,
+      "source": "account.go",
+      "handler": "GetAccountBills"
+    }
+  ],
+  "labels": {
+    "account_id": "下单账户",
+    "accountId": "账户",
+    "name": "名称",
+    "endpoint": "API 区域",
+    "zone": "账户站点",
+    "appKey": "Application Key",
+    "appSecret": "Application Secret",
+    "consumerKey": "Consumer Key",
+    "iam": "IAM",
+    "setDefault": "设为默认账户",
+    "proxyUrl": "代理地址",
+    "fingerprint": "浏览器指纹",
+    "planCode": "机型编码",
+    "datacenter": "数据中心",
+    "datacenters": "数据中心",
+    "options": "配置选项",
+    "retryInterval": "重试间隔（秒）",
+    "autoPay": "自动付款",
+    "status": "状态",
+    "interval": "检查间隔（秒）",
+    "check_interval": "检查间隔（秒）",
+    "notifyAvailable": "补货时通知",
+    "notifyUnavailable": "缺货时通知",
+    "autoOrder": "自动抢购",
+    "quantity": "每个机房数量",
+    "autoOrderAccountId": "自动抢购账户",
+    "monitorLinux": "监控 Linux",
+    "monitorWindows": "监控 Windows",
+    "os": "操作系统",
+    "ovhSubsidiary": "账户站点",
+    "alias": "别名",
+    "reason": "原因",
+    "comment": "备注",
+    "confirm": "确认执行",
+    "templateName": "系统模板",
+    "customHostname": "主机名",
+    "useProxmox9Zfs": "Proxmox 9 ZFS 分区",
+    "partitionSchemeName": "分区方案",
+    "storageConfig": "存储配置",
+    "zfsRaidLevel": "ZFS RAID 级别",
+    "zfsVzSize": "ZFS 数据分区大小（MB）",
+    "wantedBeginingDate": "预约开始时间",
+    "startDate": "开始时间",
+    "hasPerformedBackup": "已完成备份",
+    "email": "邮箱",
+    "sshKey": "SSH 公钥",
+    "bootId": "启动选项",
+    "enabled": "启用",
+    "monitoring": "硬件监控",
+    "ip": "IP 地址",
+    "reverse": "反向 DNS 域名",
+    "mode": "续费模式",
+    "period": "续费周期（月）",
+    "pricingMode": "合同套餐",
+    "strategy": "合同到期策略",
+    "contactAdmin": "管理联系人",
+    "contactTech": "技术联系人",
+    "contactBilling": "账单联系人",
+    "componentType": "故障组件",
+    "disks": "磁盘数量",
+    "inverse": "更换未列出的磁盘",
+    "details": "故障详情",
+    "slots": "内存槽位",
+    "virtualNetworkInterfaces": "虚拟网卡列表",
+    "virtualNetworkInterface": "虚拟网卡",
+    "ipBlock": "IP 段",
+    "ftp": "FTP",
+    "nfs": "NFS",
+    "cifs": "CIFS",
+    "cloudProjectId": "云项目 ID",
+    "projectDescription": "云项目描述",
+    "domain": "域名",
+    "ipAddress": "IP 地址",
+    "type": "类型",
+    "virtualMachineName": "虚拟机名称",
+    "policy": "终止策略",
+    "token": "确认令牌",
+    "futureUse": "未来用途",
+    "commentary": "备注",
+    "serialNumber": "序列号",
+    "templateId": "系统模板 ID",
+    "doNotSendPassword": "不发送密码邮件",
+    "description": "描述",
+    "option": "附加服务",
+    "vrack": "vRack 名称",
+    "task_id": "任务 ID",
+    "boot_id": "启动选项 ID",
+    "service_name": "服务名称",
+    "subscription_id": "订阅 ID",
+    "plan_code": "机型编码",
+    "notifyWebhookUrl": "Webhook 地址",
+    "tgToken": "Telegram Bot Token",
+    "tgChatId": "Telegram Chat ID",
+    "defaultRetryInterval": "默认重试间隔（秒）",
+    "quickOrderRetryInterval": "快速抢购间隔（秒）",
+    "timestamp": "时间",
+    "createdAt": "创建时间",
+    "updatedAt": "更新时间",
+    "expiration": "到期时间",
+    "serviceName": "服务名称",
+    "state": "状态",
+    "hardware": "硬件信息",
+    "serviceInfo": "服务信息",
+    "currentOS": "当前系统",
+    "ips": "IP 地址",
+    "currencyCode": "货币",
+    "withTax": "含税金额",
+    "withoutTax": "税前金额",
+    "priceWithTax": "含税金额",
+    "running": "运行中",
+    "lastStatus": "上次库存",
+    "level": "级别",
+    "message": "内容",
+    "source": "来源",
+    "orderId": "订单号",
+    "orderUrl": "订单链接",
+    "taskId": "任务 ID",
+    "retryCount": "尝试次数",
+    "failureCount": "失败次数",
+    "purchaseTime": "下单时间",
+    "orderStatus": "订单付款状态",
+    "price": "价格",
+    "cpu": "处理器",
+    "memory": "内存",
+    "storage": "硬盘",
+    "bandwidth": "带宽",
+    "processorName": "处理器",
+    "memorySize": "内存",
+    "distribution": "发行版",
+    "renew": "续费",
+    "automatic": "自动续费",
+    "forced": "合同锁定",
+    "deleteAtExpiration": "到期删除",
+    "manualPayment": "手动付款",
+    "snapshot": "快照",
+    "backup": "备份",
+    "firstname": "名",
+    "customerCode": "客户号",
+    "nichandle": "账户 ID",
+    "country": "国家",
+    "refundId": "退款 ID",
+    "date": "日期",
+    "subject": "主题",
+    "body": "正文",
+    "pdfUrl": "PDF 文件",
+    "value": "数值",
+    "unit": "单位",
+    "totalMs": "总耗时（毫秒）",
+    "timing": "各阶段耗时",
+    "error": "错误",
+    "success": "成功",
+    "tasks": "任务",
+    "block": "IP 段",
+    "forceRefresh": "强制刷新",
+    "fromMonitor": "来自监控",
+    "id": "编号",
+    "intervention_id": "维护 ID",
+    "ip_block": "IP 段",
+    "periodEnd": "结束日期",
+    "periodStart": "开始日期",
+    "showApiServers": "包含 API 机型",
+    "skipDuplicateCheck": "跳过重复检查",
+    "subsidiary": "账户站点",
+    "verify": "验证凭据",
+    "disk_serial": "硬盘序列号",
+    "slot_id": "硬盘槽位",
+    "diskGroupId": "磁盘组 ID",
+    "hardwareRaid": "硬件 RAID",
+    "partitioning": "分区配置",
+    "layout": "分区布局",
+    "mountPoint": "挂载点",
+    "fileSystem": "文件系统",
+    "raidLevel": "RAID 级别",
+    "arrays": "阵列数",
+    "spares": "备用磁盘数"
+  },
+  "subsidiaries": [
+    {
+      "code": "IE",
+      "endpoint": "ovh-eu",
+      "label": "爱尔兰 · EUR",
+      "currency": "EUR"
+    },
+    {
+      "code": "FR",
+      "endpoint": "ovh-eu",
+      "label": "法国 · EUR",
+      "currency": "EUR"
+    },
+    {
+      "code": "DE",
+      "endpoint": "ovh-eu",
+      "label": "德国 · EUR",
+      "currency": "EUR"
+    },
+    {
+      "code": "GB",
+      "endpoint": "ovh-eu",
+      "label": "英国 · GBP",
+      "currency": "GBP"
+    },
+    {
+      "code": "IT",
+      "endpoint": "ovh-eu",
+      "label": "意大利 · EUR",
+      "currency": "EUR"
+    },
+    {
+      "code": "ES",
+      "endpoint": "ovh-eu",
+      "label": "西班牙 · EUR",
+      "currency": "EUR"
+    },
+    {
+      "code": "PL",
+      "endpoint": "ovh-eu",
+      "label": "波兰 · PLN",
+      "currency": "PLN"
+    },
+    {
+      "code": "NL",
+      "endpoint": "ovh-eu",
+      "label": "荷兰 · EUR",
+      "currency": "EUR"
+    },
+    {
+      "code": "PT",
+      "endpoint": "ovh-eu",
+      "label": "葡萄牙 · EUR",
+      "currency": "EUR"
+    },
+    {
+      "code": "FI",
+      "endpoint": "ovh-eu",
+      "label": "芬兰 · EUR",
+      "currency": "EUR"
+    },
+    {
+      "code": "CZ",
+      "endpoint": "ovh-eu",
+      "label": "捷克 · EUR",
+      "currency": "EUR"
+    },
+    {
+      "code": "LT",
+      "endpoint": "ovh-eu",
+      "label": "立陶宛 · EUR",
+      "currency": "EUR"
+    },
+    {
+      "code": "MA",
+      "endpoint": "ovh-eu",
+      "label": "摩洛哥 · MAD",
+      "currency": "MAD"
+    },
+    {
+      "code": "TN",
+      "endpoint": "ovh-eu",
+      "label": "突尼斯 · TND",
+      "currency": "TND"
+    },
+    {
+      "code": "SN",
+      "endpoint": "ovh-eu",
+      "label": "塞内加尔 · XOF",
+      "currency": "XOF"
+    },
+    {
+      "code": "US",
+      "endpoint": "ovh-us",
+      "label": "美国 · USD（独立产品线）",
+      "currency": "USD"
+    },
+    {
+      "code": "CA",
+      "endpoint": "ovh-ca",
+      "label": "加拿大 · CAD",
+      "currency": "CAD"
+    },
+    {
+      "code": "QC",
+      "endpoint": "ovh-ca",
+      "label": "魁北克 · CAD",
+      "currency": "CAD"
+    },
+    {
+      "code": "ASIA",
+      "endpoint": "ovh-ca",
+      "label": "亚太 · USD",
+      "currency": "USD"
+    },
+    {
+      "code": "SG",
+      "endpoint": "ovh-ca",
+      "label": "新加坡 · SGD",
+      "currency": "SGD"
+    },
+    {
+      "code": "AU",
+      "endpoint": "ovh-ca",
+      "label": "澳大利亚 · AUD",
+      "currency": "AUD"
+    },
+    {
+      "code": "IN",
+      "endpoint": "ovh-ca",
+      "label": "印度 · INR",
+      "currency": "INR"
+    },
+    {
+      "code": "WE",
+      "endpoint": "ovh-ca",
+      "label": "西欧(WE) · USD",
+      "currency": "USD"
+    },
+    {
+      "code": "WS",
+      "endpoint": "ovh-ca",
+      "label": "南欧(WS) · USD",
+      "currency": "USD"
+    }
+  ]
+}

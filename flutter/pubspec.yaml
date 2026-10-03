@@ -1,0 +1,36 @@
+name: ovh_flutter
+description: OVH Flutter client for the gokele/ovh self-hosted console.
+publish_to: none
+version: 1.2.0+1
+
+environment:
+  sdk: '>=3.10.0 <4.0.0'
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+  flutter_secure_storage: 10.3.1
+  http: 1.6.0
+  image_picker: 1.2.3
+  mobile_scanner: 7.4.2
+  qr_flutter: 4.1.0
+  shared_preferences: 2.5.5
+  share_plus: 13.2.1
+  url_launcher: 6.3.2
+  webview_flutter: 4.13.1
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  integration_test:
+    sdk: flutter
+  flutter_lints: 6.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/NativeCatalog.json
+    - assets/ovh.png
+    - assets/LICENSE.txt

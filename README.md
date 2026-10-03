@@ -1,6 +1,8 @@
-# OVH · SwiftUI 原生客户端
+# OVH · SwiftUI / Flutter 客户端
 
-当前源码版本 1.2.0（9），最低 iOS 17，支持 iPhone 和 iPad。网站继续使用 React；iOS 的业务页面全部使用 SwiftUI，共用现有 gokele/ovh Go 后端。已移除“完整控制台”网页入口。WebKit 仅用于 OVH 返回的 KVM 远程屏幕，不加载管理面板，也不注入面板令牌。
+新增独立 [Flutter 客户端](flutter/README.md)：iOS、iPad 和 Android 共用 Flutter/Dart 界面，同步接入原有后端与 226 项业务操作描述。底部服务器直接进入实例，首页资源位于活跃队列下方。使用独立应用 ID，可和现有 SwiftUI 版并存；Flutter 版本尚未提交应用商店。
+
+SwiftUI 源码版本 1.2.0（9），最低 iOS 17，支持 iPhone 和 iPad。网站继续使用 React；此版本的业务页面全部使用 SwiftUI，共用现有 gokele/ovh Go 后端。已移除“完整控制台”网页入口。WebKit 仅用于 OVH 返回的 KVM 远程屏幕，不加载管理面板，也不注入面板令牌。
 
 首次连接可扫描二维码、识别二维码图片、粘贴配对链接、填写 8 位配对码，或使用旧访问密钥。名称与图标保持 OVH，官方图标出处见 [BrandAssets/README.md](BrandAssets/README.md)。
 
