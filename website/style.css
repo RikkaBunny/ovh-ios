@@ -528,6 +528,8 @@
 .production-style-1 { background: var(--bg-surface); }
 .production-style-2 { max-width: 800px; }
 .production-style-3 { background: var(--text-primary); color: var(--bg-base); border: none; }
+.btn-secondary.production-style-3:hover,
+.btn-secondary.production-style-3:focus-visible { background: #e5e5e5; color: #000; border: none; }
 .production-style-4 { border-top: 1px solid var(--border-subtle); }
 .production-style-5 { width: 200px; height: 200px; padding: 12px; background: white; border-radius: 16px; margin-bottom: 24px; }
 .production-style-6 { width: 24px; }
