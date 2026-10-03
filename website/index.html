@@ -3,325 +3,291 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>ovh cp - 优雅原生的 OVH 移动控制面板</title>
-    <meta name="description" content="ovh cp 是一个开源的 Flutter 移动客户端，专为连接用户自建 gokele/ovh 后端设计，提供高级、精致的 OVH 服务器与实例管理体验。">
-    <meta name="theme-color" content="#0050d7">
+    <title>ovh cp - OVH 移动端控制台</title>
+    <meta name="description" content="ovh cp 是一款移动客户端，专为连接用户自建 gokele/ovh 后端设计，提供 OVH 服务器与实例的跨区管理及监控体验。">
+    <meta name="theme-color" content="#000000">
     <link rel="canonical" href="https://ovh.hejingcheng.com/download/">
     <link rel="icon" href="assets/icon.png">
-    <meta property="og:title" content="ovh cp · 你的 OVH 掌上控制中心">
-    <meta property="og:description" content="连接同一个面板，在手机上管理服务器、VPS、监控和抢购任务。">
+    <meta property="og:title" content="ovh cp · 你的云端，尽在掌握">
+    <meta property="og:description" content="手机与网页，连接同一份数据。管理 OVH 服务器、VPS、库存与任务。">
     <meta property="og:image" content="https://ovh.hejingcheng.com/download/assets/icon.png">
 
-    <!-- 预加载核心图片资源以优化首屏 -->
+    <!-- 预加载核心图片资源 -->
     <link rel="preload" as="image" href="assets/dashboard.png">
 
-    <link rel="stylesheet" href="style.css?v=gemini-20261003">
+    <link rel="stylesheet" href="style.css?v=gemini-premium-20261003">
 </head>
 <body>
     <a class="skip-link" href="#main">跳到主要内容</a>
 
-    <header class="nav-bar">
-        <div class="container nav-inner">
-            <a href="#" class="nav-brand">
-                <img src="assets/icon.png" alt="ovh cp Logo">
+    <header class="site-header" id="header">
+        <div class="container flex justify-between items-center w-full">
+            <a href="#" class="nav-brand flex items-center gap-3">
+                <img src="assets/icon.png" alt="ovh cp 图标">
                 ovh cp
             </a>
 
-            <nav class="nav-links" id="site-nav" aria-label="网站导航">
+            <nav class="nav-links flex gap-8 items-center" id="nav-menu" aria-label="网站导航">
                 <a href="#features">功能特性</a>
-                <a href="#showcase">界面预览</a>
-                <a href="#pairing">配对指南</a>
-                <a href="#downloads">下载与校验</a>
+                <a href="#pairing">安装与配对</a>
+                <a href="#faq">常见问题</a>
+                <a href="#downloads">获取应用</a>
             </nav>
 
-            <div class="nav-actions">
-                <a href="https://github.com/RikkaBunny/ovh-ios" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
-                    <svg aria-hidden="true" focusable="false" width="20" height="20" fill="currentColor" viewBox="0 0 24 24"><path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.531 1.032 1.531 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z"/></svg>
-                    GitHub
+            <div class="nav-actions flex items-center gap-4">
+                <a href="https://github.com/RikkaBunny/ovh-ios" target="_blank" class="btn btn-secondary" rel="noopener noreferrer">
+                    GitHub 源码
                 </a>
-                <a href="#downloads" class="btn btn-primary">下载 Android 版</a>
-                <button class="mobile-menu-btn" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="site-nav">
-                    <svg aria-hidden="true" focusable="false" width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/></svg>
-                </button>
             </div>
+
+            <button class="mobile-menu-toggle flex items-center justify-center" id="menu-btn" type="button" aria-label="打开导航菜单" aria-expanded="false" aria-controls="nav-menu">
+                <svg aria-hidden="true" focusable="false" width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                </svg>
+            </button>
         </div>
     </header>
 
     <main id="main">
-    <section class="hero">
-        <div class="bg-grid"></div>
-        <div class="bg-glow"></div>
+        <section class="hero">
+            <div class="hero-canvas-container" id="canvas-container">
+                <canvas id="hero-canvas" aria-hidden="true"></canvas>
+            </div>
 
-        <div class="container hero-grid">
-            <div class="hero-content reveal">
-                <span class="badge">Release 1.3.0 · 开源发布</span>
-                <h1>你的 OVH<br>掌上控制中心</h1>
-                <p>把熟悉的控制台带到手机上。独立服务器、VPS、监控和抢购任务，连接同一份后端数据。</p>
-
-                <div class="hero-actions">
+            <div class="hero-content reveal-element">
+                <h1 class="hero-title">
+                    你的云端，<br>尽在掌握。
+                </h1>
+                <p class="hero-subtitle">
+                    手机与网页，连接同一份数据。<br>
+                    独立服务器、VPS、监控与抢购任务。
+                </p>
+                <div class="flex justify-center gap-4 flex-wrap">
                     <a href="ovh-cp-1.3.0-11.apk" download="ovh-cp-1.3.0-11.apk" class="btn btn-primary">
-                        <svg aria-hidden="true" focusable="false" width="20" height="20" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
-                        直接下载 APK
+                        下载 Android 版
                     </a>
-                    <a href="https://github.com/RikkaBunny/ovh-ios/releases/tag/v1.3.0-cp.11" target="_blank" rel="noopener noreferrer" class="btn btn-secondary">
-                        查看 iOS 发布状态
+                    <a href="https://github.com/RikkaBunny/ovh-ios/releases/tag/v1.3.0-cp.11" class="btn btn-outline">
+                        iOS 发布信息
                     </a>
                 </div>
-                <p class="package-meta">Android 7.0+ · 75.5 MB · 正式签名 APK</p>
+                <p class="hero-meta">Android 1.3.0 · 75.5 MB · iOS 1.3.0 已提交审核</p>
+                <a class="hero-explore" href="#features">探索 ovh cp <span aria-hidden="true">↓</span></a>
             </div>
+        </section>
 
-            <div class="delay-200 hero-visual reveal">
-                <div class="hero-image-wrapper">
-                    <!-- 首屏展示真实客户端的演示账户截图 -->
-                    <img src="assets/dashboard.png" alt="ovh cp 仪表盘演示账户截图" width="1080" height="2424" fetchpriority="high">
+        <section id="features" class="section-padding product-stage">
+            <div class="container">
+                <div class="section-header text-center reveal-element">
+                    <h2>熟悉的控制台。<br>随时在手边。</h2>
+                    <p class="mt-4 mx-auto">账户、实例和任务，在手机与网页间保持一致。
+                    仪表盘展示面板主机的 CPU、内存与存储占用。</p>
                 </div>
-            </div>
-        </div>
-    </section>
 
-    <section id="features" class="features">
-        <div class="container">
-            <div class="section-header reveal">
-                <h2>从查看状态，到管理实例</h2>
-                <p>账户、实例、库存与任务，把常用的管理功能放在手边。</p>
-            </div>
-
-            <div class="bento-grid">
-                <div class="bento-card bento-large reveal">
-                    <div class="bento-icon">
-                        <svg aria-hidden="true" focusable="false" width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+                <div class="reveal-element">
+                    <div class="stage-tabs" id="stage-tabs" role="tablist" aria-label="客户端界面预览">
+                        <button class="stage-tab-btn" type="button" role="tab" aria-selected="true" aria-controls="panel-dashboard" id="tab-dashboard">仪表盘</button>
+                        <button class="stage-tab-btn" type="button" role="tab" aria-selected="false" tabindex="-1" aria-controls="panel-instances" id="tab-instances">服务器实例</button>
+                        <button class="stage-tab-btn" type="button" role="tab" aria-selected="false" tabindex="-1" aria-controls="panel-control" id="tab-control">实例控制</button>
                     </div>
-                    <h3>多地区账户，随时切换</h3>
-                    <p>EU、CA、US 账户由同一个后端统一管理。切换账户，实例、机型、价格与库存跟着更新。</p>
-                </div>
 
-                <div class="delay-100 bento-card reveal">
-                    <div class="bento-icon">
-                        <svg aria-hidden="true" focusable="false" width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z"/></svg>
+                    <div class="stage-display">
+                        <div class="mockup-frame">
+                            <img src="assets/dashboard.png" width="1080" height="2424" alt="监控仪表盘界面截图" class="mockup-image is-active" id="panel-dashboard" role="tabpanel" aria-labelledby="tab-dashboard">
+                            <img src="assets/instances.png" width="1080" height="2424" alt="实例列表界面截图" class="mockup-image" id="panel-instances" role="tabpanel" aria-labelledby="tab-instances">
+                            <img src="assets/control.png" width="1080" height="2424" alt="实例控制界面截图" class="mockup-image" id="panel-control" role="tabpanel" aria-labelledby="tab-control">
+                        </div>
                     </div>
-                    <h3>实例控制，直接到达</h3>
-                    <p>管理已有独立服务器与 VPS。查看硬件、IP 和流量，进入电源、维护与高级操作。</p>
+                    <p class="text-center text-tertiary text-sm mt-8">实际 App 截图 · 使用演示账户数据</p>
                 </div>
+            </div>
+        </section>
 
-                <div class="bento-card reveal">
-                    <div class="bento-icon">
-                        <svg aria-hidden="true" focusable="false" width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z"/></svg>
+        <section class="section-padding">
+            <div class="container flex flex-col gap-16">
+
+                <div class="feature-grid reveal-element">
+                    <div class="feature-text">
+                        <h3>库存抢购与任务追踪</h3>
+                        <p class="text-secondary leading-relaxed">
+                            浏览机型、价格与地区库存，创建和调整抢购、监控任务。手机与网页共用同一个任务队列，任务由你的后端持续执行。
+                        </p>
                     </div>
-                    <h3>资源状态，一眼看清</h3>
-                    <p>仪表盘展示面板宿主机的 CPU、内存与存储占用，放在活跃队列下方。</p>
-                </div>
-
-                <div class="delay-100 bento-card bento-large reveal">
-                    <div class="bento-icon">
-                        <svg aria-hidden="true" focusable="false" width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M16 11V7a4 4 0 00-8 0v4M5 9h14l1 12H4L5 9z"/></svg>
+                    <div class="flex justify-center">
+                        <svg aria-hidden="true" focusable="false" width="240" height="240" viewBox="0 0 24 24" fill="none" stroke="var(--border-subtle)" class="text-brand">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="0.5" d="M12 6v6l4 2M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            <circle cx="12" cy="12" r="9" stroke="var(--brand-purple)" stroke-width="1" stroke-dasharray="4 4" opacity="0.5"/>
+                        </svg>
                     </div>
-                    <h3>库存与抢购，持续跟进</h3>
-                    <p>浏览机型、价格和地区库存，创建或调整抢购与监控任务。任务由你的后端继续执行。</p>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="showcase" class="showcase">
-        <div class="container">
-            <div class="section-header reveal">
-                <h2>熟悉的面板，移动的体验</h2>
-                <p>真实客户端界面。为手机和平板分别安排布局，让常用操作更容易找到。</p>
-            </div>
-
-            <div class="showcase-layout reveal">
-                <div class="showcase-tabs" id="screenshot-tabs" role="tablist" aria-label="应用界面预览" aria-orientation="vertical">
-                    <button class="tab-btn active" type="button" id="tab-dashboard" role="tab" aria-selected="true" aria-controls="showcase-panel" data-target="dashboard">
-                        <h4>宿主机监控看板</h4>
-                        <p>活跃队列与面板主机 CPU、内存、存储占用。</p>
-                    </button>
-                    <button class="tab-btn" type="button" id="tab-instances" role="tab" aria-selected="false" aria-controls="showcase-panel" tabindex="-1" data-target="instances">
-                        <h4>服务器实例列表</h4>
-                        <p>独立服务器与 VPS，底部服务器入口直接进入。</p>
-                    </button>
-                    <button class="tab-btn" type="button" id="tab-control" role="tab" aria-selected="false" aria-controls="showcase-panel" tabindex="-1" data-target="control">
-                        <h4>原生实例控制</h4>
-                        <p>配置、流量、电源、维护与高级操作集中管理。</p>
-                    </button>
                 </div>
 
-                <div class="showcase-visual" id="showcase-panel" role="tabpanel" aria-labelledby="tab-dashboard" tabindex="0">
-                    <img id="screenshot-img" src="assets/dashboard.png" alt="仪表盘：活跃队列与面板主机资源占用" width="1080" height="2424">
-                    <div class="disclaimer-text">实际 App 截图 · 使用演示账户数据</div>
+                <div class="feature-grid reverse reveal-element">
+                    <div class="flex justify-center">
+                        <svg aria-hidden="true" focusable="false" width="240" height="240" viewBox="0 0 24 24" fill="none" stroke="var(--border-subtle)" class="text-brand">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="0.5" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <div class="feature-text">
+                        <h3>多地区账户，统一管理</h3>
+                        <p class="text-secondary leading-relaxed">
+                            切换 EU、CA、US 账户，查看已有独立服务器与 VPS。硬件、IP、流量、电源、维护和高级操作，都从熟悉的实例入口进入。
+                        </p>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <section id="pairing" class="production-style-1 section-padding">
+            <div class="container">
+                <div class="section-header text-center reveal-element">
+                    <h2>扫码连接，同一份数据</h2>
+                    <p class="mt-4 mx-auto">连接你自己的 gokele/ovh 面板。每台设备独立授权，可在网页单独撤销。</p>
+                </div>
+
+                <div class="steps-container reveal-element">
+                    <div class="step-card">
+                        <div class="step-number">01</div>
+                        <h4 class="text-xl font-medium mb-4">安装 App，打开网页</h4>
+                        <p class="text-secondary leading-relaxed text-sm">
+                            安装 APK，按 Android 提示允许当前下载来源安装应用。打开已部署、支持 App 配对接口的 HTTPS 网页面板。
+                        </p>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-number">02</div>
+                        <h4 class="text-xl font-medium mb-4">生成配对码</h4>
+                        <p class="text-secondary leading-relaxed text-sm">
+                            在网页「API 设置 → App 配对」生成二维码或 8 位码。OVH API 凭据由自己的后端管理，配对时无需再次录入。
+                        </p>
+                    </div>
+
+                    <div class="step-card">
+                        <div class="step-number">03</div>
+                        <h4 class="text-xl font-medium mb-4">扫描连接</h4>
+                        <p class="text-secondary leading-relaxed text-sm">
+                            在 App 扫码、选择二维码图片，或输入面板地址与 8 位码。连接后共用账户、队列、监控与设置；也可在 App 管理 API 配置。
+                        </p>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section id="pairing" class="pairing">
-        <div class="container">
-            <div class="section-header reveal">
-                <h2>扫码配对，连接同一个面板</h2>
-                <p>OVH API 凭据由你自己的后端管理，配对时无需再次录入。每台设备独立授权，可以单独撤销。</p>
-            </div>
-
-            <div class="steps reveal">
-                <div class="step-card">
-                    <h3>安装 App，打开网页</h3>
-                    <p>下载 APK 并安装；按系统提示允许当前浏览器或文件管理器安装应用。打开已部署的 <b>gokele/ovh</b> 网页控制台。</p>
+        <section id="faq" class="section-padding">
+            <div class="production-style-2 container">
+                <div class="section-header reveal-element">
+                    <h2>常见问题</h2>
                 </div>
-                <div class="step-card">
-                    <h3>生成专属配对码</h3>
-                    <p>在网页「API 设置 → App 配对」生成二维码或 8 位配对码。</p>
-                </div>
-                <div class="step-card">
-                    <h3>打开 App，完成配对</h3>
-                    <p>扫码、选择二维码图片，或输入面板地址与 8 位码即可连接。网页与 App 共用账户、队列、监控和设置。</p>
+
+                <div class="faq-list reveal-element">
+                    <details class="faq-item" open>
+                        <summary>这是 OVHcloud 官方应用吗？</summary>
+                        <div class="faq-body">
+                            ovh cp 是支持 OVHcloud 的独立开源客户端，非 OVHcloud 官方开发。它需要连接你自己的 gokele/ovh 后端，与网页共用管理数据。
+                        </div>
+                    </details>
+
+                    <details class="faq-item">
+                        <summary>iOS 版本什么时候可以下载？</summary>
+                        <div class="faq-body">
+                            iOS / iPadOS 1.3.0 已提交 App Store 审核。这里的 iOS 入口指向 GitHub 发布信息，商店下载链接会在确认上架后更新。
+                        </div>
+                    </details>
+
+                    <details class="faq-item">
+                        <summary>App 如何连接我的后端？</summary>
+                        <div class="faq-body">
+                            App 通过 HTTPS 访问配对的面板后端，无需额外注册开发者账号。OVH API 凭据由该后端管理，App 的账户与 API 设置也可以读写这些配置。请在自己的网页控制台管理已授权设备。
+                        </div>
+                    </details>
+
+                    <details class="faq-item">
+                        <summary>首页的资源占用属于哪台服务器？</summary>
+                        <div class="faq-body">CPU、内存和存储数据来自运行网页面板的宿主机，不代表每台 OVH 实例内部的系统指标。</div>
+                    </details>
                 </div>
             </div>
+        </section>
 
-            <div class="auth-note reveal">
-                <svg aria-hidden="true" focusable="false" width="24" height="24" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"/></svg>
-                <div>
-                    <strong>直接连接你的后端</strong>
-                    <p class="auth-note-text">不需要额外注册开发者账号。连接支持 App 配对接口的 HTTPS 面板，就能在手机上继续管理。</p>
+        <section id="downloads" class="production-style-1 section-padding">
+            <div class="container reveal-element">
+                <div class="section-header">
+                    <h2>获取应用</h2>
+                    <p class="mt-4">当前最新正式版本：1.3.0</p>
                 </div>
-            </div>
-        </div>
-    </section>
 
-    <section id="downloads" class="downloads">
-        <div class="container">
-            <div class="section-header reveal">
-                <h2>获取客户端</h2>
-                <p>当前最新版本：v1.3.0 (Build 11)</p>
-            </div>
+                <div class="download-layout">
+                    <div class="download-card">
+                        <h3 class="text-2xl font-medium mb-2">Android 客户端</h3>
+                        <p class="text-secondary text-sm mb-6">1.3.0 (Build 11) · 75.5 MB · Android 7.0+</p>
 
-            <div class="dl-grid reveal">
-                <div class="dl-info">
-                    <details class="accordion" open>
-                        <summary>Android 直接下载</summary>
-                        <div class="accordion-content">
-                            <p>通过我们的服务器直接获取包含正式签名的 APK 安装包。</p>
-                            <a href="ovh-cp-1.3.0-11.apk" download="ovh-cp-1.3.0-11.apk" class="action-spaced btn btn-primary">
-                                下载 APK (75.5 MB)
+                        <div class="flex gap-4 flex-wrap mb-8">
+                            <a href="ovh-cp-1.3.0-11.apk" download="ovh-cp-1.3.0-11.apk" class="production-style-3 btn btn-secondary">
+                                直接下载 APK
                             </a>
-                            <p class="environment-note">环境要求：最低 Android 7.0 (API 24)</p>
-                        </div>
-                    </details>
-
-                    <details class="accordion">
-                        <summary>Android GitHub 备用链接</summary>
-                        <div class="accordion-content">
-                            <p>如果主线路下载缓慢，您可以从 GitHub Release 获取相同版本。</p>
-                            <a href="https://github.com/RikkaBunny/ovh-ios/releases/download/v1.3.0-cp.11/ovh-cp-1.3.0-11-release.apk" class="action-spaced btn btn-secondary">
-                                前往 GitHub 下载
+                            <a href="https://github.com/RikkaBunny/ovh-ios/releases/download/v1.3.0-cp.11/ovh-cp-1.3.0-11-release.apk" class="btn btn-secondary">
+                                GitHub 备用链接
                             </a>
                         </div>
-                    </details>
 
-                    <details class="accordion">
-                        <summary>iOS 获取状态</summary>
-                        <div class="accordion-content">
-                            <p>目前 iOS v1.3.0 版本已提交 App Store 审核。我们将在审核通过后第一时间更新状态，请关注 GitHub Release 发布说明以获取最新进展。</p>
-                            <a href="https://github.com/RikkaBunny/ovh-ios/releases/tag/v1.3.0-cp.11" target="_blank" rel="noopener noreferrer" class="action-spaced btn btn-secondary">
-                                查看发布日志
-                            </a>
+                        <div class="production-style-4 mt-8 pt-8">
+                            <h4 class="text-base font-medium mb-2">校验安装包完整性 (SHA256)</h4>
+                            <p class="text-sm text-tertiary mb-2">核对哈希值以确保文件未经篡改。</p>
+                            <code class="code-snippet" id="apk-hash">c2bfe133850f390ecfd0e272fa7248ccf84d8effb45349bf606ba60032339010</code>
+                            <span id="copy-status" role="status" aria-live="polite" class="copy-status"></span>
+                            <div class="flex gap-4 mt-4">
+                                <button class="btn btn-outline" id="copy-hash-btn" type="button">复制哈希值</button>
+                                <a href="SHA256SUMS.txt" target="_blank" class="btn btn-outline" rel="noopener noreferrer">校验文件</a>
+                            </div>
                         </div>
-                    </details>
+                    </div>
 
-                    <details class="accordion">
-                        <summary>文件校验与 SHA256</summary>
-                        <div class="accordion-content">
-                            <p>为了确保您的下载未被篡改，请核对 APK 文件的 SHA256 校验和：</p>
-                            <code class="code-block" id="apk-hash">c2bfe133850f390ecfd0e272fa7248ccf84d8effb45349bf606ba60032339010</code>
-                            <button class="btn btn-secondary action-spaced" id="copy-hash" type="button">复制校验值</button>
-                            <span class="copy-status" id="copy-status" role="status" aria-live="polite"></span>
-                            <a href="SHA256SUMS.txt" target="_blank" rel="noopener noreferrer" class="checksum-link">查看完整校验文件</a>
-                        </div>
-                    </details>
-                </div>
-
-                <div class="qr-card">
-                    <img src="assets/download-qr.svg" alt="打开此下载页面的二维码" width="180" height="180">
-                    <h4>手机扫码下载</h4>
-                    <p class="qr-warning">扫描打开本下载页面。连接 App 的配对码，请在自己的网页控制台生成。</p>
+                    <div class="download-card flex flex-col items-center text-center justify-center">
+                        <img src="assets/download-qr.svg" alt="官网二维码" class="production-style-5">
+                        <p class="text-sm text-tertiary leading-relaxed qr-description">
+                            手机扫码打开本下载页。
+                            连接 App 的配对码，请在自己的网页面板生成。
+                        </p>
+                    </div>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <section id="faq" class="faq-section features">
-        <div class="container">
-            <div class="faq-heading section-header reveal">
-                <h2>常见问题</h2>
-            </div>
-            <div class="faq-content reveal">
-                <details class="accordion">
-                    <summary>安卓安装提示“暂不允许安装”，怎么办？</summary>
-                    <div class="accordion-content">
-                        按系统提示允许当前浏览器或文件管理器安装应用，再重新打开下载好的 APK。不同品牌手机的菜单名称可能有所不同。
-                    </div>
-                </details>
-                <details class="accordion">
-                    <summary>更新需要重新配对吗？</summary>
-                    <div class="accordion-content">
-                        同一签名的正式版可以覆盖安装并保留连接。开发测试包签名不同，需要先卸载测试版，再安装正式版并重新配对。
-                    </div>
-                </details>
-                <details class="accordion">
-                    <summary>这个 App 是 OVHcloud 官方的吗？</summary>
-                    <div class="accordion-content">
-                        不是。ovh cp 是由独立开发者 jingcheng he 开发并采用 AGPL-3.0 协议开源的第三方客户端，旨在为您提供更好的移动端管理体验。它与 OVHcloud 公司无官方关联。
-                    </div>
-                </details>
-                <details class="accordion">
-                    <summary>为什么首页不显示每台 VPS 的 CPU/内存使用率？</summary>
-                    <div class="accordion-content">
-                        仪表盘的资源数据来自运行 <b>gokele/ovh</b> 面板的宿主机。它反映面板主机的负载，不代表每一台 OVH 实例内部的系统指标。
-                    </div>
-                </details>
-                <details class="accordion">
-                    <summary>我可以在不部署网页后端的情况下单独使用 App 吗？</summary>
-                    <div class="accordion-content">
-                        不可以。ovh cp 被设计为 <b>gokele/ovh</b> 系统的前端扩展，它依赖后端的账户管理、队列调度与 API 通信能力。请务必先部署后端控制台。
-                    </div>
-                </details>
-            </div>
-        </div>
-    </section>
-
+        </section>
     </main>
-    <footer>
+
+    <footer class="site-footer text-sm">
         <div class="container">
-            <div class="footer-grid">
-                <div>
-                    <div class="footer-brand">
-                        <img src="assets/icon.png" alt="Icon">
+            <div class="footer-main flex flex-col justify-between gap-12 mb-12">
+                <div class="flex-1 footer-about">
+                    <div class="flex items-center gap-3 font-medium text-base mb-4">
+                        <img src="assets/icon.png" alt="ovh cp 图标" class="production-style-6">
                         ovh cp
                     </div>
-                    <p class="footer-desc">
-                        为 gokele/ovh 系统精心打造的移动终端。采用 AGPL-3.0 协议开源。<br>
-                        由 jingcheng he 开发与维护。
+                    <p class="text-tertiary leading-relaxed">
+                        基于 AGPL-3.0 协议开源的移动客户端，致力于完善私有部署环境下的服务器控制体验。<br><br>
+                        支持 OVHcloud 的独立客户端，非 OVHcloud 官方开发。
                     </p>
                 </div>
-                <div class="footer-col">
-                    <h4>资源</h4>
-                    <ul>
-                        <li><a href="https://github.com/RikkaBunny/ovh-ios" target="_blank" rel="noopener noreferrer">开源代码 (GitHub)</a></li>
-                        <li><a href="https://github.com/RikkaBunny/ovh-ios/releases/tag/v1.3.0-cp.11" target="_blank" rel="noopener noreferrer">发布说明 (Release)</a></li>
-                    </ul>
-                </div>
-                <div class="footer-col">
-                    <h4>法律与帮助</h4>
-                    <ul>
-                        <li><a href="https://ovh-review.hejingcheng.com/support" target="_blank" rel="noopener noreferrer">技术支持 (Support)</a></li>
-                        <li><a href="https://ovh-review.hejingcheng.com/privacy" target="_blank" rel="noopener noreferrer">隐私政策 (Privacy)</a></li>
-                    </ul>
+
+                <div class="footer-links flex gap-16 flex-wrap">
+                    <div class="flex flex-col gap-4">
+                        <h5 class="text-primary font-medium mb-1">资源</h5>
+                        <a href="https://github.com/RikkaBunny/ovh-ios" target="_blank" rel="noopener noreferrer">源代码库</a>
+                        <a href="https://github.com/RikkaBunny/ovh-ios/releases/tag/v1.3.0-cp.11" target="_blank" rel="noopener noreferrer">版本日志</a>
+                    </div>
+                    <div class="flex flex-col gap-4">
+                        <h5 class="text-primary font-medium mb-1">支持</h5>
+                        <a href="https://ovh-review.hejingcheng.com/support" target="_blank" rel="noopener noreferrer">技术支持 (Support)</a>
+                        <a href="https://ovh-review.hejingcheng.com/privacy" target="_blank" rel="noopener noreferrer">隐私政策 (Privacy)</a>
+                    </div>
                 </div>
             </div>
-            <div class="footer-bottom">
-                <p>&copy; 2026 jingcheng he. 保留所有权利。</p>
-                <p>支持 OVHcloud 的独立开源客户端，非 OVHcloud 官方开发。</p>
+
+            <div class="footer-bottom flex flex-col justify-between items-center gap-4 pt-8 text-tertiary">
+                <p>&copy; 2026 jingcheng he. 版权所有。</p>
+                <p>AGPL-3.0 · 开源与自建</p>
             </div>
         </div>
     </footer>
 
-    <script src="app.js?v=gemini-20261003" defer></script>
+    <script src="app.js?v=gemini-premium-20261003" defer></script>
 </body>
 </html>
