@@ -1,0 +1,40 @@
+.DS_Store
+DerivedData/
+build/
+*.xcuserstate
+xcuserdata/
+*.ipa
+*.xcarchive
+*.xcresult
+*.dSYM/
+*.log
+.env*
+!.env.example
+*.credentials.json
+
+# Private signing material and generated local HTTPS certificates.
+*.key
+*.pem
+*.p8
+*.p12
+*.pfx
+*.crt
+*.cer
+*.mobileprovision
+*.provisionprofile
+
+# Local deployment/review data and build artifacts are not app source.
+AppStore/
+*.db
+*.db-shm
+*.db-wal
+*.sqlite*
+__pycache__/
+*.pyc
+
+# Historical screenshots/notes use live accounts. Public QA captures are in NativeScreenshots/.
+/UI截图/
+/UI测试记录.md
+/验证记录.md
+/NativeScreenshots/Build7/
+/NativeScreenshots/Build8/

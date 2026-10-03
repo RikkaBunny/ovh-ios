@@ -1,0 +1,4 @@
+localhost.key
+localhost.crt
+*.xcresult/
+__pycache__/

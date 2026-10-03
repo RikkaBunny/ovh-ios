@@ -1,0 +1,2730 @@
+[
+  {
+    "method": "GET",
+    "path": "/health",
+    "handler": "Health",
+    "file": "health.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/settings",
+    "handler": "GetSettings",
+    "file": "settings.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/settings",
+    "handler": "SaveSettings",
+    "file": "settings.go",
+    "fields": [
+      {
+        "key": "$type",
+        "type": "types.Config",
+        "required": false
+      }
+    ],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/verify-auth",
+    "handler": "VerifyAuth",
+    "file": "settings.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/endpoint-config",
+    "handler": "EndpointConfig",
+    "file": "settings.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/logs",
+    "handler": "GetLogs",
+    "file": "logs.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/logs/flush",
+    "handler": "FlushLogs",
+    "file": "logs.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "DELETE",
+    "path": "/logs",
+    "handler": "ClearLogs",
+    "file": "logs.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/stats",
+    "handler": "GetStats",
+    "file": "stats.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/queue",
+    "handler": "GetQueue",
+    "file": "queue_stub.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/queue/timings",
+    "handler": "GetPurchaseTimings",
+    "file": "timings.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/queue",
+    "handler": "AddQueueItem",
+    "file": "queue.go",
+    "fields": [
+      {
+        "key": "account_id",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "planCode",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "datacenter",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "options",
+        "type": "[]string",
+        "required": false
+      },
+      {
+        "key": "retryInterval",
+        "type": "int",
+        "required": false
+      },
+      {
+        "key": "autoPay",
+        "type": "bool",
+        "required": false
+      }
+    ],
+    "query": []
+  },
+  {
+    "method": "DELETE",
+    "path": "/queue/clear",
+    "handler": "ClearQueue",
+    "file": "queue.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "DELETE",
+    "path": "/queue/:id",
+    "handler": "RemoveQueueItem",
+    "file": "queue.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "PUT",
+    "path": "/queue/:id/status",
+    "handler": "UpdateQueueStatus",
+    "file": "queue.go",
+    "fields": [
+      {
+        "key": "status",
+        "type": "string",
+        "required": false
+      }
+    ],
+    "query": []
+  },
+  {
+    "method": "PUT",
+    "path": "/queue/:id/interval",
+    "handler": "UpdateQueueInterval",
+    "file": "queue.go",
+    "fields": [
+      {
+        "key": "retryInterval",
+        "type": "int",
+        "required": false
+      }
+    ],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/purchase-history",
+    "handler": "GetPurchaseHistory",
+    "file": "queue_stub.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "DELETE",
+    "path": "/purchase-history",
+    "handler": "ClearPurchaseHistory",
+    "file": "queue.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/purchase-history/refresh-status",
+    "handler": "RefreshOrderStatuses",
+    "file": "queue.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/monitor/subscriptions",
+    "handler": "GetSubscriptions",
+    "file": "monitor.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/monitor/subscriptions",
+    "handler": "AddSubscription",
+    "file": "monitor.go",
+    "fields": [
+      {
+        "key": "planCode",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "datacenters",
+        "type": "[]string",
+        "required": false
+      },
+      {
+        "key": "notifyAvailable",
+        "type": "*bool",
+        "required": false
+      },
+      {
+        "key": "notifyUnavailable",
+        "type": "*bool",
+        "required": false
+      },
+      {
+        "key": "autoOrder",
+        "type": "bool",
+        "required": false
+      },
+      {
+        "key": "quantity",
+        "type": "int",
+        "required": false
+      },
+      {
+        "key": "autoOrderAccountId",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "autoPay",
+        "type": "AutoPay bool",
+        "required": false
+      },
+      {
+        "key": "options",
+        "type": "[]string",
+        "required": false
+      }
+    ],
+    "query": []
+  },
+  {
+    "method": "PUT",
+    "path": "/monitor/subscriptions/:planCode",
+    "handler": "UpdateSubscription",
+    "file": "subscription_edit.go",
+    "fields": [
+      {
+        "key": "datacenters",
+        "type": "*[]string",
+        "required": false
+      },
+      {
+        "key": "notifyAvailable",
+        "type": "*bool",
+        "required": false
+      },
+      {
+        "key": "notifyUnavailable",
+        "type": "*bool",
+        "required": false
+      },
+      {
+        "key": "autoOrder",
+        "type": "*bool",
+        "required": false
+      },
+      {
+        "key": "quantity",
+        "type": "*int",
+        "required": false
+      },
+      {
+        "key": "autoOrderAccountId",
+        "type": "*string",
+        "required": false
+      },
+      {
+        "key": "autoPay",
+        "type": "*bool",
+        "required": false
+      },
+      {
+        "key": "options",
+        "type": "*[]string",
+        "required": false
+      }
+    ],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/monitor/subscriptions/batch-add-all",
+    "handler": "BatchAddAll",
+    "file": "monitor.go",
+    "fields": [
+      {
+        "key": "notifyAvailable",
+        "type": "*bool",
+        "required": false
+      },
+      {
+        "key": "notifyUnavailable",
+        "type": "*bool",
+        "required": false
+      },
+      {
+        "key": "autoOrder",
+        "type": "bool",
+        "required": false
+      },
+      {
+        "key": "autoOrderAccountId",
+        "type": "string",
+        "required": false
+      }
+    ],
+    "query": []
+  },
+  {
+    "method": "DELETE",
+    "path": "/monitor/subscriptions/clear",
+    "handler": "ClearSubscriptions",
+    "file": "monitor.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "DELETE",
+    "path": "/monitor/subscriptions/:planCode",
+    "handler": "RemoveSubscription",
+    "file": "monitor.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/monitor/subscriptions/:planCode/history",
+    "handler": "GetSubscriptionHistory",
+    "file": "monitor.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/monitor/start",
+    "handler": "StartMonitor",
+    "file": "monitor.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/monitor/stop",
+    "handler": "StopMonitor",
+    "file": "monitor.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/monitor/status",
+    "handler": "GetMonitorStatus",
+    "file": "monitor.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "PUT",
+    "path": "/monitor/interval",
+    "handler": "SetMonitorInterval",
+    "file": "monitor.go",
+    "fields": [
+      {
+        "key": "interval",
+        "type": "*int",
+        "required": false
+      },
+      {
+        "key": "check_interval",
+        "type": "*int",
+        "required": false
+      }
+    ],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/monitor/test-notification",
+    "handler": "TestNotification",
+    "file": "monitor.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/notify/channels",
+    "handler": "GetNotifyChannels",
+    "file": "monitor.go",
+    "fields": [],
+    "query": [
+      "verify"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/telegram/verify",
+    "handler": "VerifyTelegram",
+    "file": "monitor.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/telegram/poller",
+    "handler": "GetTelegramPollerStatus",
+    "file": "telegram_poll.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/accounts/:id/proxy-test",
+    "handler": "TestAccountProxy",
+    "file": "proxy.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/accounts/:id/proxy-check",
+    "handler": "CheckAccountProxy",
+    "file": "proxy.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/accounts/proxy-status",
+    "handler": "ProxyStatus",
+    "file": "proxy.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/servers",
+    "handler": "GetServers",
+    "file": "servers.go",
+    "fields": [],
+    "query": [
+      "showApiServers",
+      "forceRefresh",
+      "account"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/internal/monitor/price",
+    "handler": "MonitorPrice",
+    "file": "servers.go",
+    "fields": [
+      {
+        "key": "account_id",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "plan_code",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "datacenter",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "options",
+        "type": "[]string",
+        "required": false
+      }
+    ],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/servers/:planCode/price",
+    "handler": "ServerPrice",
+    "file": "servers.go",
+    "fields": [
+      {
+        "key": "account_id",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "datacenter",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "options",
+        "type": "[]string",
+        "required": false
+      }
+    ],
+    "query": [
+      "account",
+      "datacenter"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/cache/info",
+    "handler": "CacheInfo",
+    "file": "servers.go",
+    "fields": [],
+    "query": [
+      "account"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/cache/clear",
+    "handler": "ClearCache",
+    "file": "servers.go",
+    "fields": [
+      {
+        "key": "type",
+        "type": "string",
+        "required": false
+      }
+    ],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/catalog",
+    "handler": "GetCatalog",
+    "file": "catalog.go",
+    "fields": [],
+    "query": [
+      "subsidiary",
+      "forceRefresh"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/system/metrics",
+    "handler": "GetSystemMetrics",
+    "file": "system_metrics.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/version",
+    "handler": "GetVersion",
+    "file": "version.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/app/pair",
+    "handler": "RedeemPairingCode",
+    "file": "appair.go",
+    "fields": [
+      {
+        "key": "code",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "deviceName",
+        "type": "string",
+        "required": false
+      }
+    ],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/app/pairing-codes",
+    "handler": "CreatePairingCode",
+    "file": "appair.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/app/devices",
+    "handler": "ListAppDevices",
+    "file": "appair.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "DELETE",
+    "path": "/app/devices/:id",
+    "handler": "RevokeAppDevice",
+    "file": "appair.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/version/check-update",
+    "handler": "CheckUpdate",
+    "file": "version.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/version/update",
+    "handler": "SelfUpdate",
+    "file": "selfupdate.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/version/update/status",
+    "handler": "GetUpdateStatus",
+    "file": "selfupdate.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/accounts",
+    "handler": "ListAccounts",
+    "file": "accounts.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/accounts/:id",
+    "handler": "GetAccountByID",
+    "file": "accounts.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/accounts",
+    "handler": "CreateAccount",
+    "file": "accounts.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "PUT",
+    "path": "/accounts/:id",
+    "handler": "UpdateAccount",
+    "file": "accounts.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "DELETE",
+    "path": "/accounts/:id",
+    "handler": "DeleteAccountByID",
+    "file": "accounts.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/accounts/:id/set-default",
+    "handler": "SetDefaultAccountByID",
+    "file": "accounts.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/accounts/:id/verify",
+    "handler": "VerifyAccount",
+    "file": "accounts.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/queue/quick-order",
+    "handler": "QuickOrder",
+    "file": "quick_order.go",
+    "fields": [
+      {
+        "key": "account_id",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "planCode",
+        "type": "PlanCode           string",
+        "required": false
+      },
+      {
+        "key": "datacenter",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "options",
+        "type": "[]string",
+        "required": false
+      },
+      {
+        "key": "fromMonitor",
+        "type": "bool",
+        "required": false
+      },
+      {
+        "key": "skipDuplicateCheck",
+        "type": "bool",
+        "required": false
+      },
+      {
+        "key": "autoPay",
+        "type": "bool",
+        "required": false
+      }
+    ],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/server-control/list",
+    "handler": "ListMyServers",
+    "file": "server_control_basic.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/server-control/aliases",
+    "handler": "ListServerAliases",
+    "file": "server_aliases.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "PUT",
+    "path": "/server-control/:service_name/alias",
+    "handler": "SetServerAlias",
+    "file": "server_aliases.go",
+    "fields": [
+      {
+        "key": "alias",
+        "type": "string",
+        "required": false
+      }
+    ],
+    "query": []
+  },
+  {
+    "method": "DELETE",
+    "path": "/server-control/:service_name/alias",
+    "handler": "DeleteServerAlias",
+    "file": "server_aliases.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/server-control/order-mapping",
+    "handler": "GetOrderMapping",
+    "file": "order_mapping.go",
+    "fields": [],
+    "query": [
+      "forceRefresh"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/server-control/:service_name/retraction",
+    "handler": "GetRetraction",
+    "file": "server_control_retraction.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/server-control/:service_name/retraction",
+    "handler": "PostRetraction",
+    "file": "server_control_retraction.go",
+    "fields": [
+      {
+        "key": "reason",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "comment",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "confirm",
+        "type": "bool",
+        "required": false
+      }
+    ],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/server-control/:service_name/reboot",
+    "handler": "Reboot",
+    "file": "server_control_basic.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/server-control/:service_name/templates",
+    "handler": "GetOSTemplates",
+    "file": "server_control_basic.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/server-control/:service_name/install",
+    "handler": "InstallOS",
+    "file": "server_control_basic.go",
+    "fields": [
+      {
+        "key": "templateName",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "customHostname",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "useProxmox9Zfs",
+        "type": "bool",
+        "required": false
+      },
+      {
+        "key": "partitionSchemeName",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "storageConfig",
+        "type": "interface{}",
+        "required": false
+      },
+      {
+        "key": "zfsRaidLevel",
+        "type": "interface{}",
+        "required": false
+      },
+      {
+        "key": "zfsVzSize",
+        "type": "interface{}",
+        "required": false
+      }
+    ],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/server-control/:service_name/install/status",
+    "handler": "GetInstallStatus",
+    "file": "server_control_basic.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/server-control/:service_name/tasks",
+    "handler": "GetServerTasks",
+    "file": "server_control_basic.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/server-control/:service_name/tasks/:task_id/available-timeslots",
+    "handler": "GetTaskAvailableTimeslots",
+    "file": "server_control_basic.go",
+    "fields": [],
+    "query": [
+      "periodStart",
+      "periodEnd"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/server-control/:service_name/tasks/:task_id/schedule",
+    "handler": "ScheduleTaskTimeslot",
+    "file": "server_control_basic.go",
+    "fields": [
+      {
+        "key": "wantedBeginingDate",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "startDate",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "hasPerformedBackup",
+        "type": "*bool",
+        "required": false
+      }
+    ],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/server-control/:service_name/rescue",
+    "handler": "GetRescueStatus",
+    "file": "server_control_rescue.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/server-control/:service_name/rescue",
+    "handler": "EnterRescue",
+    "file": "server_control_rescue.go",
+    "fields": [
+      {
+        "key": "email",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "sshKey",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "bootId",
+        "type": "int64",
+        "required": false
+      },
+      {
+        "key": "confirm",
+        "type": "bool",
+        "required": false
+      }
+    ],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/server-control/:service_name/rescue/exit",
+    "handler": "ExitRescue",
+    "file": "server_control_rescue.go",
+    "fields": [
+      {
+        "key": "confirm",
+        "type": "bool",
+        "required": false
+      }
+    ],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/server-control/:service_name/boot",
+    "handler": "GetBootConfig",
+    "file": "server_control_boot.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "PUT",
+    "path": "/server-control/:service_name/boot/:boot_id",
+    "handler": "SetBootConfig",
+    "file": "server_control_boot.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/server-control/:service_name/monitoring",
+    "handler": "GetMonitoringStatus",
+    "file": "server_control_boot.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "PUT",
+    "path": "/server-control/:service_name/monitoring",
+    "handler": "SetMonitoringStatus",
+    "file": "server_control_boot.go",
+    "fields": [
+      {
+        "key": "enabled",
+        "type": "*bool",
+        "required": false
+      },
+      {
+        "key": "monitoring",
+        "type": "*bool",
+        "required": false
+      }
+    ],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/server-control/:service_name/boot-mode",
+    "handler": "GetBootModes",
+    "file": "server_control_boot.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "PUT",
+    "path": "/server-control/:service_name/boot-mode",
+    "handler": "ChangeBootMode",
+    "file": "server_control_boot.go",
+    "fields": [
+      {
+        "key": "bootId",
+        "type": "int64",
+        "required": false
+      }
+    ],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/server-control/:service_name/hardware",
+    "handler": "GetHardwareInfo",
+    "file": "server_control_hardware.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/server-control/:service_name/network-specs",
+    "handler": "GetNetworkSpecs",
+    "file": "server_control_hardware.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/server-control/:service_name/ips",
+    "handler": "GetServerIPs",
+    "file": "server_control_hardware.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/server-control/:service_name/reverse",
+    "handler": "GetReverseDNS",
+    "file": "server_control_hardware.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/server-control/:service_name/reverse",
+    "handler": "SetReverseDNS",
+    "file": "server_control_hardware.go",
+    "fields": [
+      {
+        "key": "ip",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "reverse",
+        "type": "string",
+        "required": false
+      }
+    ],
+    "query": []
+  },
+  {
+    "method": "DELETE",
+    "path": "/server-control/:service_name/reverse/:ip",
+    "handler": "DeleteReverseDNS",
+    "file": "server_control_hardware.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/server-control/:service_name/serviceinfo",
+    "handler": "GetServiceInfo",
+    "file": "server_control_hardware.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "PUT",
+    "path": "/server-control/:service_name/serviceinfo/renewal",
+    "handler": "UpdateServiceRenewal",
+    "file": "server_control_hardware.go",
+    "fields": [
+      {
+        "key": "mode",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "period",
+        "type": "int",
+        "required": false
+      }
+    ],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/server-control/:service_name/engagement",
+    "handler": "GetEngagement",
+    "file": "server_control_engagement.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/server-control/:service_name/engagement/available",
+    "handler": "GetEngagementAvailable",
+    "file": "server_control_engagement.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/server-control/:service_name/engagement/request",
+    "handler": "GetEngagementRequest",
+    "file": "server_control_engagement.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/server-control/:service_name/engagement/request",
+    "handler": "CreateEngagementRequest",
+    "file": "server_control_engagement.go",
+    "fields": [
+      {
+        "key": "pricingMode",
+        "type": "string",
+        "required": false
+      }
+    ],
+    "query": []
+  },
+  {
+    "method": "DELETE",
+    "path": "/server-control/:service_name/engagement/request",
+    "handler": "DeleteEngagementRequest",
+    "file": "server_control_engagement.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "PUT",
+    "path": "/server-control/:service_name/engagement/end-rule",
+    "handler": "UpdateEngagementEndRule",
+    "file": "server_control_engagement.go",
+    "fields": [
+      {
+        "key": "strategy",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "confirm",
+        "type": "bool",
+        "required": false
+      }
+    ],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/server-control/:service_name/mitigation",
+    "handler": "GetMitigation",
+    "file": "server_control_mitigation.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/server-control/:service_name/mitigation/:ip",
+    "handler": "EnableMitigation",
+    "file": "server_control_mitigation.go",
+    "fields": [],
+    "query": [
+      "block"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/server-control/:service_name/mitigation/:ip",
+    "handler": "DisableMitigation",
+    "file": "server_control_mitigation.go",
+    "fields": [],
+    "query": [
+      "block"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/server-control/:service_name/change-contact",
+    "handler": "ChangeContact",
+    "file": "server_control_hardware.go",
+    "fields": [
+      {
+        "key": "contactAdmin",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "contactTech",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "contactBilling",
+        "type": "string",
+        "required": false
+      }
+    ],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/server-control/:service_name/interventions",
+    "handler": "GetInterventions",
+    "file": "server_control_hardware.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/server-control/:service_name/interventions/:intervention_id",
+    "handler": "GetInterventionDetail",
+    "file": "server_control_hardware.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/server-control/:service_name/planned-interventions",
+    "handler": "GetPlannedInterventions",
+    "file": "server_control_hardware.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/server-control/:service_name/planned-interventions/:intervention_id",
+    "handler": "GetPlannedInterventionDetail",
+    "file": "server_control_hardware.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/server-control/:service_name/hardware/replace",
+    "handler": "HardwareReplace",
+    "file": "server_control_hardware.go",
+    "fields": [
+      {
+        "key": "componentType",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "comment",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "disks",
+        "type": "interface{}",
+        "required": false
+      },
+      {
+        "key": "inverse",
+        "type": "bool",
+        "required": false
+      },
+      {
+        "key": "details",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "slots",
+        "type": "interface{}",
+        "required": false
+      }
+    ],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/server-control/:service_name/hardware-raid-profiles",
+    "handler": "GetHardwareRaidProfiles",
+    "file": "server_control_hardware.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/server-control/:service_name/hardware-disk-info",
+    "handler": "GetHardwareDiskInfo",
+    "file": "server_control_hardware.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/server-control/:service_name/partition-schemes",
+    "handler": "GetPartitionSchemes",
+    "file": "server_control_hardware.go",
+    "fields": [],
+    "query": [
+      "templateName"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/server-control/:service_name/network-interfaces",
+    "handler": "GetNetworkInterfaces",
+    "file": "server_control_network.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/server-control/:service_name/mrtg",
+    "handler": "GetMRTGData",
+    "file": "server_control_network.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/server-control/:service_name/ola/aggregation",
+    "handler": "ConfigureOLAAggregation",
+    "file": "server_control_network.go",
+    "fields": [
+      {
+        "key": "name",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "virtualNetworkInterfaces",
+        "type": "[]string",
+        "required": false
+      }
+    ],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/server-control/:service_name/ola/reset",
+    "handler": "ResetOLAConfiguration",
+    "file": "server_control_network.go",
+    "fields": [
+      {
+        "key": "virtualNetworkInterface",
+        "type": "string",
+        "required": false
+      }
+    ],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/server-control/:service_name/ola/group",
+    "handler": "OLAGroup",
+    "file": "server_control_network.go",
+    "fields": [
+      {
+        "key": "name",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "virtualNetworkInterfaces",
+        "type": "[]string",
+        "required": false
+      }
+    ],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/server-control/:service_name/ola/ungroup",
+    "handler": "OLAUngroup",
+    "file": "server_control_network.go",
+    "fields": [
+      {
+        "key": "virtualNetworkInterface",
+        "type": "string",
+        "required": false
+      }
+    ],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/server-control/:service_name/console",
+    "handler": "GetIPMIConsole",
+    "file": "server_control_network.go",
+    "fields": [],
+    "query": [
+      "type",
+      "sshKey"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/server-control/:service_name/ipmi-types",
+    "handler": "GetIPMIAccessTypes",
+    "file": "server_control_network.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/server-control/:service_name/statistics",
+    "handler": "GetTrafficStatistics",
+    "file": "server_control_network.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/server-control/:service_name/network-stats",
+    "handler": "GetNetworkInterfaceStats",
+    "file": "server_control_network.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/server-control/:service_name/burst",
+    "handler": "GetBurst",
+    "file": "server_control_features.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "PUT",
+    "path": "/server-control/:service_name/burst",
+    "handler": "UpdateBurst",
+    "file": "server_control_features.go",
+    "fields": [
+      {
+        "key": "status",
+        "type": "string",
+        "required": false
+      }
+    ],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/server-control/:service_name/firewall",
+    "handler": "GetFirewall",
+    "file": "server_control_features.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "PUT",
+    "path": "/server-control/:service_name/firewall",
+    "handler": "UpdateFirewall",
+    "file": "server_control_features.go",
+    "fields": [
+      {
+        "key": "enabled",
+        "type": "*bool",
+        "required": false
+      }
+    ],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/server-control/:service_name/backup-ftp",
+    "handler": "GetBackupFTP",
+    "file": "server_control_features.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/server-control/:service_name/backup-ftp",
+    "handler": "ActivateBackupFTP",
+    "file": "server_control_features.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "DELETE",
+    "path": "/server-control/:service_name/backup-ftp",
+    "handler": "DeleteBackupFTP",
+    "file": "server_control_features.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/server-control/:service_name/backup-ftp/access",
+    "handler": "GetBackupFTPAccess",
+    "file": "server_control_features.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/server-control/:service_name/backup-ftp/access",
+    "handler": "AddBackupFTPAccess",
+    "file": "server_control_features.go",
+    "fields": [
+      {
+        "key": "ipBlock",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "ftp",
+        "type": "*bool",
+        "required": false
+      },
+      {
+        "key": "nfs",
+        "type": "bool",
+        "required": false
+      },
+      {
+        "key": "cifs",
+        "type": "bool",
+        "required": false
+      }
+    ],
+    "query": []
+  },
+  {
+    "method": "DELETE",
+    "path": "/server-control/:service_name/backup-ftp/access",
+    "handler": "DeleteBackupFTPAccess",
+    "file": "server_control_features.go",
+    "fields": [
+      {
+        "key": "ipBlock",
+        "type": "string",
+        "required": false
+      }
+    ],
+    "query": [
+      "ipBlock"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/server-control/:service_name/backup-ftp/access/:ip_block",
+    "handler": "DeleteBackupFTPAccess",
+    "file": "server_control_features.go",
+    "fields": [
+      {
+        "key": "ipBlock",
+        "type": "string",
+        "required": false
+      }
+    ],
+    "query": [
+      "ipBlock"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/server-control/:service_name/backup-ftp/password",
+    "handler": "ChangeBackupFTPPassword",
+    "file": "server_control_features.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/server-control/:service_name/backup-ftp/authorizable-blocks",
+    "handler": "GetBackupFTPAuthorizableBlocks",
+    "file": "server_control_features.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/server-control/:service_name/backup-cloud",
+    "handler": "GetBackupCloud",
+    "file": "server_control_features.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/server-control/:service_name/backup-cloud/offer-details",
+    "handler": "GetBackupCloudOfferDetails",
+    "file": "server_control_features.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/server-control/:service_name/backup-cloud",
+    "handler": "ActivateBackupCloud",
+    "file": "server_control_features.go",
+    "fields": [
+      {
+        "key": "cloudProjectId",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "projectDescription",
+        "type": "string",
+        "required": false
+      }
+    ],
+    "query": []
+  },
+  {
+    "method": "DELETE",
+    "path": "/server-control/:service_name/backup-cloud",
+    "handler": "DeleteBackupCloud",
+    "file": "server_control_features.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/server-control/:service_name/backup-cloud/password",
+    "handler": "ChangeBackupCloudPassword",
+    "file": "server_control_features.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/server-control/:service_name/secondary-dns",
+    "handler": "GetSecondaryDNS",
+    "file": "server_control_misc.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/server-control/:service_name/secondary-dns",
+    "handler": "AddSecondaryDNS",
+    "file": "server_control_misc.go",
+    "fields": [
+      {
+        "key": "domain",
+        "type": "string",
+        "required": false
+      }
+    ],
+    "query": []
+  },
+  {
+    "method": "DELETE",
+    "path": "/server-control/:service_name/secondary-dns/:domain",
+    "handler": "DeleteSecondaryDNS",
+    "file": "server_control_misc.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/server-control/:service_name/virtual-mac",
+    "handler": "GetVirtualMACList",
+    "file": "server_control_misc.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/server-control/:service_name/virtual-mac",
+    "handler": "CreateVirtualMAC",
+    "file": "server_control_misc.go",
+    "fields": [
+      {
+        "key": "ipAddress",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "type",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "virtualMachineName",
+        "type": "string",
+        "required": false
+      }
+    ],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/server-control/:service_name/virtual-network-interface",
+    "handler": "GetVirtualNetworkInterfaces",
+    "file": "server_control_misc.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/server-control/:service_name/vrack",
+    "handler": "GetVRackList",
+    "file": "server_control_misc.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "DELETE",
+    "path": "/server-control/:service_name/vrack/:vrack",
+    "handler": "RemoveFromVRack",
+    "file": "server_control_misc.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/server-control/:service_name/orderable/bandwidth",
+    "handler": "GetOrderableBandwidth",
+    "file": "server_control_misc.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/server-control/:service_name/orderable/traffic",
+    "handler": "GetOrderableTraffic",
+    "file": "server_control_misc.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/server-control/:service_name/orderable/ip",
+    "handler": "GetOrderableIP",
+    "file": "server_control_misc.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/server-control/:service_name/options",
+    "handler": "GetServerOptions",
+    "file": "server_control_misc.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/server-control/:service_name/ip-specs",
+    "handler": "GetIPSpecs",
+    "file": "server_control_misc.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/server-control/:service_name/ip/can-be-moved-to",
+    "handler": "GetIPCanBeMovedTo",
+    "file": "server_control_misc.go",
+    "fields": [],
+    "query": [
+      "ip"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/server-control/:service_name/ip/country-available",
+    "handler": "GetIPCountryAvailable",
+    "file": "server_control_misc.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/server-control/:service_name/ip/move",
+    "handler": "MoveIP",
+    "file": "server_control_misc.go",
+    "fields": [
+      {
+        "key": "ip",
+        "type": "string",
+        "required": false
+      }
+    ],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/server-control/:service_name/ongoing",
+    "handler": "GetOngoingTasks",
+    "file": "server_control_misc.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/server-control/:service_name/license/windows/compliant",
+    "handler": "GetCompliantWindowsVersions",
+    "file": "server_control_misc.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/server-control/:service_name/license/windows-sql/compliant",
+    "handler": "GetCompliantWindowsSqlVersions",
+    "file": "server_control_misc.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "PUT",
+    "path": "/server-control/:service_name/termination-policy",
+    "handler": "UpdateTerminationPolicy",
+    "file": "termination_policy.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/server-control/:service_name/terminate",
+    "handler": "TerminateService",
+    "file": "server_control_misc.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/server-control/:service_name/confirm-termination",
+    "handler": "ConfirmTermination",
+    "file": "server_control_misc.go",
+    "fields": [
+      {
+        "key": "token",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "reason",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "futureUse",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "commentary",
+        "type": "string",
+        "required": false
+      }
+    ],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/server-control/:service_name/spla",
+    "handler": "GetSPLAList",
+    "file": "server_control_misc.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/server-control/:service_name/spla",
+    "handler": "CreateSPLA",
+    "file": "server_control_misc.go",
+    "fields": [
+      {
+        "key": "type",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "serialNumber",
+        "type": "string",
+        "required": false
+      }
+    ],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/server-control/:service_name/bios-settings",
+    "handler": "GetBIOSSettings",
+    "file": "server_control_misc.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/server-control/:service_name/bios-settings/sgx",
+    "handler": "GetBIOSSettingsSGX",
+    "file": "server_control_misc.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/vps-control/list",
+    "handler": "ListVps",
+    "file": "vps_control_basic.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/vps-control/:service_name/info",
+    "handler": "GetVpsInfo",
+    "file": "vps_control_basic.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/vps-control/:service_name/status",
+    "handler": "GetVpsServiceStatus",
+    "file": "vps_control_basic.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/vps-control/:service_name/serviceinfo",
+    "handler": "GetVpsServiceInfo",
+    "file": "vps_control_basic.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "PUT",
+    "path": "/vps-control/:service_name/serviceinfo/renewal",
+    "handler": "UpdateVpsRenewal",
+    "file": "vps_control_basic.go",
+    "fields": [
+      {
+        "key": "mode",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "period",
+        "type": "int",
+        "required": false
+      }
+    ],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/vps-control/:service_name/ips",
+    "handler": "GetVpsIps",
+    "file": "vps_control_basic.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "PUT",
+    "path": "/vps-control/:service_name/ips/:ip/reverse",
+    "handler": "SetVpsIpReverse",
+    "file": "vps_control_basic.go",
+    "fields": [
+      {
+        "key": "reverse",
+        "type": "string",
+        "required": false
+      }
+    ],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/vps-control/:service_name/datacenter",
+    "handler": "GetVpsDatacenter",
+    "file": "vps_control_basic.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/vps-control/:service_name/start",
+    "handler": "VpsStart",
+    "file": "vps_control_power.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/vps-control/:service_name/stop",
+    "handler": "VpsStop",
+    "file": "vps_control_power.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/vps-control/:service_name/reboot",
+    "handler": "VpsReboot",
+    "file": "vps_control_power.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/vps-control/:service_name/console",
+    "handler": "VpsGetConsoleUrl",
+    "file": "vps_control_power.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/vps-control/:service_name/password",
+    "handler": "VpsSetPassword",
+    "file": "vps_control_power.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/vps-control/:service_name/current-os",
+    "handler": "GetVpsCurrentOS",
+    "file": "vps_control_install.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/vps-control/:service_name/templates",
+    "handler": "GetVpsTemplates",
+    "file": "vps_control_install.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/vps-control/:service_name/reinstall",
+    "handler": "ReinstallVps",
+    "file": "vps_control_install.go",
+    "fields": [
+      {
+        "key": "templateId",
+        "type": "interface{}",
+        "required": false
+      },
+      {
+        "key": "sshKey",
+        "type": "SSHKey            []string",
+        "required": false
+      },
+      {
+        "key": "doNotSendPassword",
+        "type": "bool",
+        "required": false
+      }
+    ],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/vps-control/:service_name/tasks",
+    "handler": "GetVpsTasks",
+    "file": "vps_control_install.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/vps-control/:service_name/tasks/:task_id",
+    "handler": "GetVpsTaskDetail",
+    "file": "vps_control_install.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/vps-control/:service_name/snapshot",
+    "handler": "GetVpsSnapshot",
+    "file": "vps_control_snapshot.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/vps-control/:service_name/snapshot",
+    "handler": "CreateVpsSnapshot",
+    "file": "vps_control_snapshot.go",
+    "fields": [
+      {
+        "key": "description",
+        "type": "string",
+        "required": false
+      }
+    ],
+    "query": []
+  },
+  {
+    "method": "PUT",
+    "path": "/vps-control/:service_name/snapshot",
+    "handler": "UpdateVpsSnapshotDescription",
+    "file": "vps_control_snapshot.go",
+    "fields": [
+      {
+        "key": "description",
+        "type": "string",
+        "required": false
+      }
+    ],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/vps-control/:service_name/snapshot/revert",
+    "handler": "RevertVpsSnapshot",
+    "file": "vps_control_snapshot.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "DELETE",
+    "path": "/vps-control/:service_name/snapshot",
+    "handler": "DeleteVpsSnapshot",
+    "file": "vps_control_snapshot.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/vps-control/:service_name/change-contact",
+    "handler": "ChangeVpsContact",
+    "file": "vps_control_misc.go",
+    "fields": [
+      {
+        "key": "contactAdmin",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "contactTech",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "contactBilling",
+        "type": "string",
+        "required": false
+      }
+    ],
+    "query": []
+  },
+  {
+    "method": "PUT",
+    "path": "/vps-control/:service_name/termination-policy",
+    "handler": "UpdateVpsTerminationPolicy",
+    "file": "termination_policy.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/vps-control/:service_name/terminate",
+    "handler": "TerminateVps",
+    "file": "vps_control_misc.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/vps-control/:service_name/confirm-termination",
+    "handler": "ConfirmVpsTermination",
+    "file": "vps_control_misc.go",
+    "fields": [
+      {
+        "key": "token",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "reason",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "commentary",
+        "type": "string",
+        "required": false
+      }
+    ],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/vps-control/:service_name/secondary-dns",
+    "handler": "GetVpsSecondaryDns",
+    "file": "vps_control_misc.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/vps-control/:service_name/secondary-dns",
+    "handler": "AddVpsSecondaryDns",
+    "file": "vps_control_misc.go",
+    "fields": [
+      {
+        "key": "domain",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "ip",
+        "type": "string",
+        "required": false
+      }
+    ],
+    "query": []
+  },
+  {
+    "method": "DELETE",
+    "path": "/vps-control/:service_name/secondary-dns/:domain",
+    "handler": "DeleteVpsSecondaryDns",
+    "file": "vps_control_misc.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/vps-control/:service_name/options",
+    "handler": "GetVpsOptions",
+    "file": "vps_control_misc.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "DELETE",
+    "path": "/vps-control/:service_name/options/:option",
+    "handler": "DeleteVpsOption",
+    "file": "vps_control_misc.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/vps-control/:service_name/automated-backup",
+    "handler": "GetVpsAutomatedBackup",
+    "file": "vps_control_misc.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/vps-control/:service_name/engagement",
+    "handler": "GetVpsEngagement",
+    "file": "vps_control_engagement.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/vps-control/:service_name/engagement/available",
+    "handler": "GetVpsEngagementAvailable",
+    "file": "vps_control_engagement.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/vps-control/:service_name/engagement/request",
+    "handler": "GetVpsEngagementRequest",
+    "file": "vps_control_engagement.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/vps-control/:service_name/engagement/request",
+    "handler": "CreateVpsEngagementRequest",
+    "file": "vps_control_engagement.go",
+    "fields": [
+      {
+        "key": "pricingMode",
+        "type": "string",
+        "required": false
+      }
+    ],
+    "query": []
+  },
+  {
+    "method": "DELETE",
+    "path": "/vps-control/:service_name/engagement/request",
+    "handler": "DeleteVpsEngagementRequest",
+    "file": "vps_control_engagement.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "PUT",
+    "path": "/vps-control/:service_name/engagement/end-rule",
+    "handler": "UpdateVpsEngagementEndRule",
+    "file": "vps_control_engagement.go",
+    "fields": [
+      {
+        "key": "strategy",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "confirm",
+        "type": "bool",
+        "required": false
+      }
+    ],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/vps-control/:service_name/mitigation",
+    "handler": "GetVpsMitigation",
+    "file": "vps_control_mitigation.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/vps-control/:service_name/mitigation/:ip",
+    "handler": "EnableVpsMitigation",
+    "file": "vps_control_mitigation.go",
+    "fields": [],
+    "query": [
+      "block"
+    ]
+  },
+  {
+    "method": "DELETE",
+    "path": "/vps-control/:service_name/mitigation/:ip",
+    "handler": "DisableVpsMitigation",
+    "file": "vps_control_mitigation.go",
+    "fields": [],
+    "query": [
+      "block"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/vps-monitor/models",
+    "handler": "GetVPSModels",
+    "file": "vps_models.go",
+    "fields": [],
+    "query": [
+      "subsidiary",
+      "accountId"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/vps-monitor/subscriptions",
+    "handler": "GetVPSSubscriptions",
+    "file": "vps_monitor.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/vps-monitor/subscriptions",
+    "handler": "AddVPSSubscription",
+    "file": "vps_monitor.go",
+    "fields": [
+      {
+        "key": "planCode",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "ovhSubsidiary",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "datacenters",
+        "type": "[]string",
+        "required": false
+      },
+      {
+        "key": "monitorLinux",
+        "type": "*bool",
+        "required": false
+      },
+      {
+        "key": "monitorWindows",
+        "type": "*bool",
+        "required": false
+      },
+      {
+        "key": "notifyAvailable",
+        "type": "*bool",
+        "required": false
+      },
+      {
+        "key": "notifyUnavailable",
+        "type": "*bool",
+        "required": false
+      },
+      {
+        "key": "autoOrderAccountId",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "autoOrder",
+        "type": "AutoOrder          bool",
+        "required": false
+      },
+      {
+        "key": "quantity",
+        "type": "int",
+        "required": false
+      },
+      {
+        "key": "os",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "autoPay",
+        "type": "bool",
+        "required": false
+      }
+    ],
+    "query": []
+  },
+  {
+    "method": "PUT",
+    "path": "/vps-monitor/subscriptions/:subscription_id",
+    "handler": "UpdateVPSSubscription",
+    "file": "subscription_edit.go",
+    "fields": [
+      {
+        "key": "ovhSubsidiary",
+        "type": "*string",
+        "required": false
+      },
+      {
+        "key": "datacenters",
+        "type": "*[]string",
+        "required": false
+      },
+      {
+        "key": "monitorLinux",
+        "type": "*bool",
+        "required": false
+      },
+      {
+        "key": "monitorWindows",
+        "type": "*bool",
+        "required": false
+      },
+      {
+        "key": "notifyAvailable",
+        "type": "*bool",
+        "required": false
+      },
+      {
+        "key": "notifyUnavailable",
+        "type": "*bool",
+        "required": false
+      },
+      {
+        "key": "autoOrderAccountId",
+        "type": "*string",
+        "required": false
+      },
+      {
+        "key": "autoOrder",
+        "type": "*bool",
+        "required": false
+      },
+      {
+        "key": "quantity",
+        "type": "*int",
+        "required": false
+      },
+      {
+        "key": "os",
+        "type": "*string",
+        "required": false
+      },
+      {
+        "key": "autoPay",
+        "type": "*bool",
+        "required": false
+      }
+    ],
+    "query": []
+  },
+  {
+    "method": "DELETE",
+    "path": "/vps-monitor/subscriptions/clear",
+    "handler": "ClearVPSSubscriptions",
+    "file": "vps_monitor.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "DELETE",
+    "path": "/vps-monitor/subscriptions/:subscription_id",
+    "handler": "RemoveVPSSubscription",
+    "file": "vps_monitor.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/vps-monitor/subscriptions/:subscription_id/history",
+    "handler": "GetVPSSubscriptionHistory",
+    "file": "vps_monitor.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/vps-monitor/start",
+    "handler": "StartVPSMonitor",
+    "file": "vps_monitor.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/vps-monitor/stop",
+    "handler": "StopVPSMonitor",
+    "file": "vps_monitor.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/vps-monitor/status",
+    "handler": "GetVPSMonitorStatus",
+    "file": "vps_monitor.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "PUT",
+    "path": "/vps-monitor/interval",
+    "handler": "SetVPSMonitorInterval",
+    "file": "vps_monitor.go",
+    "fields": [
+      {
+        "key": "interval",
+        "type": "int",
+        "required": false
+      }
+    ],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/vps-monitor/check/:plan_code",
+    "handler": "ManualCheckVPS",
+    "file": "vps_monitor.go",
+    "fields": [
+      {
+        "key": "ovhSubsidiary",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "accountId",
+        "type": "string",
+        "required": false
+      }
+    ],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/ovh/account/info",
+    "handler": "GetAccountInfo",
+    "file": "account.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/ovh/account/refunds",
+    "handler": "GetAccountRefunds",
+    "file": "account.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/ovh/account/credit-balance",
+    "handler": "GetCreditBalance",
+    "file": "account.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/ovh/account/email-history",
+    "handler": "GetEmailHistory",
+    "file": "account.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/ovh/contact-change-requests",
+    "handler": "GetContactChangeRequests",
+    "file": "account.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/ovh/contact-change-requests/:task_id",
+    "handler": "GetContactChangeRequestDetail",
+    "file": "account.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/ovh/contact-change-requests/:task_id/accept",
+    "handler": "AcceptContactChangeRequest",
+    "file": "account.go",
+    "fields": [
+      {
+        "key": "token",
+        "type": "string",
+        "required": false
+      }
+    ],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/ovh/contact-change-requests/:task_id/refuse",
+    "handler": "RefuseContactChangeRequest",
+    "file": "account.go",
+    "fields": [
+      {
+        "key": "token",
+        "type": "string",
+        "required": false
+      }
+    ],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/ovh/contact-change-requests/:task_id/resend-email",
+    "handler": "ResendContactChangeEmail",
+    "file": "account.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/ovh/account/sub-accounts",
+    "handler": "GetSubAccounts",
+    "file": "account.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/ovh/account/bills",
+    "handler": "GetAccountBills",
+    "file": "account.go",
+    "fields": [],
+    "query": []
+  }
+]
