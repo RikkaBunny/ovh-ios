@@ -1,6 +1,6 @@
 # OVH CP · Flutter 客户端
 
-独立的 Flutter/Dart 版本，支持 iPhone、iPad 和 Android，版本 `1.3.0+14`。连接与 React 网页、SwiftUI 客户端相同的 gokele/ovh 后端，沿用黑白主色、灰色分隔、圆角卡片、胶囊按钮和状态色。业务页面全部由 Flutter 绘制；WebView 仅用于 OVH 返回的 HTTPS 远程屏幕。
+独立的 Flutter/Dart 版本，支持 iPhone、iPad 和 Android，版本 `1.3.0+15`。连接与 React 网页、SwiftUI 客户端相同的 gokele/ovh 后端，沿用黑白主色、灰色分隔、圆角卡片、胶囊按钮和状态色。业务页面全部由 Flutter 绘制；WebView 仅用于 OVH 返回的 HTTPS 远程屏幕。
 
 发布版名为 `OVH CP`。iOS 沿用原版 Bundle ID `com.hejingcheng.ovhpocket`，作为现有应用更新；Android Application ID 为 `com.hejingcheng.ovh_flutter`。新版图标基于 OVH 官方标识生成，见 [图标与提示词](../BrandAssets/ovh-cp/README.md)。iOS 升级会迁移原 SwiftUI 连接、账户选择与外观。正式构建与签名说明见 [publishing](publishing/README.md)。
 
@@ -33,7 +33,7 @@
 
 同一读取请求合并执行；下拉刷新等待真实完成。失败保留上次数据和成功时间，账户/连接切换阻止迟到响应覆盖新数据。设置先读取完整配置，更新时保留其他字段；读取失败禁止保存。重装、终止等操作需输入服务名称确认。抢购任务明确展示账户、机房、数量和自动付款选项。
 
-资源圆环显示运行面板的服务器，通过 `/api/system/metrics` 获取，不是各 OVH 实例的代理指标。前台仪表盘每 2 秒更新，队列和监控在对应根页面每 10 秒更新。未加入 APNs/FCM；通知继续使用后端 Telegram/Webhook 等通道。
+Build 15 的资源圆环按当前账户和选定实例显示，使用 `/api/instance-metrics`，缓存包含账户、实例名称和类型。切换账户自动选择该账户实例，也可在同一账户选择不同独服/VPS；旧请求和身份不符的响应不能覆盖当前读数。不支持实例监控的后端、未接入采集的实例显示未知，不回退到面板主机数据。现有面板主机通过明确的服务绑定提供内核采样，其他机器需要各自监控来源，详见 [实例资源扩展](../metrics-bridge/README.md)。前台仪表盘每 2 秒更新，队列和监控在对应根页面每 10 秒更新。未加入 APNs/FCM；通知继续使用后端 Telegram/Webhook 等通道。
 
 ## 运行
 
@@ -57,9 +57,9 @@ flutter build ios --release --no-codesign
 flutter build apk --debug
 ```
 
-只构建 arm64 测试包：`flutter build apk --debug --target-platform=android-arm64 --split-per-abi`。ABI 拆分构建会按 Flutter 规则调整 Android versionCode，源码版本仍为 `1.3.0+14`。
+只构建 arm64 测试包：`flutter build apk --debug --target-platform=android-arm64 --split-per-abi`。ABI 拆分构建会按 Flutter 规则调整 Android versionCode，源码版本仍为 `1.3.0+15`。
 
-正式签名与发布入口见 [发布说明](publishing/README.md)。Android Release 必须提供私有上传密钥，缺少配置时拒绝构建；正式包不使用调试签名。仓库不包含私钥、生产密钥或真实令牌。iOS 商店名称已更新为 OVH CP，1.3.0（14）已上传并提交审核，当前等待审核，通过后自动发布。Android 白底图标正式 APK 已更新到 [安卓下载网站](https://ovh.hejingcheng.com/download/)。Google Play 后台当前未开通，因此尚未上架。
+正式签名与发布入口见 [发布说明](publishing/README.md)。Android Release 必须提供私有上传密钥，缺少配置时拒绝构建；正式包不使用调试签名。仓库不包含私钥、生产密钥或真实令牌。iOS 商店名称已更新为 OVH CP，1.3.0（15）已上传并提交审核，当前等待审核，通过后自动发布。Android 白底图标正式 APK 已更新到 [安卓下载网站](https://ovh.hejingcheng.com/download/)。Google Play 后台当前未开通，因此尚未上架。
 
 ## 测试
 

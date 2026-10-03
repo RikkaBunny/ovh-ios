@@ -78,6 +78,56 @@ void main() {
     store.dispose();
   }
 
+  Future<void> accountResources(WidgetTester tester) async {
+    await start(tester);
+    await waitFor(
+      tester,
+      () => object(store.instanceMetrics?.value)['status'] == 'available',
+    );
+    await tester.ensureVisible(find.byKey(const Key('resource.selector')));
+    await tester.pumpAndSettle();
+    expect(
+      tester.widget<Text>(find.byKey(const Key('resource.cpu'))).data,
+      '38%',
+    );
+    await screenshot(tester, 'Flutter-22-EU-InstanceResources');
+    await open(tester, find.byKey(const Key('resource.selector')));
+    await open(tester, find.text('EU 开发环境 · VPS').last);
+    await waitFor(
+      tester,
+      () => object(store.instanceMetrics?.value)['status'] == 'available',
+    );
+    expect(
+      tester.widget<Text>(find.byKey(const Key('resource.cpu'))).data,
+      '41%',
+    );
+    await open(tester, find.byKey(const Key('account.selector')));
+    await open(tester, find.byKey(const Key('account.US')));
+    await waitFor(
+      tester,
+      () => object(store.instanceMetrics?.value)['account'] == 'demo-us',
+    );
+    await tester.ensureVisible(find.byKey(const Key('resource.selector')));
+    await tester.pumpAndSettle();
+    expect(store.resourceAsset?.service, 'vps-demo-us.example');
+    expect(
+      tester.widget<Text>(find.byKey(const Key('resource.cpu'))).data,
+      '11%',
+    );
+    await screenshot(tester, 'Flutter-23-US-InstanceResources');
+    await qa('/qa/metrics', {'mode': 'unavailable'});
+    await store.refreshInstanceMetrics();
+    await tester.pumpAndSettle();
+    expect(
+      tester.widget<Text>(find.byKey(const Key('resource.cpu'))).data,
+      '—',
+    );
+    expect(find.byKey(const Key('resource.unavailable')), findsOneWidget);
+    await screenshot(tester, 'Flutter-24-UnmonitoredInstance');
+    await qa('/qa/metrics', {'mode': 'ok'});
+    await finish(tester);
+  }
+
   Future<void> dashboard(WidgetTester tester) async {
     await start(tester);
     expect(find.text('系统资源'), findsOneWidget);
@@ -358,6 +408,7 @@ void main() {
     'Native dashboard, refresh, inventory, controls, accounts and pairing',
     (tester) async {
       await dashboard(tester);
+      await accountResources(tester);
       await inventory(tester);
       await pairing(tester);
     },

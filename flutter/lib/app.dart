@@ -110,7 +110,7 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
     final store = PanelScope.of(context);
     ticks++;
     if (tab == 0) {
-      unawaited(store.load('/system/metrics', unknownOnFailure: true));
+      unawaited(store.refreshInstanceMetrics());
     }
     if (ticks % 5 == 0 && tab == 2) unawaited(store.load('/queue'));
     if (ticks % 5 == 0 && tab == 3) {

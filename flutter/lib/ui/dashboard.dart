@@ -1,7 +1,6 @@
 import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import '../core/models.dart';
-import '../core/store.dart';
 import 'common.dart';
 import 'inventory.dart';
 import 'pages.dart';
@@ -27,10 +26,8 @@ class _DashboardPageState extends State<DashboardPage> {
 
   Future<void> refresh() async {
     final store = PanelScope.of(context);
-    await Future.wait([
-      store.refreshOverview(),
-      store.load('/system/metrics', unknownOnFailure: true),
-    ]);
+    await store.refreshOverview();
+    await store.refreshInstanceMetrics();
   }
 
   @override
@@ -38,7 +35,6 @@ class _DashboardPageState extends State<DashboardPage> {
     final store = PanelScope.of(c),
         stats = store.state('/stats'),
         queue = store.state('/queue'),
-        metrics = store.state('/system/metrics'),
         values = object(stats.value);
     final active = array(queue.value)
         .map(object)
@@ -227,7 +223,7 @@ class _DashboardPageState extends State<DashboardPage> {
               ],
             ),
           ),
-          SystemResourceTiles(metrics),
+          const SystemResourceTiles(),
           PanelCard(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -447,69 +443,158 @@ class MetricTile extends StatelessWidget {
 }
 
 class SystemResourceTiles extends StatelessWidget {
-  final ResourceState metrics;
-  const SystemResourceTiles(this.metrics, {super.key});
+  const SystemResourceTiles({super.key});
   @override
-  Widget build(BuildContext c) => Column(
-    key: const Key('dashboard.resources'),
-    crossAxisAlignment: CrossAxisAlignment.stretch,
-    children: [
-      Row(
-        children: [
-          const Expanded(
+  Widget build(BuildContext c) {
+    final store = PanelScope.of(c), asset = store.resourceAsset;
+    final metrics = store.instanceMetrics;
+    final envelope = object(metrics?.value);
+    final data = envelope['status'] == 'available'
+        ? object(envelope['metrics'])
+        : <String, dynamic>{};
+    final unknown = metrics?.error != null
+        ? '读取失败'
+        : envelope['status'] == 'unavailable'
+        ? '尚未接入监控'
+        : '读取中…';
+    final listStates = [
+      store.state('/server-control/list', account: store.selectedAccount),
+      store.state('/vps-control/list', account: store.selectedAccount),
+    ];
+    return Column(
+      key: const Key('dashboard.resources'),
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        Row(
+          children: [
+            const Expanded(
+              child: Text(
+                '系统资源',
+                style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+              ),
+            ),
+            Text(
+              store.activeAccount?.name ?? '请选择账户',
+              style: PanelDesign.mutedText(c, 11),
+            ),
+          ],
+        ),
+        const SizedBox(height: 10),
+        if (asset == null)
+          PanelCard(
             child: Text(
-              '系统资源',
-              style: TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+              listStates.any((state) => state.loading)
+                  ? '正在获取当前账户实例…'
+                  : listStates.any((state) => state.error != null)
+                  ? '实例列表读取失败，请下拉重试'
+                  : '当前账户暂无实例',
+              style: PanelDesign.mutedText(c),
             ),
           ),
-          Text('面板服务器', style: PanelDesign.mutedText(c, 11)),
-        ],
-      ),
-      const SizedBox(height: 10),
-      Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          for (final kind in ['cpu', 'memory', 'disk']) ...[
-            Expanded(
-              child: ResourceTile(
-                kind,
-                object(metrics.value),
-                metrics.error != null,
+        if (asset != null) ...[
+          Container(
+            padding: const EdgeInsets.symmetric(horizontal: 12),
+            decoration: BoxDecoration(
+              color: PanelDesign.secondary(c),
+              borderRadius: BorderRadius.circular(12),
+            ),
+            child: DropdownButtonHideUnderline(
+              child: DropdownButton<String>(
+                key: const Key('resource.selector'),
+                value: store.resourceAssetId(asset),
+                isExpanded: true,
+                icon: const PanelIcon(Icons.keyboard_arrow_down, size: 14),
+                items: [
+                  for (final item in store.assets)
+                    DropdownMenuItem(
+                      value: store.resourceAssetId(item),
+                      child: Text(
+                        '${item.name} · ${item.vps ? 'VPS' : '独立服务器'}',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(fontSize: 12),
+                      ),
+                    ),
+                ],
+                onChanged: (id) {
+                  if (id != null) store.selectResourceAsset(id);
+                },
               ),
             ),
-            if (kind != 'disk') const SizedBox(width: 8),
-          ],
-        ],
-      ),
-      if (metrics.error != null)
-        Padding(
-          padding: const EdgeInsets.only(top: 10),
-          child: Row(
+          ),
+          const SizedBox(height: 10),
+          Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Expanded(
-                child: Text(
-                  '资源读取失败：${metrics.error}',
-                  style: PanelDesign.mutedText(c, 11),
+              for (final kind in ['cpu', 'memory', 'disk']) ...[
+                Expanded(
+                  child: ResourceTile(
+                    kind,
+                    data,
+                    metrics?.error != null,
+                    unknown: unknown,
+                  ),
                 ),
-              ),
-              TextButton(
-                onPressed: () => PanelScope.of(
-                  c,
-                ).load('/system/metrics', unknownOnFailure: true),
-                child: const Text('重试'),
-              ),
+                if (kind != 'disk') const SizedBox(width: 8),
+              ],
             ],
           ),
-        ),
-    ],
-  );
+          if (envelope['status'] == 'unavailable')
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: Text(
+                envelope['reason'] == 'BACKEND_UNSUPPORTED'
+                    ? '当前后端尚不支持实例监控。升级并配置监控来源后显示真实读数。'
+                    : '此实例尚未接入系统监控，CPU、内存和存储占用未知。',
+                key: const Key('resource.unavailable'),
+                style: PanelDesign.mutedText(c, 11),
+              ),
+            ),
+          if (metrics?.updated != null && envelope['status'] == 'available')
+            Padding(
+              padding: const EdgeInsets.only(top: 8),
+              child: Text(
+                '${asset.service} · 更新于 ${_time(metrics!.updated!)}',
+                key: const Key('resource.identity'),
+                style: PanelDesign.mutedText(c, 11),
+              ),
+            ),
+          if (metrics?.error != null)
+            Padding(
+              padding: const EdgeInsets.only(top: 10),
+              child: Row(
+                children: [
+                  Expanded(
+                    child: Text(
+                      '资源读取失败：${metrics!.error}',
+                      style: PanelDesign.mutedText(c, 11),
+                    ),
+                  ),
+                  TextButton(
+                    onPressed: () => PanelScope.of(c).refreshInstanceMetrics(),
+                    child: const Text('重试'),
+                  ),
+                ],
+              ),
+            ),
+        ],
+      ],
+    );
+  }
 }
 
 class ResourceTile extends StatelessWidget {
   final String kind;
   final Json data;
   final bool failed;
-  const ResourceTile(this.kind, this.data, this.failed, {super.key});
+  final String? unknown;
+  const ResourceTile(
+    this.kind,
+    this.data,
+    this.failed, {
+    super.key,
+    this.unknown,
+  });
   @override
   Widget build(BuildContext c) {
     final value = resourcePercent(data, kind), metric = object(data[kind]);
@@ -521,7 +606,7 @@ class ResourceTile extends StatelessWidget {
         ? PanelDesign.warning
         : PanelDesign.success;
     final detail = value == null
-        ? (failed ? '读取失败' : '读取中…')
+        ? unknown ?? (failed ? '读取失败' : '读取中…')
         : kind == 'cpu'
         ? '${text(metric['cores'])} 核心'
         : '${bytes(metric['usedBytes'])} / ${bytes(metric['totalBytes'])}';

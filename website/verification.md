@@ -1,3 +1,13 @@
+# 2026-10-03 · OVH CP Build 15
+
+仪表盘资源说明改为按当前账户与选定实例显示，未接入监控时明确未知。产品截图替换为 Build 15 Android 回归截图，图像查询参数 resources-15；白底图标与 OVH CP 名称保留。APK 75268472 字节，SHA-256 `3d53722193de85eca702928cdf7eeda92aa976b41a039ab2f852a9c3ed70d34d`。iOS Build 15 已提交，等待审核，通过后自动发布；原内部组可测试。
+
+1Panel OpenResty 原子部署、配置检查与 reload 成功。源站 HTML SHA-256 为 `aae68c3fd2012eb6e9fdae5342a3044805a46d936d32c3c51944b49e226f1c1c`，与源码一致。公开样式、脚本、版本元数据、校验文件、图标、二维码和三张产品截图与本地字节一致。Chrome 实际下载完整 APK 的 SHA-256 与发行包一致；MIME、文件名、75268472 字节和 Range 206 均验证。390px 手机无横向溢出，临时视口已恢复。原面板 API 健康正常，旧版下载与回滚备份保留。
+
+回滚目录：服务器 `/opt/1panel/backups/ovh-cp-download/20261003T114050Z-resources-15`。
+
+---
+
 # 2026-10-03 · OVH CP Build 14
 
 白底图标、全大写名称保留；产品预览替换为本次 Android UI 回归截图，图像引用添加 parity-14 版本参数。APK 1.3.0（14）为 75252044 字节，SHA-256 007b24266a4e3ca45ceee6f33060af7c7df1c851a9b18eb2a25789012e9e2e90。iOS 当前等待 Apple 审核，通过后自动发布。

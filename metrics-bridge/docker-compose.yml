@@ -1,0 +1,25 @@
+services:
+  instance-metrics:
+    image: python:3.13-alpine
+    container_name: ovh-instance-metrics
+    restart: unless-stopped
+    network_mode: host
+    user: "65534:65534"
+    read_only: true
+    cap_drop: [ALL]
+    security_opt: [no-new-privileges:true]
+    mem_limit: 96m
+    pids_limit: 64
+    volumes:
+      - ./app:/app:ro
+    environment:
+      PYTHONDONTWRITEBYTECODE: "1"
+      PANEL_ORIGIN: http://127.0.0.1:19998
+      PANEL_HOST_SERVICE: ${PANEL_HOST_SERVICE:-}
+      PORT: "19997"
+    command: [python, /app/server.py]
+    healthcheck:
+      test: [CMD, python, -c, "import urllib.request; urllib.request.urlopen('http://127.0.0.1:19997/health', timeout=3)"]
+      interval: 30s
+      timeout: 5s
+      retries: 3

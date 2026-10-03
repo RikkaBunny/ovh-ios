@@ -179,6 +179,13 @@ class Handler(BaseHTTPRequestHandler):
             result = dict(servers=[])
         elif path == "/api/settings":
             result = dict(endpoint="ovh-eu", zone="FR", defaultRetryInterval=60, quickOrderRetryInterval=2)
+        elif path == "/api/instance-metrics":
+            query=parse_qs(parts.query);service=query.get('service',[''])[0];kind=query.get('kind',[''])[0]
+            rows=(VPS if kind=='vps' else SERVERS)[account]
+            if kind not in ('dedicated','vps') or not any(row['serviceName']==service for row in rows):
+                self.send_json({'error':'Instance not owned by demonstration account'},404);return
+            percent={'demo-eu':5,'demo-ca':12,'demo-us':8}[account]+(3 if kind=='vps' else 0)
+            result=dict(scope='instance',account=account,service=service,kind=kind,status='available',source='synthetic-review',metrics=dict(cpu=dict(percent=percent,cores=2 if kind=='vps' else 4),memory=dict(totalBytes=4294967296,usedBytes=1073741824,percent=25),disk=dict(totalBytes=42949672960,usedBytes=8589934592,percent=20,path='/demo')))
         elif path == "/api/system/metrics":
             result = dict(cpu=dict(percent=5, cores=4), memory=dict(totalBytes=4294967296, usedBytes=1073741824, percent=25), disk=dict(totalBytes=42949672960, usedBytes=8589934592, percent=20, path="/demo"), host=dict(hostname="review-demo", platform="linux", uptimeSec=3600))
         elif path in ("/api/monitor/subscriptions", "/api/vps-monitor/subscriptions", "/api/ovh/account/refunds", "/api/ovh/account/email-history"):

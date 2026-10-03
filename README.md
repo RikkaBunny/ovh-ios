@@ -1,20 +1,24 @@
 # OVH CP · Flutter 客户端 / SwiftUI 参考实现
 
-新增 [Flutter 客户端 OVH CP](flutter/README.md)：iOS、iPad 和 Android 共用 Flutter/Dart 界面，同步接入原有后端与 226 项业务操作描述。底部服务器直接进入实例，首页资源位于活跃队列下方。1.3.0（14）iOS 沿用现有商店应用，已提交审核，正在等待 Apple 审核；Android 正式签名 APK 可从 [安卓下载网站](https://ovh.hejingcheng.com/download/) 或 [GitHub Release](https://github.com/RikkaBunny/ovh-ios/releases/tag/v1.3.0-cp.14) 下载。网站源码见 [website](website/README.md)。
+新增 [Flutter 客户端 OVH CP](flutter/README.md)：iOS、iPad 和 Android 共用 Flutter/Dart 界面，同步接入原有后端与 226 项业务操作描述。底部服务器直接进入实例，首页资源位于活跃队列下方。1.3.0（15）iOS 沿用现有商店应用，已提交审核，正在等待 Apple 审核；Android 正式签名 APK 可从 [安卓下载网站](https://ovh.hejingcheng.com/download/) 或 [GitHub Release](https://github.com/RikkaBunny/ovh-ios/releases/tag/v1.3.0-cp.15) 下载。网站源码见 [website](website/README.md)。
 
 SwiftUI 源码版本 1.2.0（9），最低 iOS 17，支持 iPhone 和 iPad。网站继续使用 React；此版本的业务页面全部使用 SwiftUI，共用现有 gokele/ovh Go 后端。已移除“完整控制台”网页入口。WebKit 仅用于 OVH 返回的 KVM 远程屏幕，不加载管理面板，也不注入面板令牌。
 
 首次连接可扫描二维码、识别二维码图片、粘贴配对链接、填写 8 位配对码，或使用旧访问密钥。名称与图标保持 OVH，官方图标出处见 [BrandAssets/README.md](BrandAssets/README.md)。
 
-仓库包含完整客户端、Xcode 工程、接口目录、单元与 UI 测试、本机合成测试服务、维护工具和测试截图。React 网页与 Go 后端由 [gokele/ovh](https://github.com/gokele/ovh) 单独维护，本仓库不复制后端。
+仓库包含完整客户端、Xcode 工程、接口目录、单元与 UI 测试、本机合成测试服务、维护工具和测试截图。React 网页与 Go 后端由 [gokele/ovh](https://github.com/gokele/ovh) 单独维护，本仓库保留原后端，新增 [metrics-bridge](metrics-bridge/README.md) 为 Flutter 提供经过账户与实例归属验证的资源接口；其他机器未接入监控时显示未知。
 
 ## 界面预览
 
-以下为 Flutter Build 14 截图，使用合成账户和演示数据。SwiftUI 参考截图保留在 `NativeScreenshots/`。
+以下为 Flutter Build 15 截图，使用合成账户和演示数据。SwiftUI 参考截图保留在 `NativeScreenshots/`。
 
 | 仪表盘 | 服务器实例 | 原生控制 |
 |---|---|---|
-| ![仪表盘](flutter/screenshots/phone-01-Dashboard.png) | ![服务器实例](flutter/screenshots/phone-03-Instances.png) | ![实例控制](flutter/screenshots/phone-14-ServerOverview.png) |
+| ![仪表盘](flutter/screenshots/phone-12-PairedDashboard.png) | ![服务器实例](flutter/screenshots/phone-03-Instances.png) | ![实例控制](flutter/screenshots/phone-14-ServerOverview.png) |
+
+## SwiftUI 1.2.0 历史参考
+
+以下功能表、资源说明与构建方法属于保留的 SwiftUI 版本，当前发行的 Flutter Build 15 请参阅 [Flutter 文档](flutter/README.md)。
 
 ## 原生功能
 

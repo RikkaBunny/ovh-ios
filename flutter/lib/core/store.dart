@@ -5,6 +5,7 @@ import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'api.dart';
 import 'models.dart';
+import 'instance_metrics.dart';
 
 abstract class Credentials {
   Future<Connection?> read();
@@ -81,6 +82,7 @@ class PanelStore extends ChangeNotifier {
   int mutations = 0;
   int accountRevision = 0;
   final Map<String, ResourceState> _resources = {};
+  final Map<String, String> _resourceSelections = {};
   PanelStore(this.catalog, {PanelApi? api, Credentials? credentials})
     : api = api ?? PanelApi(),
       credentials = credentials ?? SecureCredentials();
@@ -166,6 +168,7 @@ class PanelStore extends ChangeNotifier {
     accounts = [];
     selectedAccount = '';
     _resources.clear();
+    _resourceSelections.clear();
     connectionError = null;
     await credentials.delete();
     await (await SharedPreferences.getInstance()).remove('ovh.account');
@@ -184,6 +187,7 @@ class PanelStore extends ChangeNotifier {
     notifyListeners();
     await (await SharedPreferences.getInstance()).setString('ovh.account', id);
     await refreshOverview(includeAccounts: false);
+    await refreshInstanceMetrics();
   }
 
   Future<void> refreshOverview({bool includeAccounts = true}) async {
@@ -226,12 +230,86 @@ class PanelStore extends ChangeNotifier {
       object(state('/vps-control/list', account: selectedAccount).value)['vps'],
     ).map((j) => Asset(object(j), vps: true)),
   ];
+
+  String resourceAssetId(Asset asset) => '${asset.root}/${asset.service}';
+  Asset? get resourceAsset {
+    final candidates = assets;
+    return candidates
+            .where(
+              (asset) =>
+                  resourceAssetId(asset) ==
+                  _resourceSelections[selectedAccount],
+            )
+            .firstOrNull ??
+        candidates.firstOrNull;
+  }
+
+  Map<String, String> resourceQuery(Asset asset) => {
+    'kind': asset.vps ? 'vps' : 'dedicated',
+    'service': asset.service,
+  };
+
+  ResourceState? get instanceMetrics {
+    final asset = resourceAsset;
+    return asset == null
+        ? null
+        : state(
+            '/instance-metrics',
+            account: selectedAccount,
+            query: resourceQuery(asset),
+          );
+  }
+
+  Future<void> selectResourceAsset(String id) async {
+    final asset = assets
+        .where((asset) => resourceAssetId(asset) == id)
+        .firstOrNull;
+    if (asset == null) return;
+    _resourceSelections[selectedAccount] = id;
+    notifyListeners();
+    await refreshInstanceMetrics();
+  }
+
+  Future<void> refreshInstanceMetrics() async {
+    final account = selectedAccount, asset = resourceAsset;
+    if (connection == null || account.isEmpty || asset == null) return;
+    await load(
+      '/instance-metrics',
+      account: account,
+      query: resourceQuery(asset),
+      activeScope: true,
+      unknownOnFailure: true,
+      authenticatedFetch: true,
+      fetch: (current) async {
+        try {
+          final result = await api.request(
+            current,
+            '/instance-metrics',
+            account: account,
+            query: resourceQuery(asset),
+          );
+          return ApiResult(
+            checkedInstanceMetrics(result.value, account, asset),
+          );
+        } on PanelException catch (error) {
+          if (error.status == 404 || error.status == 501) {
+            return ApiResult(
+              unavailableInstanceMetrics(account, asset, 'BACKEND_UNSUPPORTED'),
+            );
+          }
+          rethrow;
+        }
+      },
+    );
+  }
+
   Future<void> load(
     String path, {
     String? account,
     Map<String, String> query = const {},
     bool activeScope = false,
     bool unknownOnFailure = false,
+    bool authenticatedFetch = false,
     Future<ApiResult> Function(Connection)? fetch,
   }) async {
     final current = connection;
@@ -266,7 +344,9 @@ class PanelStore extends ChangeNotifier {
         resource.updated = DateTime.now();
       } catch (error) {
         if (!valid()) return;
-        if (error is PanelException && error.status == 401 && fetch == null) {
+        if (error is PanelException &&
+            error.status == 401 &&
+            (fetch == null || authenticatedFetch)) {
           await disconnect();
           return;
         }

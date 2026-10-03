@@ -16,7 +16,7 @@ METRICS_MODE='ok'
 METRICS_REQUESTS=0
 INVENTORY = dict(mode='ok', delay=0, requests=0, completed=0, forced=0)
 REFRESH = dict(mode='ok', delay=0, marker=0, started={}, completed={})
-READ_PATHS = {'/accounts', '/stats', '/queue', '/server-control/list', '/vps-control/list', '/system/metrics', '/monitor/subscriptions', '/monitor/status', '/logs', '/purchase-history', '/ovh/account/info', '/app/devices'}
+READ_PATHS = {'/accounts', '/stats', '/queue', '/server-control/list', '/vps-control/list', '/system/metrics', '/instance-metrics', '/monitor/subscriptions', '/monitor/status', '/logs', '/purchase-history', '/ovh/account/info', '/app/devices'}
 
 def inventory_request(query):
     # Snapshot controls so switching modes cannot alter an already pending response.
@@ -73,6 +73,17 @@ class Handler(review.Handler):
             if METRICS_MODE=='error': return self.send_json(dict(error='QA metrics temporarily unavailable'),503)
             if METRICS_MODE=='malformed': return self.send_json(dict(success=True))
             return self.send_json(dict(cpu=dict(percent=37.5,cores=8),memory=dict(totalBytes=32*1024**3,usedBytes=16*1024**3,percent=50),disk=dict(totalBytes=2*1024**4,usedBytes=1.4*1024**4,percent=70,path='/'),host=dict(hostname='qa-panel',platform='debian',uptimeSec=86400)))
+        if path=='/instance-metrics':
+            account=query.get('account',[''])[0]; service=query.get('service',[''])[0]; kind=query.get('kind',[''])[0]
+            rows=(review.VPS if kind=='vps' else review.SERVERS).get(account,[])
+            if not any(row['serviceName']==service for row in rows): return self.send_json(dict(error='Instance not owned by account'),404)
+            envelope=dict(scope='instance',account=account,service=service,kind=kind)
+            METRICS_REQUESTS+=1
+            if METRICS_MODE=='error': return self.send_json(dict(error='QA metrics temporarily unavailable'),503)
+            if METRICS_MODE=='malformed': return self.send_json(dict(cpu={},memory={},disk={}))
+            if METRICS_MODE=='unavailable': return self.send_json(dict(envelope,status='unavailable',reason='INSTANCE_MONITORING_NOT_CONFIGURED'))
+            pct={'demo-eu':37.5,'demo-ca':12,'demo-us':8}.get(account,0)+(3 if kind=='vps' else 0)
+            return self.send_json(dict(envelope,status='available',metrics=dict(cpu=dict(percent=pct,cores=2 if kind=='vps' else 8),memory=dict(totalBytes=4*1024**3,usedBytes=2*1024**3,percent=50),disk=dict(totalBytes=40*1024**3,usedBytes=20*1024**3,percent=50,path='/'))))
         if path.startswith('/accounts/') and path.count('/')==2:
             account=next((a for a in review.ACCOUNTS if a['id']==path.split('/')[-1]),None)
             if not account: return self.send_json({'error':'Unknown account'},404)
