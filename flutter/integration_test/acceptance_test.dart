@@ -81,6 +81,14 @@ void main() {
   Future<void> dashboard(WidgetTester tester) async {
     await start(tester);
     expect(find.text('系统资源'), findsOneWidget);
+    expect(find.text('当前账户实例'), findsOneWidget);
+    expect(find.text('1 台独立服务器 · 1 台 VPS'), findsOneWidget);
+    expect(
+      tester.getRect(find.byKey(const Key('dashboard.resources'))).top,
+      greaterThan(
+        tester.getRect(find.byKey(const Key('dashboard.queue'))).bottom,
+      ),
+    );
     expect(find.byKey(const Key('resource.cpu')), findsOneWidget);
     final scroll = find.byType(Scrollable).first;
     await qa('/qa/refresh', {'mode': 'ok', 'delay': 1, 'marker': 17});
@@ -116,7 +124,11 @@ void main() {
       tester,
       () => store.assets.any((a) => a.name.contains('refresh-19')),
     );
+    expect(find.text('自动续费'), findsNWidgets(2));
     await screenshot(tester, 'Flutter-03-Instances');
+    await store.setAppearance('dark');
+    await screenshot(tester, 'Flutter-13-DarkInstances');
+    await store.setAppearance('light');
     await finish(tester);
   }
 
@@ -160,18 +172,26 @@ void main() {
     await screenshot(tester, 'Flutter-06-Monitor');
     await open(tester, find.byKey(const Key('tab.instances')));
     await open(tester, find.byKey(const Key('asset.ns-demo-eu.example')));
+    await screenshot(tester, 'Flutter-14-ServerOverview');
+    await tester.ensureVisible(find.byKey(const Key('traffic.chart')));
+    await screenshot(tester, 'Flutter-15-Traffic');
+    await open(tester, find.byKey(const Key('detail.高级')));
+    await open(tester, find.text('FTP 备份'));
+    expect(find.byKey(const Key('native.GetBackupFTP')), findsOneWidget);
+    await screenshot(tester, 'Flutter-16-Advanced');
+    await open(tester, find.byKey(const Key('detail.维护')));
+    await screenshot(tester, 'Flutter-17-Maintenance');
     await open(tester, find.byKey(const Key('detail.电源')));
     await open(tester, find.byKey(const Key('native.InstallOS')));
     final buttons = find.byKey(const Key('operation.submit'));
     expect(buttons, findsOneWidget);
-    await open(
-      tester,
-      find.byWidgetPredicate(
-        (widget) =>
-            widget is DropdownButtonFormField<String> &&
-            widget.decoration.labelText == '系统模板 *',
-      ),
+    final templatePicker = find.byWidgetPredicate(
+      (widget) =>
+          widget is DropdownButtonFormField<String> &&
+          widget.decoration.labelText == '系统模板 *',
     );
+    await waitFor(tester, () => templatePicker.evaluate().isNotEmpty);
+    await open(tester, templatePicker);
     await open(tester, find.text('debian13_64').last);
     await open(tester, buttons);
     expect(
@@ -200,6 +220,7 @@ void main() {
     await start(tester);
     await open(tester, find.byKey(const Key('tab.more')));
     await open(tester, find.text('API 设置'));
+    await screenshot(tester, 'Flutter-21-Settings');
     await open(tester, find.byKey(const Key('native.SaveSettings')));
     await waitFor(
       tester,
@@ -234,6 +255,29 @@ void main() {
     expect(store.selectedAccount, 'demo-us');
     expect(store.assets.any((a) => a.service == 'ns-demo-eu.example'), false);
     await screenshot(tester, 'Flutter-08-US-VPS');
+    await open(tester, find.byKey(const Key('asset.vps-demo-us.example')));
+    await open(tester, find.byKey(const Key('detail.快照')));
+    await waitFor(
+      tester,
+      () => !store
+          .state(
+            '/vps-control/vps-demo-us.example/snapshot',
+            account: 'demo-us',
+          )
+          .loading,
+    );
+    expect(find.text('安装前备份'), findsOneWidget);
+    await screenshot(tester, 'Flutter-18-VPSSnapshot');
+    await open(tester, find.byKey(const Key('tab.more')));
+    for (var i = 0; i < 5 && find.text('抢购历史').evaluate().isEmpty; i++) {
+      await open(tester, find.byKey(const Key('app.back')));
+    }
+    await open(tester, find.text('抢购历史'));
+    await screenshot(tester, 'Flutter-19-History');
+    await open(tester, find.byKey(const Key('tab.more')));
+    await open(tester, find.byKey(const Key('app.back')));
+    await open(tester, find.text('详细日志'));
+    await screenshot(tester, 'Flutter-20-Logs');
     final issued = object(await qa('/app/pairing-codes', {}));
     final paired = await control.pair(
       fixture.address,
@@ -265,11 +309,13 @@ void main() {
     final button = tester.getRect(
           find.byKey(const Key('connection.disconnect')),
         ),
-        nav = tester.getRect(find.byType(NavigationBar));
+        nav = tester.getRect(find.byKey(const Key('app.bottomBar')));
     expect(button.bottom, lessThanOrEqualTo(nav.top));
     expect(
       button.top,
-      greaterThanOrEqualTo(tester.getRect(find.byType(AppBar)).bottom),
+      greaterThanOrEqualTo(
+        tester.getRect(find.byKey(const Key('app.header'))).bottom,
+      ),
     );
     expect(
       find.byKey(const Key('connection.disconnect')).hitTestable(),

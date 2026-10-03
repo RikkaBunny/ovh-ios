@@ -13,6 +13,17 @@ import Security
 
   func didInitializeImplicitFlutterEngine(_ engineBridge: FlutterImplicitEngineBridge) {
     GeneratedPluginRegistrant.register(with: engineBridge.pluginRegistry)
+    FlutterMethodChannel(name: "ovh_cp/system_symbol", binaryMessenger: engineBridge.applicationRegistrar.messenger())
+      .setMethodCallHandler { call, result in
+        guard call.method == "render", let args = call.arguments as? [String: Any],
+              let name = args["name"] as? String, let size = args["size"] as? Double,
+              size.isFinite, size > 0, size <= 128 else { result(FlutterMethodNotImplemented); return }
+        let weight: UIImage.SymbolWeight = (args["weight"] as? Int ?? 400) >= 600 ? .semibold : .regular
+        guard let image = UIImage(systemName: name, withConfiguration: UIImage.SymbolConfiguration(pointSize: size, weight: weight))?.withTintColor(.black, renderingMode: .alwaysOriginal) else { result(nil); return }
+        guard let data = image.pngData() else { result(nil); return }
+        result(["data": FlutterStandardTypedData(bytes: data),
+                "width": image.size.width, "height": image.size.height])
+      }
     FlutterMethodChannel(
       name: "ovh_cp/legacy_connection",
       binaryMessenger: engineBridge.applicationRegistrar.messenger()

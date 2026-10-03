@@ -20,6 +20,7 @@ class OperationRow extends StatelessWidget {
   Widget build(BuildContext context) => FeatureRow(
     operation.title,
     key: Key('native.${operation.handler}'),
+    iconColor: operation.danger ? PanelDesign.warning : null,
     icon: operation.read
         ? Icons.description_outlined
         : operation.danger
@@ -252,7 +253,7 @@ class _OperationPageState extends State<OperationPage> {
           Text(
             op.globalTarget ??
                 '${widget.target.name}${widget.target.service == null ? '' : ' · ${widget.target.service}'}',
-            style: const TextStyle(color: Colors.grey, fontSize: 13),
+            style: TextStyle(color: PanelDesign.muted(context), fontSize: 12),
           ),
           if (op.danger)
             Notice(
@@ -270,7 +271,7 @@ class _OperationPageState extends State<OperationPage> {
                 children: fields
                     .map(
                       (field) => Padding(
-                        padding: const EdgeInsets.only(bottom: 18),
+                        padding: const EdgeInsets.only(bottom: 20),
                         child: FieldEditor(
                           key: ValueKey(
                             '${field.location}:${field.key}:$configLoaded',
@@ -434,11 +435,20 @@ class _FieldEditorState extends State<FieldEditor> {
     final label = '${field.label}${field.required ? ' *' : ''}';
     Widget editor;
     if (field.kind == 'toggle') {
-      editor = SwitchListTile(
-        contentPadding: EdgeInsets.zero,
-        title: Text(label, style: const TextStyle(fontSize: 14)),
-        value: value == true,
-        onChanged: widget.onChanged,
+      editor = Row(
+        children: [
+          Expanded(
+            child: Text(
+              value == null
+                  ? '未设置'
+                  : value == true
+                  ? '开启'
+                  : '关闭',
+              style: const TextStyle(fontSize: 13),
+            ),
+          ),
+          PanelSwitch(value: value == true, onChanged: widget.onChanged),
+        ],
       );
     } else if (field.kind == 'object') {
       editor = PanelCard(
@@ -471,7 +481,7 @@ class _FieldEditorState extends State<FieldEditor> {
                           final copy = [...items]..removeAt(i);
                           widget.onChanged(copy);
                         },
-                        icon: const Icon(Icons.remove_circle_outline),
+                        icon: const PanelIcon(Icons.remove_circle_outline),
                       ),
                     ],
                   ),
@@ -492,7 +502,7 @@ class _FieldEditorState extends State<FieldEditor> {
             ),
           OutlinedButton.icon(
             onPressed: () => widget.onChanged([...items, <String, dynamic>{}]),
-            icon: const Icon(Icons.add),
+            icon: const PanelIcon(Icons.add),
             label: Text('添加${field.label}'),
           ),
         ],
@@ -553,7 +563,7 @@ class _FieldEditorState extends State<FieldEditor> {
             IconButton(
               tooltip: '清除时间',
               onPressed: () => widget.onChanged(null),
-              icon: const Icon(Icons.clear),
+              icon: const PanelIcon(Icons.clear),
             ),
         ],
       );
@@ -567,6 +577,7 @@ class _FieldEditorState extends State<FieldEditor> {
         keyboardType: field.kind == 'number'
             ? const TextInputType.numberWithOptions(decimal: true, signed: true)
             : null,
+        style: const TextStyle(fontSize: 13),
         decoration: InputDecoration(
           labelText: label,
           hintText: field.kind == 'secret'
@@ -588,7 +599,19 @@ class _FieldEditorState extends State<FieldEditor> {
         ),
       );
     }
-    return Padding(padding: const EdgeInsets.only(bottom: 10), child: editor);
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: [
+        if (field.kind == 'toggle') ...[
+          Text(
+            label,
+            style: const TextStyle(fontSize: 13, fontWeight: FontWeight.w500),
+          ),
+          const SizedBox(height: 8),
+        ],
+        editor,
+      ],
+    );
   }
 }
 
@@ -648,7 +671,7 @@ class ResourceResults extends StatelessWidget {
                 remote.startsWith('https://'))
               FilledButton.icon(
                 onPressed: () => pushPage(context, RemoteConsolePage(remote)),
-                icon: const Icon(Icons.desktop_windows_outlined),
+                icon: const PanelIcon(Icons.desktop_windows_outlined),
                 label: const Text('进入远程控制台'),
               ),
           ],

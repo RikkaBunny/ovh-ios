@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/cupertino.dart' show CupertinoPageTransitionsBuilder;
 import 'package:url_launcher/url_launcher.dart';
 import '../core/models.dart';
 import '../core/store.dart';
+import 'design.dart';
+export 'design.dart';
 
 class PanelScope extends InheritedNotifier<PanelStore> {
   const PanelScope({super.key, required PanelStore store, required super.child})
@@ -12,82 +15,151 @@ class PanelScope extends InheritedNotifier<PanelStore> {
 
 ThemeData panelTheme(Brightness brightness) {
   final dark = brightness == Brightness.dark;
-  final primary = dark ? Colors.white : const Color(0xff171717);
-  final background = dark ? const Color(0xff101010) : Colors.white;
-  final border = dark ? const Color(0xff303030) : const Color(0xffe5e5e5);
+  final primary = dark ? const Color(0xfff5f5f5) : const Color(0xff171717);
+  final background = dark ? const Color(0xff0f0f0f) : Colors.white;
+  final card = dark ? const Color(0xff141414) : Colors.white;
+  final border = dark ? const Color(0xff2e2e2e) : const Color(0xffe6e6e6);
+  final muted = dark ? const Color(0xff999999) : const Color(0xff737373);
+  final secondary = dark ? const Color(0xff242424) : const Color(0xfff5f5f5);
+  final onPrimary = dark ? const Color(0xff171717) : const Color(0xfffafafa);
   final scheme =
       ColorScheme.fromSeed(seedColor: primary, brightness: brightness).copyWith(
         primary: primary,
-        onPrimary: dark ? Colors.black : Colors.white,
+        onPrimary: onPrimary,
         surface: background,
+        onSurface: primary,
+        onSurfaceVariant: muted,
+        outline: border,
         outlineVariant: border,
-        secondary: const Color(0xff168b58),
+        secondary: PanelDesign.success,
       );
+  final text = ThemeData(brightness: brightness).textTheme.apply(
+    fontFamily: '.SF Pro Text',
+    bodyColor: primary,
+    displayColor: primary,
+  );
+  final button = ButtonStyle(
+    textStyle: const WidgetStatePropertyAll(
+      TextStyle(
+        fontFamily: '.SF Pro Text',
+        fontSize: 13,
+        fontWeight: FontWeight.w500,
+      ),
+    ),
+    minimumSize: const WidgetStatePropertyAll(Size(0, 40)),
+    padding: const WidgetStatePropertyAll(EdgeInsets.symmetric(horizontal: 15)),
+    shape: const WidgetStatePropertyAll(StadiumBorder()),
+    tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+    visualDensity: VisualDensity.standard,
+  );
   return ThemeData(
     useMaterial3: true,
     brightness: brightness,
     colorScheme: scheme,
+    fontFamily: '.SF Pro Text',
     scaffoldBackgroundColor: background,
+    textTheme: text.copyWith(
+      bodyMedium: TextStyle(
+        fontFamily: '.SF Pro Text',
+        fontSize: 13,
+        color: primary,
+      ),
+      bodyLarge: TextStyle(
+        fontFamily: '.SF Pro Text',
+        fontSize: 14,
+        color: primary,
+      ),
+    ),
+    iconTheme: IconThemeData(color: primary, size: 17),
     appBarTheme: AppBarTheme(
       backgroundColor: background,
       surfaceTintColor: Colors.transparent,
+      toolbarHeight: 52,
       centerTitle: false,
       titleTextStyle: TextStyle(
+        fontFamily: '.SF Pro Text',
+        fontSize: 17,
+        fontWeight: FontWeight.w600,
         color: primary,
-        fontWeight: FontWeight.w700,
-        fontSize: 20,
       ),
     ),
+    dividerColor: border,
     dividerTheme: DividerThemeData(color: border, thickness: 1, space: 1),
     cardTheme: CardThemeData(
-      color: background,
+      color: card,
       elevation: 0,
       margin: EdgeInsets.zero,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(18),
+        borderRadius: BorderRadius.circular(16),
         side: BorderSide(color: border),
       ),
     ),
     inputDecorationTheme: InputDecorationTheme(
       filled: true,
-      fillColor: dark ? const Color(0xff222222) : const Color(0xfff5f5f5),
+      fillColor: secondary,
+      isDense: true,
       border: OutlineInputBorder(
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(10),
         borderSide: BorderSide.none,
       ),
-      contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+      contentPadding: const EdgeInsets.all(12),
+      hintStyle: TextStyle(fontSize: 13, color: muted),
+      labelStyle: TextStyle(fontSize: 12, color: muted),
     ),
     filledButtonTheme: FilledButtonThemeData(
-      style: FilledButton.styleFrom(
-        backgroundColor: primary,
-        foregroundColor: scheme.onPrimary,
-        padding: const EdgeInsets.symmetric(horizontal: 18, vertical: 14),
+      style: button.copyWith(
+        backgroundColor: WidgetStatePropertyAll(primary),
+        foregroundColor: WidgetStatePropertyAll(onPrimary),
       ),
     ),
     outlinedButtonTheme: OutlinedButtonThemeData(
-      style: OutlinedButton.styleFrom(
-        foregroundColor: primary,
-        side: BorderSide(color: border),
-        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
+      style: button.copyWith(
+        backgroundColor: WidgetStatePropertyAll(card),
+        foregroundColor: WidgetStatePropertyAll(primary),
+        side: WidgetStatePropertyAll(BorderSide(color: border)),
       ),
     ),
-    navigationBarTheme: NavigationBarThemeData(
-      backgroundColor: background,
-      surfaceTintColor: Colors.transparent,
-      indicatorColor: dark ? const Color(0xff222222) : const Color(0xfff4f4f4),
-      height: 70,
+    textButtonTheme: TextButtonThemeData(
+      style: TextButton.styleFrom(
+        foregroundColor: primary,
+        textStyle: const TextStyle(fontSize: 12, fontFamily: '.SF Pro Text'),
+        minimumSize: Size.zero,
+        padding: EdgeInsets.zero,
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      ),
+    ),
+    iconButtonTheme: IconButtonThemeData(
+      style: IconButton.styleFrom(
+        foregroundColor: primary,
+        minimumSize: const Size(32, 32),
+        padding: EdgeInsets.zero,
+        tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+      ),
+    ),
+    listTileTheme: ListTileThemeData(
+      contentPadding: const EdgeInsets.all(14),
+      dense: true,
+      minVerticalPadding: 0,
+      minLeadingWidth: 22,
+      horizontalTitleGap: 12,
+      textColor: primary,
+      iconColor: muted,
     ),
     chipTheme: ChipThemeData(
       side: BorderSide(color: border),
       shape: const StadiumBorder(),
       selectedColor: primary,
       showCheckmark: false,
-      labelStyle: TextStyle(color: primary),
-      secondaryLabelStyle: TextStyle(color: scheme.onPrimary),
+      labelStyle: TextStyle(fontSize: 13, color: primary),
+      secondaryLabelStyle: TextStyle(color: onPrimary),
+      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 6),
     ),
-    textTheme: ThemeData(
-      brightness: brightness,
-    ).textTheme.apply(bodyColor: primary, displayColor: primary),
+    pageTransitionsTheme: const PageTransitionsTheme(
+      builders: {
+        TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+        TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+      },
+    ),
   );
 }
 
@@ -104,17 +176,71 @@ class PageLayout extends StatelessWidget {
     this.actions = const [],
   });
   @override
-  Widget build(BuildContext context) => Scaffold(
-    appBar: AppBar(
-      title: Text(title),
-      actions: [
-        if (account) const AccountSelector(),
-        ...actions,
-        const SizedBox(width: 8),
-      ],
-    ),
-    body: SafeArea(top: false, child: child),
-  );
+  Widget build(BuildContext context) {
+    final back = Navigator.of(context).canPop();
+    return Scaffold(
+      appBar: PreferredSize(
+        preferredSize: const Size.fromHeight(52),
+        child: SafeArea(
+          bottom: false,
+          child: Container(
+            key: const Key('app.header'),
+            height: 52,
+            padding: const EdgeInsets.symmetric(horizontal: 14),
+            decoration: BoxDecoration(
+              color: PanelDesign.background(context),
+              border: Border(
+                bottom: BorderSide(
+                  color: PanelDesign.border(context),
+                  width: .5,
+                ),
+              ),
+            ),
+            child: Row(
+              children: [
+                if (back)
+                  Padding(
+                    padding: const EdgeInsets.only(right: 10),
+                    child: Semantics(
+                      label: '返回',
+                      button: true,
+                      child: GestureDetector(
+                        key: const Key('app.back'),
+                        onTap: () => Navigator.of(context).maybePop(),
+                        behavior: HitTestBehavior.opaque,
+                        child: const SizedBox(
+                          width: 32,
+                          height: 44,
+                          child: Center(
+                            child: PanelIcon(
+                              Icons.arrow_back_ios_new,
+                              size: 17,
+                              weight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ),
+                  ),
+                Text(
+                  title,
+                  style: const TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.w600,
+                  ),
+                  maxLines: 1,
+                ),
+                const Spacer(),
+                if (account) const Flexible(child: AccountSelector()),
+                ...actions,
+              ],
+            ),
+          ),
+        ),
+      ),
+      body: SafeArea(top: false, child: child),
+    );
+  }
 }
 
 class AccountSelector extends StatelessWidget {
@@ -138,31 +264,49 @@ class AccountSelector extends StatelessWidget {
           )
           .toList(),
       child: Container(
-        constraints: const BoxConstraints(maxWidth: 200),
-        padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 9),
+        width: 235,
+        height: 36,
+        constraints: const BoxConstraints(maxWidth: 235),
+        padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 9),
         decoration: BoxDecoration(
           color: Theme.of(context).inputDecorationTheme.fillColor,
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(9),
         ),
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
             Flexible(
               child: Text(
-                account?.name ?? '账户',
+                account?.name ?? '选择账户',
                 overflow: TextOverflow.ellipsis,
                 style: const TextStyle(
-                  fontSize: 13,
+                  fontSize: 12,
+                  fontWeight: FontWeight.w500,
+                ),
+              ),
+            ),
+            const SizedBox(width: 7),
+            Container(
+              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 3),
+              decoration: BoxDecoration(
+                color: PanelDesign.card(context),
+                borderRadius: BorderRadius.circular(4),
+              ),
+              child: Text(
+                account?.zone ?? 'OVH',
+                style: const TextStyle(
+                  fontSize: 10,
                   fontWeight: FontWeight.w600,
                 ),
               ),
             ),
-            const SizedBox(width: 6),
-            Text(
-              account?.zone ?? '',
-              style: const TextStyle(color: Color(0xff199c6b), fontSize: 12),
+            const SizedBox(width: 7),
+            PanelIcon(
+              Icons.expand_more,
+              size: 10,
+              color: PanelDesign.muted(context),
+              weight: FontWeight.w500,
             ),
-            const Icon(Icons.expand_more, size: 18),
           ],
         ),
       ),
@@ -176,7 +320,7 @@ class PanelCard extends StatelessWidget {
   const PanelCard({
     super.key,
     required this.child,
-    this.padding = const EdgeInsets.all(18),
+    this.padding = const EdgeInsets.all(16),
   });
   @override
   Widget build(BuildContext context) => Card(
@@ -188,27 +332,34 @@ class PageList extends StatelessWidget {
   final List<Widget> children;
   final Future<void> Function()? refresh;
   final String storageKey;
+  final double maxWidth, spacing;
+  final EdgeInsets padding;
   const PageList({
     super.key,
     required this.children,
     this.refresh,
     this.storageKey = '',
+    this.maxWidth = 900,
+    this.spacing = 14,
+    this.padding = const EdgeInsets.all(14),
   });
   @override
   Widget build(BuildContext context) {
     final list = SingleChildScrollView(
       key: PageStorageKey(storageKey),
       physics: const AlwaysScrollableScrollPhysics(),
-      padding: const EdgeInsets.fromLTRB(16, 16, 16, 28),
+      padding: padding,
       child: Center(
         child: ConstrainedBox(
-          constraints: const BoxConstraints(maxWidth: 1100),
+          constraints: BoxConstraints(maxWidth: maxWidth),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: children
                 .map(
                   (w) => Padding(
-                    padding: const EdgeInsets.only(bottom: 16),
+                    padding: EdgeInsets.only(
+                      bottom: w == children.last ? 0 : spacing,
+                    ),
                     child: w,
                   ),
                 )
@@ -230,14 +381,14 @@ class Notice extends StatelessWidget {
   Widget build(BuildContext context) => Container(
     padding: const EdgeInsets.all(14),
     decoration: BoxDecoration(
-      color: const Color(0xffb77914).withValues(alpha: .07),
-      border: Border.all(color: const Color(0xffb77914).withValues(alpha: .4)),
-      borderRadius: BorderRadius.circular(14),
+      color: PanelDesign.warning.withValues(alpha: .06),
+      border: Border.all(color: PanelDesign.warning.withValues(alpha: .3)),
+      borderRadius: BorderRadius.circular(12),
     ),
     child: Row(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        const Icon(
+        const PanelIcon(
           Icons.warning_amber_rounded,
           size: 18,
           color: Color(0xffb77914),
@@ -264,24 +415,34 @@ class EmptyPanel extends StatelessWidget {
   final String title;
   final Widget? action;
   final IconData icon;
+  final String subtitle;
   const EmptyPanel(
     this.title, {
     super.key,
     this.action,
+    this.subtitle = '',
     this.icon = Icons.inbox_outlined,
   });
   @override
   Widget build(BuildContext context) => PanelCard(
     child: Padding(
-      padding: const EdgeInsets.symmetric(vertical: 30),
+      padding: const EdgeInsets.symmetric(vertical: 22),
       child: Column(
         children: [
-          Icon(icon, size: 40, color: Colors.grey),
-          const SizedBox(height: 16),
+          PanelIcon(icon, size: 32, color: PanelDesign.muted(context)),
+          const SizedBox(height: 12),
           Text(
             title,
-            style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
+            style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
           ),
+          if (subtitle.isNotEmpty) ...[
+            const SizedBox(height: 12),
+            Text(
+              subtitle,
+              textAlign: TextAlign.center,
+              style: PanelDesign.mutedText(context),
+            ),
+          ],
           if (action != null) ...[const SizedBox(height: 20), action!],
         ],
       ),
@@ -294,15 +455,34 @@ class StatusBadge extends StatelessWidget {
   final bool healthy;
   const StatusBadge(this.label, {super.key, this.healthy = false});
   @override
-  Widget build(BuildContext context) {
-    final color = healthy ? const Color(0xff168b58) : const Color(0xffb77914);
+  Widget build(BuildContext c) {
+    final tone = healthy ? PanelDesign.success : PanelDesign.warning;
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
       decoration: BoxDecoration(
-        color: color.withValues(alpha: .08),
+        color: tone.withValues(alpha: .08),
+        border: Border.all(color: tone.withValues(alpha: .30)),
         borderRadius: BorderRadius.circular(50),
       ),
-      child: Text(label, style: TextStyle(fontSize: 12, color: color)),
+      child: Row(
+        mainAxisSize: MainAxisSize.min,
+        children: [
+          Container(
+            width: 5,
+            height: 5,
+            decoration: BoxDecoration(color: tone, shape: BoxShape.circle),
+          ),
+          const SizedBox(width: 5),
+          Text(
+            label,
+            style: TextStyle(
+              fontSize: 11,
+              fontWeight: FontWeight.w500,
+              color: tone,
+            ),
+          ),
+        ],
+      ),
     );
   }
 }
@@ -312,23 +492,53 @@ class FeatureRow extends StatelessWidget {
   final IconData icon;
   final VoidCallback tap;
   final String? subtitle;
+  final Color? iconColor;
   const FeatureRow(
     this.title, {
     super.key,
     required this.tap,
     this.icon = Icons.tune,
     this.subtitle,
+    this.iconColor,
   });
   @override
-  Widget build(BuildContext context) => ListTile(
-    shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
-    leading: Icon(icon, size: 23, color: Colors.grey),
-    title: Text(title, style: const TextStyle(fontSize: 15)),
-    subtitle: subtitle == null
-        ? null
-        : Text(subtitle!, style: const TextStyle(fontSize: 12)),
-    trailing: const Icon(Icons.chevron_right, size: 19),
-    onTap: tap,
+  Widget build(BuildContext c) => Semantics(
+    button: true,
+    child: InkWell(
+      onTap: tap,
+      borderRadius: BorderRadius.circular(16),
+      child: Padding(
+        padding: const EdgeInsets.all(14),
+        child: Row(
+          children: [
+            SizedBox(
+              width: 22,
+              child: PanelIcon(
+                icon,
+                size: 17,
+                color: iconColor ?? PanelDesign.muted(c),
+              ),
+            ),
+            const SizedBox(width: 12),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(title, style: const TextStyle(fontSize: 14)),
+                  if (subtitle != null)
+                    Text(subtitle!, style: PanelDesign.mutedText(c)),
+                ],
+              ),
+            ),
+            PanelIcon(
+              Icons.chevron_right,
+              size: 11,
+              color: PanelDesign.muted(c),
+            ),
+          ],
+        ),
+      ),
+    ),
   );
 }
 
@@ -345,6 +555,65 @@ Future<void> openHttps(String value) async {
   if (!await launchUrl(uri, mode: LaunchMode.externalApplication)) {
     throw const PanelException('无法打开链接');
   }
+}
+
+/// Local expansion state must not share PageStorage with the scroll offset.
+/// Expansible otherwise reads the parent scroll's double as a boolean.
+class PanelDisclosure extends StatefulWidget {
+  final Widget title;
+  final List<Widget> children;
+  final EdgeInsets padding;
+  const PanelDisclosure({
+    super.key,
+    required this.title,
+    required this.children,
+    this.padding = const EdgeInsets.all(14),
+  });
+  @override
+  State<PanelDisclosure> createState() => _PanelDisclosureState();
+}
+
+class _PanelDisclosureState extends State<PanelDisclosure> {
+  bool expanded = false;
+  @override
+  Widget build(BuildContext c) => Column(
+    crossAxisAlignment: CrossAxisAlignment.stretch,
+    children: [
+      InkWell(
+        onTap: () => setState(() => expanded = !expanded),
+        child: Padding(
+          padding: widget.padding,
+          child: SizedBox(
+            height: 24,
+            child: Row(
+              children: [
+                Expanded(child: widget.title),
+                AnimatedRotation(
+                  turns: expanded ? .25 : 0,
+                  duration: const Duration(milliseconds: 180),
+                  child: PanelIcon(
+                    Icons.chevron_right,
+                    size: 12,
+                    color: PanelDesign.primary(c),
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+      AnimatedSize(
+        duration: const Duration(milliseconds: 180),
+        alignment: Alignment.topCenter,
+        child: expanded
+            ? Column(
+                crossAxisAlignment: CrossAxisAlignment.stretch,
+                children: widget.children,
+              )
+            : const SizedBox(width: double.infinity),
+      ),
+    ],
+  );
 }
 
 class DataView extends StatelessWidget {
@@ -380,8 +649,9 @@ class DataView extends StatelessWidget {
         children: keys.map((key) {
           final v = json[key];
           if (v is Map || v is List) {
-            return ExpansionTile(
-              tilePadding: EdgeInsets.zero,
+            return PanelDisclosure(
+              key: ValueKey('data.$key'),
+              padding: EdgeInsets.zero,
               title: Text(
                 catalog.label(key),
                 style: const TextStyle(fontSize: 13),
@@ -402,7 +672,10 @@ class DataView extends StatelessWidget {
                   flex: 2,
                   child: Text(
                     catalog.label(key),
-                    style: const TextStyle(color: Colors.grey, fontSize: 13),
+                    style: TextStyle(
+                      color: PanelDesign.muted(context),
+                      fontSize: 13,
+                    ),
                   ),
                 ),
                 const SizedBox(width: 14),
@@ -445,50 +718,142 @@ Future<bool> confirmAction(
   Widget? detail,
 }) async {
   var typed = '';
-  return await showDialog<bool>(
+  return await showModalBottomSheet<bool>(
         context: context,
-        builder: (context) => StatefulBuilder(
-          builder: (context, update) => AlertDialog(
-            title: Text(title),
-            content: SingleChildScrollView(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  Text(target),
-                  if (danger) ...[
-                    const SizedBox(height: 16),
-                    const Notice('此操作会修改或删除目标数据，请核对后确认。'),
-                  ],
-                  if (detail != null) ...[const SizedBox(height: 16), detail],
-                  if (typeTarget != null) ...[
-                    const SizedBox(height: 16),
-                    const Text('输入完整服务名称以确认'),
-                    const SizedBox(height: 8),
-                    TextField(
-                      key: const Key('operation.confirmTarget'),
-                      onChanged: (s) => update(() => typed = s),
-                      decoration: InputDecoration(hintText: typeTarget),
+        isScrollControlled: true,
+        useSafeArea: true,
+        showDragHandle: true,
+        backgroundColor: PanelDesign.background(context),
+        builder: (c) => StatefulBuilder(
+          builder: (c, update) => FractionallySizedBox(
+            heightFactor: .94,
+            child: Column(
+              children: [
+                Padding(
+                  padding: const EdgeInsets.fromLTRB(18, 0, 18, 12),
+                  child: Row(
+                    children: [
+                      TextButton(
+                        onPressed: () => Navigator.pop(c, false),
+                        child: const Text('取消'),
+                      ),
+                      const Expanded(
+                        child: Text(
+                          '确认操作',
+                          textAlign: TextAlign.center,
+                          style: TextStyle(
+                            fontSize: 17,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 28),
+                    ],
+                  ),
+                ),
+                const Divider(),
+                Expanded(
+                  child: SingleChildScrollView(
+                    padding: const EdgeInsets.all(18),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Text(
+                          title,
+                          style: const TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        ),
+                        const SizedBox(height: 16),
+                        Text(target, style: const TextStyle(fontSize: 14)),
+                        if (danger) ...[
+                          const SizedBox(height: 16),
+                          const Notice('此操作会修改或删除当前目标的数据，请核对后确认。'),
+                        ],
+                        if (detail != null) ...[
+                          const SizedBox(height: 16),
+                          detail,
+                        ],
+                        if (typeTarget != null) ...[
+                          const SizedBox(height: 16),
+                          const Text(
+                            '输入完整服务名称以确认',
+                            style: TextStyle(fontSize: 13),
+                          ),
+                          const SizedBox(height: 16),
+                          TextField(
+                            key: const Key('operation.confirmTarget'),
+                            onChanged: (s) => update(() => typed = s),
+                            style: const TextStyle(fontSize: 13),
+                            decoration: InputDecoration(hintText: typeTarget),
+                          ),
+                        ],
+                        const SizedBox(height: 16),
+                        FilledButton(
+                          key: const Key('operation.confirm'),
+                          onPressed: typeTarget != null && typed != typeTarget
+                              ? null
+                              : () => Navigator.pop(c, true),
+                          child: Text('确认$title'),
+                        ),
+                      ],
                     ),
-                  ],
-                ],
-              ),
+                  ),
+                ),
+              ],
             ),
-            actions: [
-              TextButton(
-                onPressed: () => Navigator.pop(context, false),
-                child: const Text('取消'),
-              ),
-              FilledButton(
-                key: const Key('operation.confirm'),
-                onPressed: typeTarget != null && typed != typeTarget
-                    ? null
-                    : () => Navigator.pop(context, true),
-                child: const Text('确认'),
-              ),
-            ],
           ),
         ),
       ) ??
       false;
+}
+
+class AppTabSelection extends InheritedWidget {
+  final ValueChanged<int> onSelected;
+  const AppTabSelection({
+    super.key,
+    required this.onSelected,
+    required super.child,
+  });
+  static ValueChanged<int>? of(BuildContext c) =>
+      c.dependOnInheritedWidgetOfExactType<AppTabSelection>()?.onSelected;
+  @override
+  bool updateShouldNotify(AppTabSelection old) => false;
+}
+
+class SectionHeading extends StatelessWidget {
+  final String title, subtitle;
+  const SectionHeading(this.title, this.subtitle, {super.key});
+  @override
+  Widget build(BuildContext c) => Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: [
+      Text(
+        title,
+        style: const TextStyle(fontSize: 14, fontWeight: FontWeight.w600),
+      ),
+      const SizedBox(height: 5),
+      Text(subtitle, style: PanelDesign.mutedText(c, 11)),
+    ],
+  );
+}
+
+class DividedRows extends StatelessWidget {
+  final List<Widget> children;
+  final double inset;
+  const DividedRows(this.children, {super.key, this.inset = 48});
+  @override
+  Widget build(BuildContext c) => Column(
+    children: [
+      for (var i = 0; i < children.length; i++) ...[
+        children[i],
+        if (i < children.length - 1)
+          Padding(
+            padding: EdgeInsets.only(left: inset),
+            child: const Divider(),
+          ),
+      ],
+    ],
+  );
 }

@@ -1,6 +1,6 @@
-App: OVH CP 1.3.0 (13), Bundle ID com.hejingcheng.ovhpocket.
+App: OVH CP 1.3.0 (14), Bundle ID com.hejingcheng.ovhpocket.
 
-Build 13 updates the app icon and launch branding to a white background with the same blue OVH-inspired mark and cp lettering. The application name is now consistently uppercase OVH CP. Functionality and data handling are unchanged from build 11.
+Build 14 aligns the Flutter UI with the React web console and the previous native client: monochrome cards, capsule controls, navigation, dark mode, account-aware instances, traffic, snapshots, and settings. System resources remain below the active queue and the Servers tab opens purchased instances. The white-background icon and uppercase OVH CP name are retained. iPhone and iPad screenshots now show this build. Data handling and backend authentication remain unchanged.
 
 This update replaces the existing OVH client's interface with a Flutter mobile client while preserving the original application identity. Its initial connection can migrate existing on-device credentials. It uses the same self-hosted backend as the web console. Business screens are built in Flutter; only the OVH-provided remote KVM screen is a WebView. It is not a webpage wrapper.
 

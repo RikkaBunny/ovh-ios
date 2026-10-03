@@ -135,64 +135,113 @@ class _AppShellState extends State<AppShell> with WidgetsBindingObserver {
       if (!didPop) await keys[tab].currentState?.maybePop();
     },
     child: Scaffold(
-      body: IndexedStack(
-        index: tab,
-        children: List.generate(
-          5,
-          (index) => Navigator(
-            key: keys[index],
-            observers: [observers[index]],
-            onGenerateRoute: (_) => MaterialPageRoute<void>(
-              builder: (_) => [
-                const DashboardPage(),
-                const InstancesPage(),
-                const QueuePage(),
-                const MonitorPage(),
-                const MorePage(),
-              ][index],
+      body: AppTabSelection(
+        onSelected: (index) {
+          setState(() => tab = index);
+          poll();
+        },
+        child: IndexedStack(
+          index: tab,
+          children: List.generate(
+            5,
+            (index) => Navigator(
+              key: keys[index],
+              observers: [observers[index]],
+              onGenerateRoute: (_) => MaterialPageRoute<void>(
+                builder: (_) => [
+                  const DashboardPage(),
+                  const InstancesPage(),
+                  const QueuePage(),
+                  const MonitorPage(),
+                  const MorePage(),
+                ][index],
+              ),
             ),
           ),
         ),
       ),
-      bottomNavigationBar: DecoratedBox(
-        decoration: BoxDecoration(
-          border: Border(
-            top: BorderSide(color: Theme.of(context).dividerColor),
+      bottomNavigationBar: PanelBottomBar(
+        selected: tab,
+        onSelected: (index) {
+          setState(() => tab = index);
+          poll();
+        },
+      ),
+    ),
+  );
+}
+
+class PanelBottomBar extends StatelessWidget {
+  final int selected;
+  final ValueChanged<int> onSelected;
+  const PanelBottomBar({
+    super.key,
+    required this.selected,
+    required this.onSelected,
+  });
+  @override
+  Widget build(BuildContext c) => DecoratedBox(
+    key: const Key('app.bottomBar'),
+    decoration: BoxDecoration(
+      color: PanelDesign.background(c),
+      border: Border(top: BorderSide(color: PanelDesign.border(c), width: .5)),
+    ),
+    child: SafeArea(
+      top: false,
+      child: Row(
+        children: List.generate(
+          5,
+          (index) => Expanded(
+            child: Semantics(
+              button: true,
+              selected: index == selected,
+              label: ['仪表盘', '服务器', '队列', '监控', '更多'][index],
+              child: GestureDetector(
+                key: Key(
+                  'tab.${['dashboard', 'instances', 'queue', 'monitor', 'more'][index]}',
+                ),
+                behavior: HitTestBehavior.opaque,
+                onTap: () => onSelected(index),
+                child: SizedBox(
+                  height: 54,
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      PanelIcon(
+                        [
+                          Icons.bar_chart_outlined,
+                          Icons.dns_outlined,
+                          Icons.assignment_outlined,
+                          Icons.notifications_none,
+                          Icons.more_horiz,
+                        ][index],
+                        size: 20,
+                        color: index == selected
+                            ? PanelDesign.primary(c)
+                            : PanelDesign.muted(c),
+                        weight: index == selected
+                            ? FontWeight.w600
+                            : FontWeight.w400,
+                      ),
+                      const SizedBox(height: 4),
+                      Text(
+                        ['仪表盘', '服务器', '队列', '监控', '更多'][index],
+                        style: TextStyle(
+                          fontSize: 11,
+                          fontWeight: index == selected
+                              ? FontWeight.w600
+                              : FontWeight.w400,
+                          color: index == selected
+                              ? PanelDesign.primary(c)
+                              : PanelDesign.muted(c),
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
           ),
-        ),
-        child: NavigationBar(
-          selectedIndex: tab,
-          onDestinationSelected: (index) {
-            setState(() => tab = index);
-            poll();
-          },
-          destinations: const [
-            NavigationDestination(
-              key: Key('tab.dashboard'),
-              icon: Icon(Icons.bar_chart_outlined),
-              label: '仪表盘',
-            ),
-            NavigationDestination(
-              key: Key('tab.instances'),
-              icon: Icon(Icons.dns_outlined),
-              label: '服务器',
-            ),
-            NavigationDestination(
-              key: Key('tab.queue'),
-              icon: Icon(Icons.assignment_outlined),
-              label: '队列',
-            ),
-            NavigationDestination(
-              key: Key('tab.monitor'),
-              icon: Icon(Icons.notifications_none),
-              label: '监控',
-            ),
-            NavigationDestination(
-              key: Key('tab.more'),
-              icon: Icon(Icons.more_horiz),
-              label: '更多',
-            ),
-          ],
         ),
       ),
     ),

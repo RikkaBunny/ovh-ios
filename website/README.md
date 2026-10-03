@@ -18,4 +18,4 @@
 
 生产静态目录为 `/opt/1panel/apps/openresty/openresty/www/sites/ovh-cp-download/`，挂载到 OpenResty 容器的 `/www/sites/ovh-cp-download/`。只发布页面、样式、脚本、版本元数据、校验文件、`assets/` 和正式 APK；文档与验证截图留在 GitHub。不要把仓库、签名材料或后端配置复制到公开目录。
 
-后续发布更新时，同步页面、`release.json`、校验文件和版本化 APK 文件名，更新对应附件路由，保留旧版 APK 下载。先备份站点与 vhost，上传并校验，再执行 OpenResty 配置检查与 reload。变更仅限 `/download/`；不修改控制台 `/` 与 `/api/` 代理。当前上线证据见 [验证记录](verification.md)。
+后续发布更新时，同步页面、`release.json`、校验文件和版本化 APK 文件名，更新对应附件路由，保留旧版 APK 下载。先备份站点与 vhost，上传并校验，再执行 OpenResty 配置检查与 reload。变更仅限 `/download/`；不修改控制台 `/` 与 `/api/` 代理。Build 14 的产品截图已同步新版 Flutter 界面。iOS 已提交并等待审核；Android 从官网直接下载，尚未上架 Google Play。当前上线证据见 [验证记录](verification.md)。

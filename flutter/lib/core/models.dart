@@ -144,13 +144,18 @@ class Asset {
   String get name => text(raw[vps ? 'displayName' : 'name'], service);
   String get root => vps ? '/vps-control' : '/server-control';
   String get state => text(raw['state'], 'unknown');
-  String get location =>
-      text(raw[vps ? 'zone' : 'datacenter'], '未知机房').toUpperCase();
+  String get location => vps
+      ? (text(raw['zone']).contains('west-or')
+            ? '俄勒冈 · 美国'
+            : text(raw['zone'], '未知机房'))
+      : text(raw['datacenter'], '未知机房').toUpperCase();
   String get specification => vps
       ? '${text(raw['vcore'], '—')} vCPU · ${((raw['memoryMB'] as num? ?? 0) / 1024).toStringAsFixed(0)} GB · ${text(raw['diskGB'], '—')} GB'
       : text(raw['commercialRange'], '配置未获取');
   bool get healthy =>
-      {'ok', 'active', 'running'}.contains(state) && raw['error'] == null;
+      {'ok', 'active', 'running'}.contains(state) &&
+      raw['error'] == null &&
+      raw['svcInfoError'] == null;
   String get stateLabel =>
       {
         'ok': '正常',

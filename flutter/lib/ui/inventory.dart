@@ -117,8 +117,9 @@ class _InventoryPageState extends State<InventoryPage> {
             .toList();
     final cache = object(object(plans.value)['cacheInfo']);
     return PageLayout(
-      '服务器库存',
+      '服务器列表',
       child: PageList(
+        maxWidth: 1100,
         storageKey: 'inventory.${account.id}',
         refresh: () => reload(force: true),
         children: [
@@ -131,7 +132,7 @@ class _InventoryPageState extends State<InventoryPage> {
             onChanged: (v) => setState(() => search = v),
             decoration: const InputDecoration(
               hintText: '搜索机型、CPU、内存或硬盘',
-              prefixIcon: Icon(Icons.search),
+              prefixIcon: PanelIcon(Icons.search),
             ),
           ),
           SingleChildScrollView(
@@ -141,46 +142,49 @@ class _InventoryPageState extends State<InventoryPage> {
                   .map(
                     (s) => Padding(
                       padding: const EdgeInsets.only(right: 8),
-                      child: ChoiceChip(
-                        label: Text(s),
-                        selected: family == s,
-                        onSelected: (_) => setState(() => family = s),
-                        labelStyle: TextStyle(
-                          color: family == s
-                              ? Theme.of(context).colorScheme.onPrimary
-                              : null,
-                        ),
-                      ),
+                      child: family == s
+                          ? FilledButton(
+                              onPressed: () => setState(() => family = s),
+                              child: Text(s),
+                            )
+                          : OutlinedButton(
+                              onPressed: () => setState(() => family = s),
+                              child: Text(s),
+                            ),
                     ),
                   )
                   .toList(),
             ),
           ),
-          Wrap(
-            spacing: 20,
+          Row(
             children: [
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Text('仅显示有货'),
-                  Switch(
-                    value: onlyAvailable,
-                    onChanged: (v) => setState(() => onlyAvailable = v),
-                  ),
-                ],
+              Expanded(
+                child: Row(
+                  children: [
+                    Text('仅显示有货', style: PanelDesign.mutedText(context)),
+                    const Spacer(),
+                    PanelSwitch(
+                      value: onlyAvailable,
+                      onChanged: (v) => setState(() => onlyAvailable = v),
+                    ),
+                  ],
+                ),
               ),
-              Row(
-                mainAxisSize: MainAxisSize.min,
-                children: [
-                  const Text('含 API 机型'),
-                  Switch(
-                    value: includeApi,
-                    onChanged: (v) {
-                      setState(() => includeApi = v);
-                      reload();
-                    },
-                  ),
-                ],
+              const SizedBox(width: 18),
+              Expanded(
+                child: Row(
+                  children: [
+                    Text('含 API 机型', style: PanelDesign.mutedText(context)),
+                    const Spacer(),
+                    PanelSwitch(
+                      value: includeApi,
+                      onChanged: (v) {
+                        setState(() => includeApi = v);
+                        reload();
+                      },
+                    ),
+                  ],
+                ),
               ),
             ],
           ),
@@ -219,7 +223,7 @@ class _InventoryPageState extends State<InventoryPage> {
           ...rows.map(
             (p) => InkWell(
               key: Key('plan.${p['planCode']}'),
-              borderRadius: BorderRadius.circular(18),
+              borderRadius: BorderRadius.circular(16),
               onTap: () => pushPage(
                 context,
                 PlanPage(
@@ -261,32 +265,61 @@ class PlanCard extends StatelessWidget {
               child: Text(
                 text(plan['name'], text(plan['planCode'])),
                 style: const TextStyle(
-                  fontSize: 18,
+                  fontSize: 17,
                   fontWeight: FontWeight.w600,
                 ),
               ),
             ),
-            const Icon(Icons.chevron_right, size: 19),
+            const PanelIcon(Icons.chevron_right, size: 19),
           ],
         ),
         const SizedBox(height: 6),
         Text(
           text(plan['planCode']),
-          style: const TextStyle(color: Colors.grey, fontSize: 12),
+          style: TextStyle(
+            color: PanelDesign.muted(context),
+            fontSize: 11,
+            fontFamily: 'Menlo',
+          ),
         ),
-        const SizedBox(height: 16),
+        if (text(plan['description']).isNotEmpty)
+          Padding(
+            padding: const EdgeInsets.only(top: 12),
+            child: Text(
+              text(plan['description']),
+              style: PanelDesign.mutedText(context),
+            ),
+          ),
+        const SizedBox(height: 12),
         Text(
           price?.label ?? '— · 当前站点暂无报价',
-          style: const TextStyle(fontSize: 17, fontWeight: FontWeight.w600),
+          style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
         ),
         ...['cpu', 'memory', 'storage', 'bandwidth']
             .where((k) => plan[k] != null)
             .map(
               (k) => Padding(
-                padding: const EdgeInsets.only(top: 9),
-                child: Text(
-                  text(plan[k]),
-                  style: const TextStyle(fontSize: 13, color: Colors.grey),
+                padding: const EdgeInsets.only(top: 12),
+                child: Row(
+                  children: [
+                    PanelIcon(
+                      {
+                        'cpu': Icons.memory,
+                        'memory': Icons.developer_board_outlined,
+                        'storage': Icons.storage_outlined,
+                        'bandwidth': Icons.language,
+                      }[k],
+                      size: 14,
+                      color: PanelDesign.muted(context),
+                    ),
+                    const SizedBox(width: 5),
+                    Expanded(
+                      child: Text(
+                        text(plan[k]),
+                        style: PanelDesign.mutedText(context),
+                      ),
+                    ),
+                  ],
                 ),
               ),
             ),
@@ -500,7 +533,7 @@ class _PlanPageState extends State<PlanPage> {
                 options: options,
               ),
             ),
-            icon: const Icon(Icons.add),
+            icon: const PanelIcon(Icons.add),
             label: const Text('创建抢购任务'),
           ),
           PanelCard(
@@ -639,13 +672,13 @@ class _OrderPageState extends State<OrderPage> {
                     onPressed: quantity > 1 && !busy && done == 0
                         ? () => setState(() => quantity--)
                         : null,
-                    icon: const Icon(Icons.remove),
+                    icon: const PanelIcon(Icons.remove),
                   ),
                   IconButton(
                     onPressed: quantity < 20 && !busy && done == 0
                         ? () => setState(() => quantity++)
                         : null,
-                    icon: const Icon(Icons.add),
+                    icon: const PanelIcon(Icons.add),
                   ),
                 ],
               ),
