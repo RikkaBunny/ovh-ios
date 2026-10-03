@@ -59,7 +59,7 @@ flutter build apk --debug
 
 只构建 arm64 测试包：`flutter build apk --debug --target-platform=android-arm64 --split-per-abi`。ABI 拆分构建会按 Flutter 规则调整 Android versionCode，源码版本仍为 `1.3.0+15`。
 
-正式签名与发布入口见 [发布说明](publishing/README.md)。Android Release 必须提供私有上传密钥，缺少配置时拒绝构建；正式包不使用调试签名。仓库不包含私钥、生产密钥或真实令牌。iOS 商店名称已更新为 OVH CP，1.3.0（15）已上传并提交审核，当前等待审核，通过后自动发布。Android 白底图标正式 APK 已更新到 [安卓下载网站](https://ovh.hejingcheng.com/download/)。Google Play 后台当前未开通，因此尚未上架。
+正式签名与发布入口见 [发布说明](publishing/README.md)。Android Release 必须提供私有上传密钥，缺少配置时拒绝构建；正式包不使用调试签名。仓库不包含私钥、生产密钥或真实令牌。iOS 商店名称已更新为 OVH CP，1.3.0（15）已上传并提交审核，当前等待审核，通过后自动发布。Android 白底图标正式 APK 已更新到 [安卓下载网站](https://ovh.gamelife.life/)。Google Play 后台当前未开通，因此尚未上架。
 
 ## 测试
 

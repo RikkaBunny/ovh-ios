@@ -1,3 +1,19 @@
+# 2026-10-04 · 官网独立域名
+
+官网入口更新为 <https://ovh.gamelife.life/>。Cloudflare 的 `ovh.gamelife.life` 记录指向现有 KS-LS-B 服务器并开启代理；沿用 1Panel OpenResty，独立静态 vhost `ovh-cp-site.conf`，Let’s Encrypt 证书有效至 2027-01-01，并安装续期部署钩子。当前版本与正式 APK 未变更。
+
+- 更新 canonical、Open Graph URL、图标绝对地址、下载二维码、当前 README 链接与 GitHub Release 下载说明。
+- 旧 `ovh.hejingcheng.com/download/` 路径返回 301 到新域名，保留资源路径与查询参数；原控制台 API 健康检查正常。
+- 源站完整 HTTPS 校验通过，HTML SHA-256 `5a73587b69ff4108d13eb15da8f3b6f0868ce94aa01e49bd2ae8baafe946ab7f` 与源码一致。两个实际 Cloudflare 公网 IPv4 入口均返回 200，保留原主机名与 TLS 校验。
+- 样式、脚本、版本元数据、校验文件、图标、二维码与三张截图的公网字节均与源码一致。完整 APK SHA-256 仍为 `3d53722193de85eca702928cdf7eeda92aa976b41a039ab2f852a9c3ed70d34d`；范围请求返回 206，长度与 MIME 正确。非公开文档、Git 路径和后端 API 路径返回 404。
+- 主站 <https://www.hejingcheng.com/> 顶部导航在“游戏厅”后新增 OVH，链接新官网；导航源配置已提交到 `RikkaBunny/bunny-nexus-main-site`。补齐仓库未同步的既有工具箱入口与博客地址；比较原公网页面，首页原文案和链接完整保留。Astro 构建通过，22 个生成页面的导航已验证；桌面和 390px 手机菜单的实际浏览器检查通过，无横向溢出，测试视口已恢复。
+- 本次主站通过已核实的新服务器 SSH 连接直接部署。原 GitHub Actions 部署目标与主机身份记录已更新，但旧部署密钥未迁移，新服务器拒绝该旧密钥，因此自动上传步骤仍失败。
+- 本机当前 `vmrack-la` 代理对新域名的普通浏览器访问仍返回连接中断；本地解析返回正确 Cloudflare 地址，两个公网入口与源站的独立校验正常。尚未将浏览器访问该官网标记为通过，也没有修改代理路由或关闭 TLS 校验。
+
+官网回滚目录：服务器 `/opt/1panel/backups/ovh-cp-download/20261003T175002Z-gamelife-domain`。主站最终回滚目录：`/opt/1panel/backups/bunny-nexus/20261003T180224Z-ovh-navigation`。
+
+---
+
 # 2026-10-03 · OVH CP Build 15
 
 仪表盘资源说明改为按当前账户与选定实例显示，未接入监控时明确未知。产品截图替换为 Build 15 Android 回归截图，图像查询参数 resources-15；白底图标与 OVH CP 名称保留。APK 75268472 字节，SHA-256 `3d53722193de85eca702928cdf7eeda92aa976b41a039ab2f852a9c3ed70d34d`。iOS Build 15 已提交，等待审核，通过后自动发布；原内部组可测试。
