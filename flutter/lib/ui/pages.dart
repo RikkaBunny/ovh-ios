@@ -991,7 +991,7 @@ class ConnectionPage extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
                 const Text(
-                  'ovh cp · 1.3.0（11）',
+                  'OVH CP · 1.3.0（13）',
                   style: TextStyle(fontWeight: FontWeight.w600),
                 ),
                 const SizedBox(height: 12),
@@ -1016,8 +1016,8 @@ class ConnectionPage extends StatelessWidget {
                 TextButton(
                   onPressed: () => showLicensePage(
                     context: context,
-                    applicationName: 'ovh cp',
-                    applicationVersion: '1.3.0（11）',
+                    applicationName: 'OVH CP',
+                    applicationVersion: '1.3.0（13）',
                   ),
                   child: const Text('开源许可'),
                 ),

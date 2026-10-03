@@ -10,7 +10,7 @@ Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   LicenseRegistry.addLicense(() async* {
     yield LicenseEntryWithLineBreaks([
-      'ovh cp / gokele/ovh',
+      'OVH CP / gokele/ovh',
     ], await rootBundle.loadString('assets/LICENSE.txt'));
   });
   final catalog = Catalog(

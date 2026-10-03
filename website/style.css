@@ -530,7 +530,7 @@
 .production-style-3 { background: var(--text-primary); color: var(--bg-base); border: none; }
 .production-style-4 { border-top: 1px solid var(--border-subtle); }
 .production-style-5 { width: 200px; height: 200px; padding: 12px; background: white; border-radius: 16px; margin-bottom: 24px; }
-.production-style-6 { width: 24px; filter: grayscale(1); opacity: 0.8; }
+.production-style-6 { width: 24px; }
 /* Production integration keeps Gemini's new visual direction. */
 html { scroll-padding-top: 96px; color-scheme: dark; }
 [hidden] { display: none !important; }

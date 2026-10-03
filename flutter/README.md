@@ -1,8 +1,8 @@
-# ovh cp · Flutter 客户端
+# OVH CP · Flutter 客户端
 
-独立的 Flutter/Dart 版本，支持 iPhone、iPad 和 Android，版本 `1.3.0+11`。连接与 React 网页、SwiftUI 客户端相同的 gokele/ovh 后端，沿用黑白主色、灰色分隔、圆角卡片、胶囊按钮和状态色。业务页面全部由 Flutter 绘制；WebView 仅用于 OVH 返回的 HTTPS 远程屏幕。
+独立的 Flutter/Dart 版本，支持 iPhone、iPad 和 Android，版本 `1.3.0+13`。连接与 React 网页、SwiftUI 客户端相同的 gokele/ovh 后端，沿用黑白主色、灰色分隔、圆角卡片、胶囊按钮和状态色。业务页面全部由 Flutter 绘制；WebView 仅用于 OVH 返回的 HTTPS 远程屏幕。
 
-发布版名为 `ovh cp`。iOS 沿用原版 Bundle ID `com.hejingcheng.ovhpocket`，作为现有应用更新；Android Application ID 为 `com.hejingcheng.ovh_flutter`。新版图标基于 OVH 官方标识生成，见 [图标与提示词](../BrandAssets/ovh-cp/README.md)。iOS 升级会迁移原 SwiftUI 连接、账户选择与外观。正式构建与签名说明见 [publishing](publishing/README.md)。
+发布版名为 `OVH CP`。iOS 沿用原版 Bundle ID `com.hejingcheng.ovhpocket`，作为现有应用更新；Android Application ID 为 `com.hejingcheng.ovh_flutter`。新版图标基于 OVH 官方标识生成，见 [图标与提示词](../BrandAssets/ovh-cp/README.md)。iOS 升级会迁移原 SwiftUI 连接、账户选择与外观。正式构建与签名说明见 [publishing](publishing/README.md)。
 
 ## 界面预览
 
@@ -57,9 +57,9 @@ flutter build ios --release --no-codesign
 flutter build apk --debug
 ```
 
-只构建 arm64 测试包：`flutter build apk --debug --target-platform=android-arm64 --split-per-abi`。ABI 拆分构建会按 Flutter 规则调整 Android versionCode，源码版本仍为 `1.3.0+11`。
+只构建 arm64 测试包：`flutter build apk --debug --target-platform=android-arm64 --split-per-abi`。ABI 拆分构建会按 Flutter 规则调整 Android versionCode，源码版本仍为 `1.3.0+13`。
 
-正式签名与发布入口见 [发布说明](publishing/README.md)。Android Release 必须提供私有上传密钥，缺少配置时拒绝构建；正式包不使用调试签名。仓库不包含私钥、生产密钥或真实令牌。iOS 商店名称已更新为 ovh cp，1.3.0（11）于 2026-10-03 15:25 提交成功，目前等待审核，审核通过后自动发布。Android 正式签名 AAB/APK 和完整源码已在 [GitHub Release](https://github.com/RikkaBunny/ovh-ios/releases/tag/v1.3.0-cp.11) 发布，手机可通过 [安卓下载网站](https://ovh.hejingcheng.com/download/) 直接下载 APK；Google Play 后台当前未开通，因此尚未上架。状态与验证证据见 [验证记录](验证记录.md)及 [下载站验证](../website/verification.md)。
+正式签名与发布入口见 [发布说明](publishing/README.md)。Android Release 必须提供私有上传密钥，缺少配置时拒绝构建；正式包不使用调试签名。仓库不包含私钥、生产密钥或真实令牌。iOS 商店名称已更新为 OVH CP，1.3.0（13）已上传并关联版本；等待界面对齐完成后以新构建提交审核。Android 白底图标正式 APK 已更新到 [安卓下载网站](https://ovh.hejingcheng.com/download/)。Google Play 后台当前未开通，因此尚未上架。
 
 ## 测试
 

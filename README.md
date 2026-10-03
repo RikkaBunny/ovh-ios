@@ -1,6 +1,6 @@
-# OVH / ovh cp · SwiftUI / Flutter 客户端
+# OVH / OVH CP · SwiftUI / Flutter 客户端
 
-新增 [Flutter 客户端 ovh cp](flutter/README.md)：iOS、iPad 和 Android 共用 Flutter/Dart 界面，同步接入原有后端与 226 项业务操作描述。底部服务器直接进入实例，首页资源位于活跃队列下方。1.3.0（11）iOS 沿用现有商店应用，已提交审核；Android 正式签名 APK 可从 [安卓下载网站](https://ovh.hejingcheng.com/download/) 或 [GitHub Release](https://github.com/RikkaBunny/ovh-ios/releases/tag/v1.3.0-cp.11) 下载。网站源码见 [website](website/README.md)。
+新增 [Flutter 客户端 OVH CP](flutter/README.md)：iOS、iPad 和 Android 共用 Flutter/Dart 界面，同步接入原有后端与 226 项业务操作描述。底部服务器直接进入实例，首页资源位于活跃队列下方。1.3.0（13）iOS 沿用现有商店应用，已提交审核；Android 正式签名 APK 可从 [安卓下载网站](https://ovh.hejingcheng.com/download/) 或 [GitHub Release](https://github.com/RikkaBunny/ovh-ios/releases/tag/v1.3.0-cp.11) 下载。网站源码见 [website](website/README.md)。
 
 SwiftUI 源码版本 1.2.0（9），最低 iOS 17，支持 iPhone 和 iPad。网站继续使用 React；此版本的业务页面全部使用 SwiftUI，共用现有 gokele/ovh Go 后端。已移除“完整控制台”网页入口。WebKit 仅用于 OVH 返回的 KVM 远程屏幕，不加载管理面板，也不注入面板令牌。
 

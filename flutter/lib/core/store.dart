@@ -134,7 +134,7 @@ class PanelStore extends ChangeNotifier {
     String address,
     String secret, {
     bool pair = false,
-    String deviceName = '手机 · ovh cp',
+    String deviceName = '手机 · OVH CP',
   }) async {
     if (connecting) return;
     connecting = true;

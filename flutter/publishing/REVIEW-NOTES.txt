@@ -1,4 +1,6 @@
-App: ovh cp 1.3.0 (11), Bundle ID com.hejingcheng.ovhpocket.
+App: OVH CP 1.3.0 (13), Bundle ID com.hejingcheng.ovhpocket.
+
+Build 13 updates the app icon and launch branding to a white background with the same blue OVH-inspired mark and cp lettering. The application name is now consistently uppercase OVH CP. Functionality and data handling are unchanged from build 11.
 
 This update replaces the existing OVH client's interface with a Flutter mobile client while preserving the original application identity. Its initial connection can migrate existing on-device credentials. It uses the same self-hosted backend as the web console. Business screens are built in Flutter; only the OVH-provided remote KVM screen is a WebView. It is not a webpage wrapper.
 
@@ -10,4 +12,4 @@ The value above is a public test credential for synthetic servers, not an OVH ac
 
 Test the Dashboard, Servers, Queue, Monitor and More tabs, switch EU/CA/US demo accounts, inspect dedicated servers and VPS, and use simulated controls. CPU/memory/storage gauges describe the panel host. Reinstall/termination actions require typed service names; all demo effects are simulated. Disconnect is at the bottom of the connection settings. Scanning or selecting a pairing image is optional because manual pairing and access-key entry are available.
 
-ovh cp is provided by jingcheng he for self-hosted consoles and is not developed by OVHcloud. The user has confirmed authorization for the name and brand-based icon. Complete corresponding source and license are available at https://github.com/RikkaBunny/ovh-ios . Support and privacy URLs are publicly accessible. Android's separate ML Kit data disclosure does not apply to the iOS implementation.
+OVH CP is provided by jingcheng he for self-hosted consoles and is not developed by OVHcloud. The user has confirmed authorization for the name and brand-based icon. Complete corresponding source and license are available at https://github.com/RikkaBunny/ovh-ios . Support and privacy URLs are publicly accessible. Android's separate ML Kit data disclosure does not apply to the iOS implementation.

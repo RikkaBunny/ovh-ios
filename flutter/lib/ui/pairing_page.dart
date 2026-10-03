@@ -14,7 +14,7 @@ class PairingPage extends StatefulWidget {
 class _PairingPageState extends State<PairingPage> {
   final address = TextEditingController(),
       code = TextEditingController(),
-      deviceName = TextEditingController(text: '手机 · ovh cp');
+      deviceName = TextEditingController(text: '手机 · OVH CP');
   bool legacy = false;
   String? error;
   @override
@@ -76,7 +76,7 @@ class _PairingPageState extends State<PairingPage> {
               ),
             ),
             const Text(
-              '连接 ovh cp',
+              '连接 OVH CP',
               textAlign: TextAlign.center,
               style: TextStyle(fontSize: 26, fontWeight: FontWeight.w700),
             ),

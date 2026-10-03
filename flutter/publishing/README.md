@@ -1,6 +1,6 @@
-# ovh cp 发布
+# OVH CP 发布
 
-Flutter 客户端版本为 **1.3.0 (11)**。iOS 使用原 OVH 商店记录的 Bundle ID `com.hejingcheng.ovhpocket`，Android 使用 `com.hejingcheng.ovh_flutter`。应用显示名称统一为 `ovh cp`。
+Flutter 客户端版本为 **1.3.0 (13)**。iOS 使用原 OVH 商店记录的 Bundle ID `com.hejingcheng.ovhpocket`，Android 使用 `com.hejingcheng.ovh_flutter`。应用显示名称统一为 `OVH CP`。
 
 旧 SwiftUI 源码保留作参考；发布以本目录为准。iOS 更新会将原版 Keychain 中的面板令牌、账户选择和外观迁移到 Flutter 存储。成功保存后清除旧令牌，断开时清理两个存储，避免重新导入已断开的授权。迁移不读取其他应用的钥匙串，不上传凭据。
 
@@ -34,7 +34,7 @@ iOS 的 ExportOptions 使用现有开发者团队 `4MGNRHR56T`。本地归档/�
 
 ## 商店资料
 
-名称：`ovh cp`
+名称：`OVH CP`
 
 简短说明：管理自建 OVH 面板的服务器、VPS、监控与抢购任务。
 
@@ -54,4 +54,4 @@ iOS 的 ExportOptions 使用现有开发者团队 `4MGNRHR56T`。本地归档/�
 
 演示环境仅包含合成 EU/CA/US 账户、实例与操作，不控制真实服务器。审核可用演示页面公开的测试访问密钥，不需要真实 OVH 登录。提交前应核对这些页面的可访问性、当前名称和隐私说明。
 
-更新说明：全新的 Flutter 跨平台客户端；应用更名为 ovh cp；新蓝白 cp 图标；iOS 原版连接迁移；保留仪表盘资源、实例主入口、配对和刷新修复。
+更新说明：全新的 Flutter 跨平台客户端；应用更名为 OVH CP；白底蓝标 cp 图标；iOS 原版连接迁移；保留仪表盘资源、实例主入口、配对和刷新修复。
