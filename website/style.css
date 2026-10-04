@@ -425,6 +425,80 @@
             gap: 40px;
         }
 
+        .inline-link {
+            color: var(--brand-blue);
+            text-decoration: underline;
+            text-underline-offset: 3px;
+        }
+
+        .inline-link:hover { color: #1d4ed8; }
+
+        .hero-requirement {
+            margin-top: 16px;
+            font-size: 13px;
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        .prerequisite-card {
+            display: grid;
+            grid-template-columns: minmax(0, 1fr) auto;
+            align-items: center;
+            gap: 40px;
+            padding: 40px;
+            margin-bottom: 40px;
+            border: 1px solid var(--border-subtle);
+            border-radius: 24px;
+            background: var(--bg-base);
+        }
+
+        .prerequisite-label {
+            font-size: 13px;
+            font-weight: 500;
+            color: var(--brand-blue);
+            margin-bottom: 12px;
+        }
+
+        .prerequisite-card h3 {
+            font-size: 24px;
+            font-weight: 500;
+            line-height: 1.5;
+            margin-bottom: 16px;
+        }
+
+        .prerequisite-compatibility {
+            font-size: 14px;
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-top: 16px;
+        }
+
+        .prerequisite-actions {
+            display: flex;
+            flex-direction: column;
+            align-items: stretch;
+            gap: 12px;
+        }
+
+        .download-requirement {
+            font-size: 15px;
+            line-height: 1.8;
+            margin-top: 16px;
+        }
+
+        .section-header .download-requirement { font-size: 15px; }
+
+        @media (max-width: 900px) {
+            .prerequisite-card { grid-template-columns: 1fr; gap: 24px; padding: 30px; }
+            .prerequisite-actions { flex-direction: row; flex-wrap: wrap; }
+        }
+
+        @media (max-width: 768px) {
+            .prerequisite-card { padding: 28px 24px; margin-bottom: 24px; }
+            .prerequisite-card h3 { font-size: 22px; }
+            .prerequisite-card .leading-relaxed { font-size: 15px; }
+        }
+
         .step-card {
             background: var(--bg-base);
             padding: 40px 32px;

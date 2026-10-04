@@ -4,19 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>OVH CP - OVH 移动端控制台</title>
-    <meta name="description" content="OVH CP 是一款移动客户端，专为连接用户自建 gokele/ovh 后端设计，提供 OVH 服务器与实例的跨区管理及监控体验。">
+    <meta name="description" content="OVH CP 是连接自建 gokele/ovh 服务的移动客户端。使用前需在自己的 VPS 上部署支持 App 配对的 OVH 服务，再通过 HTTPS 面板配对管理服务器、VPS 与任务。">
     <meta name="theme-color" content="#ffffff">
     <link rel="canonical" href="https://ovh.gamelife.life/">
     <link rel="icon" href="assets/icon.png?v=resources-15">
     <meta property="og:title" content="OVH CP · 你的云端，尽在掌握">
-    <meta property="og:description" content="手机与网页，连接同一份数据。管理 OVH 服务器、VPS、库存与任务。">
+    <meta property="og:description" content="先在自己的 VPS 部署 gokele/ovh 服务，再用 App 配对连接。手机与网页共用账户、服务器、监控与任务。">
     <meta property="og:url" content="https://ovh.gamelife.life/">
     <meta property="og:image" content="https://ovh.gamelife.life/assets/icon.png?v=resources-15">
 
     <!-- 预加载核心图片资源 -->
     <link rel="preload" as="image" href="assets/dashboard.png?v=resources-15">
 
-    <link rel="stylesheet" href="style.css?v=illustrations-20261004">
+    <link rel="stylesheet" href="style.css?v=prerequisites-20261004">
 </head>
 <body>
     <a class="skip-link" href="#main">跳到主要内容</a>
@@ -72,6 +72,7 @@
                     </a>
                 </div>
                 <p class="hero-meta">Android 1.3.0 · 75.3 MB · iOS 1.3.0 已提交审核</p>
+                <p class="hero-requirement">使用前需先在自己的 VPS 部署 OVH 服务。<a class="inline-link" href="#prerequisites">查看前置条件</a></p>
                 <a class="hero-explore" href="#features">探索 OVH CP <span aria-hidden="true">↓</span></a>
             </div>
         </section>
@@ -137,8 +138,21 @@
             <div class="container">
                 <div class="section-header text-center reveal-element">
                     <h2>扫码连接，同一份数据</h2>
-                    <p class="mt-4 mx-auto">连接你自己的 gokele/ovh 面板。每台设备独立授权，可在网页单独撤销。</p>
+                    <p class="mt-4 mx-auto">先部署自己的 OVH 服务，再连接手机 App。每台设备独立授权，可在网页单独撤销。</p>
                 </div>
+
+                <aside class="prerequisite-card reveal-element" id="prerequisites" aria-labelledby="prerequisite-title">
+                    <div>
+                        <p class="prerequisite-label">使用前置条件</p>
+                        <h3 id="prerequisite-title">先在自己的 VPS 上部署 OVH 服务</h3>
+                        <p class="text-secondary leading-relaxed">OVH CP 基于开源项目 gokele/ovh 开发，连接由你自行部署的网页面板与服务。请先在自己的 VPS 上安装该项目、配置 OVH 账户，并准备可通过 HTTPS 访问的面板地址，再进行 App 配对。</p>
+                        <p class="prerequisite-compatibility">请使用带有「API 设置 → App 配对」入口的服务版本；如果看不到此入口，请先更新服务。</p>
+                    </div>
+                    <div class="prerequisite-actions">
+                        <a class="btn btn-primary" href="https://github.com/gokele/ovh" target="_blank" rel="noopener noreferrer">OVH 服务项目</a>
+                        <a class="btn btn-outline" href="https://github.com/gokele/ovh#部署方式" target="_blank" rel="noopener noreferrer">查看部署文档</a>
+                    </div>
+                </aside>
 
                 <div class="steps-container reveal-element">
                     <div class="step-card">
@@ -146,9 +160,9 @@
                             <div class="step-number">01</div>
                             <img src="assets/feature-install.webp?v=illustrations-20261004" class="step-illustration" width="1024" height="1024" alt="" aria-hidden="true" loading="lazy" decoding="async">
                         </div>
-                        <h4 class="text-xl font-medium mb-4">安装 App，打开网页</h4>
+                        <h4 class="text-xl font-medium mb-4">部署服务并安装 App</h4>
                         <p class="text-secondary leading-relaxed text-sm">
-                            安装 APK，按 Android 提示允许当前下载来源安装应用。打开已部署、支持 App 配对接口的 HTTPS 网页面板。
+                            先在自己的 VPS 部署 gokele/ovh 服务并配置 OVH 账户。确认网页面板可通过 HTTPS 访问后，再安装手机 App。
                         </p>
                     </div>
 
@@ -185,9 +199,16 @@
 
                 <div class="faq-list reveal-element">
                     <details class="faq-item" open>
+                        <summary>使用 App 前需要准备什么？</summary>
+                        <div class="faq-body">
+                            需要自己的 VPS，并先安装 <a class="inline-link" href="https://github.com/gokele/ovh" target="_blank" rel="noopener noreferrer">gokele/ovh 服务项目</a>、配置 OVH 账户与可通过 HTTPS 访问的网页面板。确认网页「API 设置 → App 配对」入口可用后，再生成配对码连接 App。安装方法见 <a class="inline-link" href="https://github.com/gokele/ovh#部署方式" target="_blank" rel="noopener noreferrer">项目部署文档</a>。
+                        </div>
+                    </details>
+
+                    <details class="faq-item" open>
                         <summary>这是 OVHcloud 官方应用吗？</summary>
                         <div class="faq-body">
-                            OVH CP 是支持 OVHcloud 的独立开源客户端，非 OVHcloud 官方开发。它需要连接你自己的 gokele/ovh 后端，与网页共用管理数据。
+                            OVH CP 是支持 OVHcloud 的独立开源客户端，非 OVHcloud 官方开发。它基于 <a class="inline-link" href="https://github.com/gokele/ovh" target="_blank" rel="noopener noreferrer">gokele/ovh</a>，需要连接你在自己的 VPS 上部署的该项目服务，与网页共用管理数据。
                         </div>
                     </details>
 
@@ -218,6 +239,7 @@
                 <div class="section-header">
                     <h2>获取应用</h2>
                     <p class="mt-4">当前最新正式版本：1.3.0</p>
+                    <p class="download-requirement">下载前，请先完成自己的 VPS 上的 OVH 服务部署。<a class="inline-link" href="#prerequisites">查看前置条件与服务项目</a></p>
                 </div>
 
                 <div class="download-layout">
@@ -276,6 +298,7 @@
                     <div class="flex flex-col gap-4">
                         <h5 class="text-primary font-medium mb-1">资源</h5>
                         <a href="https://github.com/RikkaBunny/ovh-ios" target="_blank" rel="noopener noreferrer">源代码库</a>
+                        <a href="https://github.com/gokele/ovh" target="_blank" rel="noopener noreferrer">OVH 服务项目</a>
                         <a href="https://github.com/RikkaBunny/ovh-ios/releases/tag/v1.3.0-cp.15" target="_blank" rel="noopener noreferrer">版本日志</a>
                     </div>
                     <div class="flex flex-col gap-4">
