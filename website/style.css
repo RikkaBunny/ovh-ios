@@ -404,11 +404,6 @@
         .pairing-intro { padding: 128px 0 64px; }
         .pairing-guide { padding: 64px 0 80px; }
 
-        .content-band-muted .feature-illustration,
-        .content-band-muted .step-illustration {
-            mix-blend-mode: multiply;
-        }
-
         .feature-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);

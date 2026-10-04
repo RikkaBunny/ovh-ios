@@ -1,3 +1,27 @@
+# 透明背景版本 · 2026-10-04
+
+使用内置 image_gen 编辑工具对原五张功能插图逐张执行背景移除，参数 `transparent_background: true`，保留原造型、材质与蓝紫配色。接口未返回可核验的模型版本。最终网页资源为带真实 Alpha 通道的 RGBA WebP（质量 92），转换格式时逐像素核对 Alpha 与生成 PNG 完全一致，没有另写抠图算法。
+
+五张素材的 Alpha 范围均为 0–255，四个角像素均为 0，均包含完全透明像素与半透明边缘 / 阴影。总大小 834,396 字节。网页移除 `mix-blend-mode: multiply`，使用 `alpha-20261004` 资源版本。
+
+| 素材 | 最终路径 | 尺寸 | 文件字节 | 完全透明像素 | 部分透明像素 |
+| --- | --- | --- | ---: | ---: | ---: |
+| tasks | [feature-tasks.webp](../assets/feature-tasks.webp) | 1254 × 1254 | 165,562 | 712,017 | 859,413 |
+| regions | [feature-regions.webp](../assets/feature-regions.webp) | 1254 × 1254 | 201,368 | 793,111 | 778,287 |
+| install | [feature-install.webp](../assets/feature-install.webp) | 1254 × 1254 | 130,590 | 932,173 | 639,643 |
+| pairing | [feature-pairing.webp](../assets/feature-pairing.webp) | 1254 × 1254 | 163,106 | 564,881 | 1,005,862 |
+| scan | [feature-scan.webp](../assets/feature-scan.webp) | 1254 × 1254 | 173,770 | 945,374 | 626,297 |
+
+共同编辑提示词（每次输入只有对应原插图，角色为 edit target）：
+
+```text
+Use case: background-extraction. Asset type: existing OVH CP website feature illustration. The supplied image is the EDIT TARGET. Remove only its white background and floor/backdrop, producing genuine RGBA transparency with alpha 0 in the empty space and all four corners. Preserve the existing object group, its exact composition, camera angle, silhouette, white porcelain and frosted-glass materials, blue-violet colors, highlights, symbols and proportions. Keep white portions of the objects opaque; do not key out their white surfaces. Preserve clean anti-aliased edges. Retain only a small soft contact shadow as semi-transparent alpha, with no opaque white floor, halo, rectangle or backdrop. Where an original light beam or glass is translucent, retain its natural transparency. Square framing with all objects fully inside the frame and similar scale to the original. No additions, no text, no watermark. Do not paint a checkerboard; the background must be actual transparent pixels.
+```
+
+原始透明 PNG 由生成工具保留在本地生成目录，网页仅部署上表五张 WebP。以下为原白底版本的生成记录，当前资源已经替换为上方的透明版本。
+
+---
+
 # 官网功能插图 · 2026-10-04
 
 使用内置 `image_gen` 图像生成工具；本次接口未返回可核验的模型版本。前两张按同一风格规范生成，后三张使用任务插图作为材质、光线和配色参考。所有功能插图统一纯白背景、白色瓷质与磨砂玻璃、蓝紫点缀，保持真实应用截图与功能二维码。
