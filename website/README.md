@@ -2,7 +2,7 @@
 
 公开入口：<https://ovh.gamelife.life/>。
 
-使用用户已登录的 Chrome Gemini Pro Canvas 重新设计官网，视觉参考 Gemini 产品官网 <https://gemini.google/us/about/?hl=en>。采用固定黑色主题、居中轻字重大标题、原生 Canvas 3D 蓝紫粒子云、胶囊按钮、真实截图产品舞台与交错功能介绍。
+使用用户已登录的 Chrome Gemini Pro Canvas 重新设计官网，视觉参考 Gemini 产品官网 <https://gemini.google/us/about/?hl=en>。采用固定浅色主题、居中轻字重大标题、原生 Canvas 3D 蓝紫粒子云、胶囊按钮、真实截图产品舞台与交错功能介绍。官网的白色与浅灰背景和三张浅色 App 示例统一，操作系统的深色偏好不会切换官网主题。
 
 接入时补齐 Gemini 未生成完整的动画脚本末尾，校正剩余内联样式、缺失布局类与产品文案。粒子数量按桌面/手机分别为 3,500 / 1,000，DPR 上限 1.5、30 FPS；离开首屏或页面不可见时停止动画，减少动态效果时保留静态画面。生产版本为独立 HTML/CSS/JavaScript，无登录、埋点、第三方字体或 CDN 运行时。
 

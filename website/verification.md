@@ -1,3 +1,19 @@
+# 2026-10-04 · 官网与 App 示例统一浅色
+
+根据用户要求，官网改为固定白色 / 浅灰主题，与现有三张真实浅色 App 截图统一。保留蓝紫点缀、布局和截图切换；导航、首屏 Canvas、展示边框、下载卡片和页脚均改为浅色。Canvas 共用页面背景色，使用普通混合保持粒子可见；HTML 浏览器主题色改为白色，样式和脚本版本参数更新为 `light-20261004`。
+
+- 桌面 1141px、手机 390px / 360px 的实际 Chrome 检查通过，无横向溢出。深色系统偏好下官网仍为浅色；减少动画偏好正常。截图切换、手机菜单与 FAQ 展开正常，线上未捕获页面警告或错误。
+- 当前 Chrome 已能正常打开新官网，刷新后加载新版主题，三张 App 截图正常加载；前次记录中的浏览器连接问题本次未复现。测试视口与系统偏好模拟已恢复。
+- 现有 1Panel OpenResty 静态目录原子更新，配置检查通过；源站 HTTPS 的 HTML、CSS、JavaScript 字节与源文件一致。HTML SHA-256 为 `b9ff7583f2b921904c50169efb3de0aab45fd84e71866f473b1506d415cabcb2`。
+- 公网 CSS / JavaScript 与源码逐字节一致，HTML 包含新版主题与资源版本；原 Cloudflare 交付脚本仍保留。APK 未更换，源站 SHA-256 与 Build 15 一致，公网范围下载返回 206、1,024 字节，总长度 75,268,472 字节。原控制台 API 健康正常。
+- 回滚快照：`/opt/1panel/backups/ovh-cp-download/20261004T041032Z-light-theme`。文档与验证截图只保存在仓库，不发布到公开静态目录。
+
+![浅色官网与 App 示例：桌面](verification/light-theme-desktop.png)
+
+![浅色官网与 App 示例：手机](verification/light-theme-mobile.png)
+
+---
+
 # 2026-10-04 · 官网独立域名
 
 官网入口更新为 <https://ovh.gamelife.life/>。Cloudflare 的 `ovh.gamelife.life` 记录指向现有 KS-LS-B 服务器并开启代理；沿用 1Panel OpenResty，独立静态 vhost `ovh-cp-site.conf`，Let’s Encrypt 证书有效至 2027-01-01，并安装续期部署钩子。当前版本与正式 APK 未变更。

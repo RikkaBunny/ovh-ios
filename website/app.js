@@ -95,6 +95,7 @@ function initializeParticleStage() {
   const canvas = document.getElementById('hero-canvas');
   const ctx = canvas.getContext('2d', { alpha: false });
   if (!ctx) return;
+  const canvasBackground = getComputedStyle(document.documentElement).getPropertyValue('--bg-base').trim();
   let width, height;
   let particles = [];
   let animationFrameId = null;
@@ -150,12 +151,12 @@ const initParticles = () => {
             };
 
             const drawParticles = () => {
-                // 填充纯黑底色
-                ctx.fillStyle = '#000000';
+                // Canvas 与官网共用浅色背景，避免首屏残留深色区域。
+                ctx.fillStyle = canvasBackground;
                 ctx.fillRect(0, 0, width, height);
 
-                // 使用 screen 混合模式实现密集处的发光效果
-                ctx.globalCompositeOperation = 'screen';
+                // 白底使用普通混合，保留蓝紫粒子的颜色与可见度。
+                ctx.globalCompositeOperation = 'source-over';
 
                 const cx = width / 2;
                 const cy = height / 2;

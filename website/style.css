@@ -1,20 +1,20 @@
 :root {
-            /* 高级深色主题体系 */
-            --bg-base: #000000;
-            --bg-surface: #0a0a0a;
-            --bg-surface-elevated: #121212;
+            /* 与浅色 App 示例统一的白色 / 浅灰主题 */
+            --bg-base: #ffffff;
+            --bg-surface: #f7f7f8;
+            --bg-surface-elevated: #f0f1f3;
 
-            --text-primary: #ffffff;
-            --text-secondary: #a1a1aa;
-            --text-tertiary: #92929c;
+            --text-primary: #18181b;
+            --text-secondary: #52525b;
+            --text-tertiary: #666670;
 
             --brand-blue: #2563eb;
             --brand-purple: #9333ea;
             --brand-gradient: linear-gradient(135deg, var(--brand-blue), var(--brand-purple));
 
-            --border-subtle: rgba(255, 255, 255, 0.08);
-            --border-focus: rgba(255, 255, 255, 0.2);
-            --border-active: rgba(147, 51, 234, 0.4);
+            --border-subtle: rgba(24, 24, 27, 0.10);
+            --border-focus: rgba(24, 24, 27, 0.22);
+            --border-active: rgba(147, 51, 234, 0.32);
 
             /* 排版 */
             --font-sans: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
@@ -145,7 +145,7 @@
         .btn-primary {
             padding: 14px 32px;
             font-size: 16px;
-            color: var(--text-primary);
+            color: #ffffff;
             background: var(--brand-gradient);
             box-shadow: 0 0 0 1px rgba(255, 255, 255, 0.1) inset, 0 8px 20px -8px rgba(147, 51, 234, 0.4);
         }
@@ -164,7 +164,7 @@
         }
 
         .btn-secondary:hover {
-            background: rgba(255, 255, 255, 0.05);
+            background: #e7e8eb;
             border-color: var(--border-focus);
         }
 
@@ -190,7 +190,7 @@
             height: var(--header-height);
             display: flex;
             align-items: center;
-            background: rgba(0, 0, 0, 0.5);
+            background: rgba(255, 255, 255, 0.82);
             backdrop-filter: blur(20px);
             -webkit-backdrop-filter: blur(20px);
             border-bottom: 1px solid transparent;
@@ -199,7 +199,7 @@
 
         .site-header.is-scrolled {
             border-bottom-color: var(--border-subtle);
-            background: rgba(0, 0, 0, 0.8);
+            background: rgba(255, 255, 255, 0.94);
         }
 
         .nav-brand {
@@ -263,7 +263,7 @@
             inset: 0;
             z-index: 0;
             pointer-events: none;
-            /* 提供一个深色遮罩，确保文字始终可读 */
+            /* 保持与页面一致的浅色背景 */
             background: radial-gradient(circle at center, transparent 0%, var(--bg-base) 100%);
         }
 
@@ -339,8 +339,8 @@
 
         .stage-tab-btn:hover { color: var(--text-primary); }
         .stage-tab-btn[aria-selected="true"] {
-            color: var(--text-primary);
-            background: rgba(255, 255, 255, 0.05);
+            color: #6b21a8;
+            background: rgba(147, 51, 234, 0.06);
             border-color: var(--border-active);
         }
 
@@ -356,9 +356,9 @@
             inset: 0;
             border-radius: 40px;
             padding: 12px;
-            background: var(--bg-surface-elevated);
+            background: var(--bg-base);
             border: 1px solid var(--border-subtle);
-            box-shadow: 0 32px 64px -16px rgba(0, 0, 0, 0.8);
+            box-shadow: 0 32px 64px -16px rgba(24, 24, 27, 0.14);
             z-index: 2;
         }
 
@@ -478,7 +478,7 @@
         .download-card {
             flex: 1;
             padding: 48px;
-            background: var(--bg-surface);
+            background: var(--bg-base);
             border-radius: 32px;
             border: 1px solid var(--border-subtle);
         }
@@ -486,7 +486,7 @@
         .code-snippet {
             display: block;
             padding: 12px 16px;
-            background: rgba(255,255,255,0.03);
+            background: var(--bg-surface);
             border-radius: 8px;
             font-family: var(--font-mono);
             font-size: 13px;
@@ -529,12 +529,12 @@
 .production-style-2 { max-width: 800px; }
 .production-style-3 { background: var(--text-primary); color: var(--bg-base); border: none; }
 .btn-secondary.production-style-3:hover,
-.btn-secondary.production-style-3:focus-visible { background: #e5e5e5; color: #000; border: none; }
+.btn-secondary.production-style-3:focus-visible { background: #3f3f46; color: #fff; border: none; }
 .production-style-4 { border-top: 1px solid var(--border-subtle); }
 .production-style-5 { width: 200px; height: 200px; padding: 12px; background: white; border-radius: 16px; margin-bottom: 24px; }
 .production-style-6 { width: 24px; }
 /* Production integration keeps Gemini's new visual direction. */
-html { scroll-padding-top: 96px; color-scheme: dark; }
+html { scroll-padding-top: 96px; color-scheme: light; }
 [hidden] { display: none !important; }
 .w-full { width: 100%; }
 .mx-auto { margin-left: auto; margin-right: auto; }
@@ -545,13 +545,13 @@ html { scroll-padding-top: 96px; color-scheme: dark; }
 .skip-link { position: fixed; left: 20px; top: -80px; z-index: 200; padding: 12px 20px; border-radius: 12px; background: #fff; color: #000; }
 .skip-link:focus { top: 10px; }
 .hero { min-height: 740px; min-height: max(740px, 100svh); padding: 120px 0 88px; isolation: isolate; }
-.hero-canvas-container { background: radial-gradient(ellipse at 50% 52%, #11132e, transparent 65%); }
-.hero-canvas-container::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 48%, rgba(0,0,0,.38), transparent 60%), linear-gradient(0deg, #000, transparent 20%); }
-.hero-title { line-height: 1.17; font-weight: 350; text-shadow: 0 2px 40px rgba(0,0,0,.6); }
-.hero-subtitle { line-height: 1.85; color: #c1c0cc; }
+.hero-canvas-container { background: var(--bg-base); }
+.hero-canvas-container::after { content: ''; position: absolute; inset: 0; background: radial-gradient(ellipse at 50% 48%, rgba(255,255,255,.88), rgba(255,255,255,.18) 65%), linear-gradient(0deg, var(--bg-base), transparent 25%); }
+.hero-title { line-height: 1.17; font-weight: 350; }
+.hero-subtitle { line-height: 1.85; color: var(--text-secondary); }
 .hero-meta { margin-top: 24px; color: var(--text-secondary); font-size: 12px; }
 .hero-explore { display: inline-flex; gap: 14px; align-items: center; font-size: 13px; margin-top: 52px; color: var(--text-secondary); }
-.hero-explore:hover { color: #fff; }
+.hero-explore:hover { color: var(--text-primary); }
 .stage-tabs { gap: 8px; }
 .stage-display { max-width: 310px; }
 .section-header p { line-height: 1.8; }
