@@ -392,6 +392,23 @@
         .mockup-image.is-active { opacity: 1; z-index: 3; }
 
         /* 功能叙事列 */
+        .content-band { background: var(--bg-base); }
+
+        .content-band-muted {
+            background: var(--bg-surface);
+            border-top: 1px solid var(--border-subtle);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .feature-band { padding: 112px 0; }
+        .pairing-intro { padding: 128px 0 64px; }
+        .pairing-guide { padding: 64px 0 80px; }
+
+        .content-band-muted .feature-illustration,
+        .content-band-muted .step-illustration {
+            mix-blend-mode: multiply;
+        }
+
         .feature-grid {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
@@ -413,6 +430,9 @@
         }
 
         @media (max-width: 768px) {
+            .feature-band { padding: 72px 0; }
+            .pairing-intro { padding: 88px 0 48px; }
+            .pairing-guide { padding: 48px 0; }
             .feature-grid { grid-template-columns: 1fr; gap: 40px; }
             .feature-grid.reverse .feature-text { grid-row: 1; }
             .feature-illustration { width: min(100%, 280px); }
@@ -423,7 +443,6 @@
             display: grid;
             grid-template-columns: repeat(3, 1fr);
             gap: 48px;
-            padding-top: 48px;
         }
 
         .inline-link {
@@ -446,8 +465,6 @@
             grid-template-columns: minmax(0, 1fr) auto;
             align-items: center;
             gap: 80px;
-            padding-bottom: 48px;
-            border-bottom: 1px solid var(--border-subtle);
         }
 
         .prerequisite-label {
@@ -510,7 +527,6 @@
         }
 
         @media (max-width: 768px) {
-            .prerequisite-block { padding-bottom: 32px; }
             .prerequisite-block h3 { font-size: 24px; }
             .prerequisite-block .leading-relaxed { font-size: 15px; }
         }
@@ -613,7 +629,7 @@
         .site-footer {
             border-top: 1px solid var(--border-subtle);
             padding: 64px 0 40px;
-            background: var(--bg-surface);
+            background: var(--bg-base);
         }
 
         /* 渐显动画基础 */
@@ -687,7 +703,7 @@ html { scroll-padding-top: 96px; color-scheme: light; }
  .stage-tab-btn { padding: 12px 16px; font-size: 14px; }
  .stage-display { max-width: 282px; }
  .feature-grid { gap: 28px; }
- .steps-container { gap: 48px; padding-top: 32px; }
+ .steps-container { gap: 48px; }
  .download-layout { gap: 24px; }
  .download-card { padding: 28px 22px; border-radius: 24px; }
  .download-card .flex { flex-wrap: wrap; }
