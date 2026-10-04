@@ -422,7 +422,8 @@
         .steps-container {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
-            gap: 40px;
+            gap: 48px;
+            padding-top: 48px;
         }
 
         .inline-link {
@@ -440,16 +441,13 @@
             line-height: 1.8;
         }
 
-        .prerequisite-card {
+        .prerequisite-block {
             display: grid;
             grid-template-columns: minmax(0, 1fr) auto;
             align-items: center;
-            gap: 40px;
-            padding: 40px;
-            margin-bottom: 40px;
-            border: 1px solid var(--border-subtle);
-            border-radius: 24px;
-            background: var(--bg-base);
+            gap: 80px;
+            padding-bottom: 48px;
+            border-bottom: 1px solid var(--border-subtle);
         }
 
         .prerequisite-label {
@@ -459,12 +457,14 @@
             margin-bottom: 12px;
         }
 
-        .prerequisite-card h3 {
-            font-size: 24px;
+        .prerequisite-block h3 {
+            font-size: 28px;
             font-weight: 500;
             line-height: 1.5;
             margin-bottom: 16px;
         }
+
+        .service-name { white-space: nowrap; }
 
         .prerequisite-compatibility {
             font-size: 14px;
@@ -476,8 +476,24 @@
         .prerequisite-actions {
             display: flex;
             flex-direction: column;
-            align-items: stretch;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .service-link {
+            display: inline-flex;
+            align-items: center;
             gap: 12px;
+            min-height: 44px;
+            color: var(--brand-blue);
+            font-size: 15px;
+            font-weight: 500;
+        }
+
+        .service-link:hover {
+            color: #1d4ed8;
+            text-decoration: underline;
+            text-underline-offset: 4px;
         }
 
         .download-requirement {
@@ -489,22 +505,18 @@
         .section-header .download-requirement { font-size: 15px; }
 
         @media (max-width: 900px) {
-            .prerequisite-card { grid-template-columns: 1fr; gap: 24px; padding: 30px; }
-            .prerequisite-actions { flex-direction: row; flex-wrap: wrap; }
+            .prerequisite-block { grid-template-columns: 1fr; gap: 20px; }
+            .prerequisite-actions { flex-direction: row; flex-wrap: wrap; gap: 12px 28px; }
         }
 
         @media (max-width: 768px) {
-            .prerequisite-card { padding: 28px 24px; margin-bottom: 24px; }
-            .prerequisite-card h3 { font-size: 22px; }
-            .prerequisite-card .leading-relaxed { font-size: 15px; }
+            .prerequisite-block { padding-bottom: 32px; }
+            .prerequisite-block h3 { font-size: 24px; }
+            .prerequisite-block .leading-relaxed { font-size: 15px; }
         }
 
-        .step-card {
-            background: var(--bg-base);
-            padding: 40px 32px;
-            border-radius: 24px;
-            border: 1px solid var(--border-subtle);
-            position: relative;
+        .pairing-step {
+            min-width: 0;
         }
 
         .step-number {
@@ -675,8 +687,7 @@ html { scroll-padding-top: 96px; color-scheme: light; }
  .stage-tab-btn { padding: 12px 16px; font-size: 14px; }
  .stage-display { max-width: 282px; }
  .feature-grid { gap: 28px; }
- .steps-container { gap: 20px; }
- .step-card { padding: 30px; }
+ .steps-container { gap: 48px; padding-top: 32px; }
  .download-layout { gap: 24px; }
  .download-card { padding: 28px 22px; border-radius: 24px; }
  .download-card .flex { flex-wrap: wrap; }

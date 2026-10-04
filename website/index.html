@@ -16,7 +16,7 @@
     <!-- 预加载核心图片资源 -->
     <link rel="preload" as="image" href="assets/dashboard.png?v=resources-15">
 
-    <link rel="stylesheet" href="style.css?v=prerequisites-20261004">
+    <link rel="stylesheet" href="style.css?v=flat-pairing-20261004">
 </head>
 <body>
     <a class="skip-link" href="#main">跳到主要内容</a>
@@ -134,28 +134,28 @@
             </div>
         </section>
 
-        <section id="pairing" class="production-style-1 section-padding">
+        <section id="pairing" class="section-padding">
             <div class="container">
                 <div class="section-header text-center reveal-element">
                     <h2>扫码连接，同一份数据</h2>
                     <p class="mt-4 mx-auto">先部署自己的 OVH 服务，再连接手机 App。每台设备独立授权，可在网页单独撤销。</p>
                 </div>
 
-                <aside class="prerequisite-card reveal-element" id="prerequisites" aria-labelledby="prerequisite-title">
+                <aside class="prerequisite-block reveal-element" id="prerequisites" aria-labelledby="prerequisite-title">
                     <div>
                         <p class="prerequisite-label">使用前置条件</p>
-                        <h3 id="prerequisite-title">先在自己的 VPS 上部署 OVH 服务</h3>
+                        <h3 id="prerequisite-title">先在自己的 VPS 上部署 <span class="service-name">OVH 服务</span></h3>
                         <p class="text-secondary leading-relaxed">OVH CP 基于开源项目 gokele/ovh 开发，连接由你自行部署的网页面板与服务。请先在自己的 VPS 上安装该项目、配置 OVH 账户，并准备可通过 HTTPS 访问的面板地址，再进行 App 配对。</p>
                         <p class="prerequisite-compatibility">请使用带有「API 设置 → App 配对」入口的服务版本；如果看不到此入口，请先更新服务。</p>
                     </div>
                     <div class="prerequisite-actions">
-                        <a class="btn btn-primary" href="https://github.com/gokele/ovh" target="_blank" rel="noopener noreferrer">OVH 服务项目</a>
-                        <a class="btn btn-outline" href="https://github.com/gokele/ovh#部署方式" target="_blank" rel="noopener noreferrer">查看部署文档</a>
+                        <a class="service-link" href="https://github.com/gokele/ovh" target="_blank" rel="noopener noreferrer">OVH 服务项目 <span aria-hidden="true">↗</span></a>
+                        <a class="service-link" href="https://github.com/gokele/ovh#部署方式" target="_blank" rel="noopener noreferrer">查看部署文档 <span aria-hidden="true">↗</span></a>
                     </div>
                 </aside>
 
                 <div class="steps-container reveal-element">
-                    <div class="step-card">
+                    <div class="pairing-step">
                         <div class="step-visual">
                             <div class="step-number">01</div>
                             <img src="assets/feature-install.webp?v=illustrations-20261004" class="step-illustration" width="1024" height="1024" alt="" aria-hidden="true" loading="lazy" decoding="async">
@@ -166,7 +166,7 @@
                         </p>
                     </div>
 
-                    <div class="step-card">
+                    <div class="pairing-step">
                         <div class="step-visual">
                             <div class="step-number">02</div>
                             <img src="assets/feature-pairing.webp?v=illustrations-20261004" class="step-illustration" width="1024" height="1024" alt="" aria-hidden="true" loading="lazy" decoding="async">
@@ -177,7 +177,7 @@
                         </p>
                     </div>
 
-                    <div class="step-card">
+                    <div class="pairing-step">
                         <div class="step-visual">
                             <div class="step-number">03</div>
                             <img src="assets/feature-scan.webp?v=illustrations-20261004" class="step-illustration" width="1024" height="1024" alt="" aria-hidden="true" loading="lazy" decoding="async">

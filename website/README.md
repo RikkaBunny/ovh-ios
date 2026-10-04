@@ -2,7 +2,9 @@
 
 公开入口：<https://ovh.gamelife.life/>。
 
-使用前置条件：先在用户自己的 VPS 上部署支持「API 设置 → App 配对」的 [gokele/ovh 服务](https://github.com/gokele/ovh)，配置 OVH 账户，并准备手机可访问的 HTTPS 网页面板地址，再安装 App、生成配对码并连接。上游 [部署文档](https://github.com/gokele/ovh#部署方式) 提供 Docker 等方式。首页下载入口、安装与配对区的前置条件卡片、FAQ、下载区和页脚均明确该要求，并提供服务项目链接；缺少 App 配对入口时需先更新服务。App 与网页读取同一服务的数据。
+使用前置条件：先在用户自己的 VPS 上部署支持「API 设置 → App 配对」的 [gokele/ovh 服务](https://github.com/gokele/ovh)，配置 OVH 账户，并准备手机可访问的 HTTPS 网页面板地址，再安装 App、生成配对码并连接。上游 [部署文档](https://github.com/gokele/ovh#部署方式) 提供 Docker 等方式。首页下载入口、安装与配对区的前置条件说明、FAQ、下载区和页脚均明确该要求，并提供服务项目链接；缺少 App 配对入口时需先更新服务。App 与网页读取同一服务的数据。
+
+部署与配对区沿用上方功能区的白色背景和开放式排版，前置条件与三个步骤均不使用圆角卡片。通过留白与一条细分隔线组织内容，服务项目及部署文档使用无阴影的文字链接，保留原生成插图。
 
 使用用户已登录的 Chrome Gemini Pro Canvas 重新设计官网，视觉参考 Gemini 产品官网 <https://gemini.google/us/about/?hl=en>。采用固定浅色主题、居中轻字重大标题、原生 Canvas 3D 蓝紫粒子云、胶囊按钮、真实截图产品舞台与交错功能介绍。官网的白色与浅灰背景和三张浅色 App 示例统一，操作系统的深色偏好不会切换官网主题。
 
