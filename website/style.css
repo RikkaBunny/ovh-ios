@@ -405,9 +405,17 @@
             margin-bottom: 20px;
         }
 
+        .feature-illustration {
+            width: min(100%, 360px);
+            height: auto;
+            aspect-ratio: 1;
+            object-fit: contain;
+        }
+
         @media (max-width: 768px) {
             .feature-grid { grid-template-columns: 1fr; gap: 40px; }
             .feature-grid.reverse .feature-text { grid-row: 1; }
+            .feature-illustration { width: min(100%, 280px); }
         }
 
         /* 三步配对指南 */
@@ -418,7 +426,7 @@
         }
 
         .step-card {
-            background: var(--bg-surface);
+            background: var(--bg-base);
             padding: 40px 32px;
             border-radius: 24px;
             border: 1px solid var(--border-subtle);
@@ -426,12 +434,26 @@
         }
 
         .step-number {
-            font-size: 48px;
+            font-size: 32px;
             font-weight: 300;
             color: var(--text-primary);
-            opacity: 0.2;
-            margin-bottom: 16px;
+            opacity: 0.35;
             font-family: var(--font-mono);
+        }
+
+        .step-visual {
+            display: flex;
+            align-items: flex-start;
+            justify-content: space-between;
+            gap: 12px;
+            margin-bottom: 24px;
+        }
+
+        .step-illustration {
+            width: min(70%, 168px);
+            height: auto;
+            aspect-ratio: 1;
+            object-fit: contain;
         }
 
         /* 手风琴 FAQ */

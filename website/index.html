@@ -16,7 +16,7 @@
     <!-- 预加载核心图片资源 -->
     <link rel="preload" as="image" href="assets/dashboard.png?v=resources-15">
 
-    <link rel="stylesheet" href="style.css?v=light-20261004">
+    <link rel="stylesheet" href="style.css?v=illustrations-20261004">
 </head>
 <body>
     <a class="skip-link" href="#main">跳到主要内容</a>
@@ -103,7 +103,7 @@
             </div>
         </section>
 
-        <section class="section-padding">
+        <section id="capabilities" class="section-padding">
             <div class="container flex flex-col gap-16">
 
                 <div class="feature-grid reveal-element">
@@ -114,18 +114,13 @@
                         </p>
                     </div>
                     <div class="flex justify-center">
-                        <svg aria-hidden="true" focusable="false" width="240" height="240" viewBox="0 0 24 24" fill="none" stroke="var(--border-subtle)" class="text-brand">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="0.5" d="M12 6v6l4 2M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                            <circle cx="12" cy="12" r="9" stroke="var(--brand-purple)" stroke-width="1" stroke-dasharray="4 4" opacity="0.5"/>
-                        </svg>
+                        <img src="assets/feature-tasks.webp?v=illustrations-20261004" class="feature-illustration" width="1024" height="1024" alt="" aria-hidden="true" loading="lazy" decoding="async">
                     </div>
                 </div>
 
                 <div class="feature-grid reverse reveal-element">
                     <div class="flex justify-center">
-                        <svg aria-hidden="true" focusable="false" width="240" height="240" viewBox="0 0 24 24" fill="none" stroke="var(--border-subtle)" class="text-brand">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="0.5" d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
-                        </svg>
+                        <img src="assets/feature-regions.webp?v=illustrations-20261004" class="feature-illustration" width="1024" height="1024" alt="" aria-hidden="true" loading="lazy" decoding="async">
                     </div>
                     <div class="feature-text">
                         <h3>多地区账户，统一管理</h3>
@@ -147,7 +142,10 @@
 
                 <div class="steps-container reveal-element">
                     <div class="step-card">
-                        <div class="step-number">01</div>
+                        <div class="step-visual">
+                            <div class="step-number">01</div>
+                            <img src="assets/feature-install.webp?v=illustrations-20261004" class="step-illustration" width="1024" height="1024" alt="" aria-hidden="true" loading="lazy" decoding="async">
+                        </div>
                         <h4 class="text-xl font-medium mb-4">安装 App，打开网页</h4>
                         <p class="text-secondary leading-relaxed text-sm">
                             安装 APK，按 Android 提示允许当前下载来源安装应用。打开已部署、支持 App 配对接口的 HTTPS 网页面板。
@@ -155,7 +153,10 @@
                     </div>
 
                     <div class="step-card">
-                        <div class="step-number">02</div>
+                        <div class="step-visual">
+                            <div class="step-number">02</div>
+                            <img src="assets/feature-pairing.webp?v=illustrations-20261004" class="step-illustration" width="1024" height="1024" alt="" aria-hidden="true" loading="lazy" decoding="async">
+                        </div>
                         <h4 class="text-xl font-medium mb-4">生成配对码</h4>
                         <p class="text-secondary leading-relaxed text-sm">
                             在网页「API 设置 → App 配对」生成二维码或 8 位码。OVH API 凭据由自己的后端管理，配对时无需再次录入。
@@ -163,7 +164,10 @@
                     </div>
 
                     <div class="step-card">
-                        <div class="step-number">03</div>
+                        <div class="step-visual">
+                            <div class="step-number">03</div>
+                            <img src="assets/feature-scan.webp?v=illustrations-20261004" class="step-illustration" width="1024" height="1024" alt="" aria-hidden="true" loading="lazy" decoding="async">
+                        </div>
                         <h4 class="text-xl font-medium mb-4">扫描连接</h4>
                         <p class="text-secondary leading-relaxed text-sm">
                             在 App 扫码、选择二维码图片，或输入面板地址与 8 位码。连接后共用账户、队列、监控与设置；也可在 App 管理 API 配置。
