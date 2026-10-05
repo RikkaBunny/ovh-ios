@@ -1,3 +1,18 @@
+# 2026-10-05 · iOS TestFlight 联系申请入口
+
+首屏 iOS 按钮改为“申请 iOS 测试”，跳转到 `https://www.hejingcheng.com/contact/`。首屏及 FAQ 说明在联系页留下接收邀请的邮箱，申请加入 TestFlight；收到邀请后通过 TestFlight 安装 iPhone / iPad 应用。保留 Android 下载和原有视觉样式。
+
+- 实际 Chrome 桌面 1141px 与手机 390px 检查通过，手机无横向溢出。首屏按钮实际点击后到达联系页，显示邮箱与留言表单；没有提交测试留言。浏览器已恢复原视口并返回官网。
+- 公网刷新显示新按钮、TestFlight 说明与 FAQ；公网 HTML 的两个联系链接正确，旧“iOS 发布信息”入口已移除。HTML 与源码的差异仅为 Cloudflare 原有交付脚本。
+- 沿用 1Panel OpenResty，备份并原子替换单个 HTML。配置检查通过，源站 HTTPS 内容与源码一致，HTML SHA-256 为 `539ea6098a6fd93479d073834dd0360b250478acd98dbec4f9d6dcff60b0dbd7`。正式 APK 哈希未变，面板 API 健康正常。
+- 回滚文件：`/opt/1panel/backups/ovh-cp-download/20261005T141405Z-ios-contact/index.html`。说明文档与验证截图仅保存在仓库。
+
+![iOS 测试申请入口：电脑](verification/ios-contact-desktop.png)
+
+![iOS 测试申请入口：手机](verification/ios-contact-mobile.png)
+
+---
+
 # 2026-10-04 · 功能插图改为真实 Alpha 透明背景
 
 使用内置图像编辑工具移除五张功能插图的背景，保留白色瓷质、磨砂玻璃与蓝紫配色。网页改用 RGBA WebP，移除 `mix-blend-mode: multiply`，资源版本更新为 `alpha-20261004`。编辑提示词、最终路径及透明像素统计见 [插图记录](artwork/README.md)。
