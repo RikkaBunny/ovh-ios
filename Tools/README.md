@@ -34,3 +34,11 @@ xcodebuild -project OVHPocket.xcodeproj -scheme OVHPocket \
 UI 测试会清除 QA 模拟器中 OVH 的连接，以本机演示账户重新登录，因此不要选择保存真实配对凭据的日常模拟器。UI 测试只在 Debug 模拟器、地址为 `https://localhost:16443` 时启用自动登录与重置。生成与运行均不需要真实服务器凭据。
 
 测试客户端原生代码、路由与交互，不能证明真实 OVH 硬件能力、付款、重装、KVM 或实体相机已通过测试。
+
+## v0.4.3 审核兼容路由
+
+`review_compat.py` 提供合成地区订单与精确配置的监控暂停/恢复，供本机 fixture 与隔离公网审核服务共用。它不连接 OVH。运行测试时遵循 VPS 默认环境：
+
+```sh
+python3 -m unittest discover -s Tools -p test_review_compat.py -v
+```

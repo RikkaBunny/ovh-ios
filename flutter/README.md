@@ -1,12 +1,12 @@
 # OVH CP · Flutter 客户端
 
-独立的 Flutter/Dart 版本，支持 iPhone、iPad 和 Android，当前候选版本 `1.4.0+16`。连接与 React 网页、SwiftUI 客户端相同的 gokele/ovh 后端，沿用黑白主色、灰色分隔、圆角卡片、胶囊按钮和状态色。业务页面全部由 Flutter 绘制；WebView 仅用于 OVH 返回的 HTTPS 远程屏幕。
+独立的 Flutter/Dart 版本，支持 iPhone、iPad 和 Android，当前提交审核版本 `1.4.0+16`。连接与 React 网页、SwiftUI 客户端相同的 gokele/ovh 后端，沿用黑白主色、灰色分隔、圆角卡片、胶囊按钮和状态色。业务页面全部由 Flutter 绘制；WebView 仅用于 OVH 返回的 HTTPS 远程屏幕。
 
 发布版名为 `OVH CP`。iOS 沿用原版 Bundle ID `com.hejingcheng.ovhpocket`，作为现有应用更新；Android Application ID 为 `com.hejingcheng.ovh_flutter`。新版图标基于 OVH 官方标识生成，见 [图标与提示词](../BrandAssets/ovh-cp/README.md)。iOS 升级会迁移原 SwiftUI 连接、账户选择与外观。正式构建与签名说明见 [publishing](publishing/README.md)。
 
 ## 本轮更新
 
-1.4.0（16）新增预发布机型搜索与预约抢购、按配置精确暂停/恢复监控、OVH 官方订单和模板自定义重装配置，并修复 OVH 业务错误导致误断开。开发与通用检查在 BERO VPS 执行，Mac 本轮未编译；iOS 归档及 TestFlight 上传仍需 macOS/Xcode。详情见 [上游同步记录](上游同步-20261021.md)。
+1.4.0（16）新增预发布机型搜索与预约抢购、按配置精确暂停/恢复监控、OVH 官方订单和模板自定义重装配置，并修复 OVH 业务错误导致误断开。开发与通用检查在 BERO VPS 执行；2026-10-22 已在 Mac/Xcode 完成 iOS 签名归档、上传及提交审核，设置为通过后自动发布。见 [发布记录](publishing/RELEASE-20261022.md)。详情见 [上游同步记录](上游同步-20261021.md)。
 
 ## 界面预览
 

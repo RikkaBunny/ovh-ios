@@ -1,6 +1,6 @@
 # OVH CP · Flutter 客户端 / SwiftUI 参考实现
 
-当前开发版本为 [Flutter 客户端 OVH CP 1.4.0（16）](flutter/README.md)，iOS、iPad 和 Android 共用 Flutter/Dart 界面。现已同步 gokele/ovh v0.4.3，接口目录为 228 项，新增预发布预约抢购、精确监控暂停及 OVH 官方订单；验证和限制见 [上游同步记录](flutter/上游同步-20261021.md)。iOS 尚未在本轮打包或上传。已提供的 Android 安装包继续从 [官网下载](https://ovh.gamelife.life/)；网站源码见 [website](website/README.md)。
+当前开发版本为 [Flutter 客户端 OVH CP 1.4.0（16）](flutter/README.md)，iOS、iPad 和 Android 共用 Flutter/Dart 界面。现已同步 gokele/ovh v0.4.3，接口目录为 228 项，新增预发布预约抢购、精确监控暂停及 OVH 官方订单；验证和限制见 [上游同步记录](flutter/上游同步-20261021.md)。iOS 1.4.0（16）已于 2026-10-22 上传并提交，当前等待 Apple 审核，通过后自动发布；见 [发布记录](flutter/publishing/RELEASE-20261022.md)。已提供的 Android 安装包继续从 [官网下载](https://ovh.gamelife.life/)；网站源码见 [website](website/README.md)。
 
 SwiftUI 源码版本 1.2.0（9），最低 iOS 17，支持 iPhone 和 iPad。网站继续使用 React；此版本的业务页面全部使用 SwiftUI，共用现有 gokele/ovh Go 后端。已移除“完整控制台”网页入口。WebKit 仅用于 OVH 返回的 KVM 远程屏幕，不加载管理面板，也不注入面板令牌。
 

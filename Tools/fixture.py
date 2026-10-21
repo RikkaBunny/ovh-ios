@@ -2,6 +2,7 @@
 import importlib.util, pathlib, json, re, ssl, time, uuid
 from http.server import ThreadingHTTPServer
 from urllib.parse import urlsplit, parse_qs, unquote
+from review_compat import handle_review_compat
 
 ROOT=pathlib.Path(__file__).resolve().parents[1]
 spec=importlib.util.spec_from_file_location('review',pathlib.Path(__file__).with_name('fixture_base.py'))
@@ -58,6 +59,8 @@ class Handler(review.Handler):
         body={}
         if self.command!='GET':
             size=int(self.headers.get('Content-Length',0)); body=json.loads(self.rfile.read(size) or b'{}')
+        if handle_review_compat(self, path, query, body, SUBS):
+            return
         if path=='/qa/refresh':
             if self.command=='POST': REFRESH.update(mode=body.get('mode','ok'), delay=min(10,max(0,body.get('delay',0))), marker=body.get('marker',0), started={}, completed={})
             return self.send_json(REFRESH)
