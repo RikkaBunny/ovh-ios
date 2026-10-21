@@ -350,4 +350,42 @@ void main() {
     expect(tester.takeException(), isNull);
     await clear(tester, store);
   });
+  testWidgets(
+    'Subscription details refresh pause state and reject a removed selection',
+    (tester) async {
+      await tester.binding.setSurfaceSize(const Size(390, 844));
+      addTearDown(() => tester.binding.setSurfaceSize(null));
+      final original = <String, dynamic>{
+        'planCode': '26sk01',
+        'options': ['ram-64'],
+        'paused': false,
+      };
+      var source = <Json>[original];
+      final store = storeWith(
+        (r) async => http.Response(jsonEncode(source), 200),
+      );
+      setupAccount(store);
+      await store.load('/monitor/subscriptions');
+      await tester.pumpWidget(harness(store, SubscriptionDetailPage(original)));
+      await tester.pumpAndSettle();
+      source = [
+        {...original, 'paused': true},
+      ];
+      await store.load('/monitor/subscriptions');
+      await tester.pumpAndSettle();
+      final pause = find.byKey(const Key('native.PauseSubscription'));
+      await tester.ensureVisible(pause);
+      await tester.tap(pause);
+      await tester.pumpAndSettle();
+      expect(tester.widget<PanelSwitch>(find.byType(PanelSwitch)).value, true);
+      await tester.tap(find.byKey(const Key('app.back')));
+      await tester.pumpAndSettle();
+      source = [];
+      await store.load('/monitor/subscriptions');
+      await tester.pumpAndSettle();
+      expect(find.byKey(const Key('native.PauseSubscription')), findsNothing);
+      expect(find.text('该订阅配置已变更或删除，请返回列表重新选择。'), findsOneWidget);
+      await clear(tester, store);
+    },
+  );
 }

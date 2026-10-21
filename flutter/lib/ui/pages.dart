@@ -684,10 +684,18 @@ class SubscriptionDetailPage extends StatelessWidget {
         (state is List ? array(state) : array(object(state)['subscriptions']))
             .map(object)
             .toList();
-    final unambiguous = vps || subscriptionIsUnique(item, subscriptions);
-    final exact = vps || subscriptionCanAddress(item, subscriptions);
+    final current = subscriptions
+        .where(
+          (row) => vps
+              ? text(row['id']) == text(item['id'])
+              : subscriptionIdentity(row) == subscriptionIdentity(item),
+        )
+        .firstOrNull;
+    final displayItem = current ?? item;
+    final unambiguous = vps || subscriptionIsUnique(displayItem, subscriptions);
+    final exact = vps || subscriptionCanAddress(displayItem, subscriptions);
     final target = store.target.bind({
-      if (!vps) 'optionsKey': subscriptionOptionsKey(item['options']),
+      if (!vps) 'optionsKey': subscriptionOptionsKey(displayItem['options']),
       'planCode': item['planCode'],
       'plan_code': item['planCode'],
       'subscription_id': item['id'] ?? item['planCode'],
@@ -698,7 +706,8 @@ class SubscriptionDetailPage extends StatelessWidget {
       account: false,
       child: PageList(
         children: [
-          PanelCard(child: DataView(item)),
+          PanelCard(child: DataView(displayItem)),
+          if (current == null) const Notice('该订阅配置已变更或删除，请返回列表重新选择。'),
           if (!unambiguous)
             const Notice(
               '当前后端的编辑与历史接口只定位同机型的第一条订阅。为避免操作其他配置，此处只提供可精确定位的暂停和删除操作。',
@@ -706,6 +715,7 @@ class SubscriptionDetailPage extends StatelessWidget {
           if (!exact) const Notice('当前后端无法精确定位这条全部配置订阅，已禁用可能影响其他配置的操作。'),
           for (final op in store.catalog.operations.where(
             (o) =>
+                current != null &&
                 o.path.startsWith('$root/subscriptions/:') &&
                 (unambiguous ||
                     (o.method != 'PUT' && !o.path.endsWith('/history'))) &&
@@ -713,7 +723,7 @@ class SubscriptionDetailPage extends StatelessWidget {
           ))
             PanelCard(
               padding: EdgeInsets.zero,
-              child: OperationRow(op, target, seed: item),
+              child: OperationRow(op, target, seed: displayItem),
             ),
         ],
       ),
