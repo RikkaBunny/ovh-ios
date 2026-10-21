@@ -1,6 +1,6 @@
 # OVH CP 发布
 
-Flutter 客户端版本为 **1.3.0 (15)**。iOS 使用原 OVH 商店记录的 Bundle ID `com.hejingcheng.ovhpocket`，Android 使用 `com.hejingcheng.ovh_flutter`。应用显示名称统一为 `OVH CP`。
+Flutter 客户端当前候选版本为 **1.4.0 (16)**，同步上游 v0.4.3；本轮未打包 iOS 或上传 TestFlight。iOS 使用原 OVH 商店记录的 Bundle ID `com.hejingcheng.ovhpocket`，Android 使用 `com.hejingcheng.ovh_flutter`。应用显示名称统一为 `OVH CP`。
 
 旧 SwiftUI 源码保留作参考；发布以本目录为准。iOS 更新会将原版 Keychain 中的面板令牌、账户选择和外观迁移到 Flutter 存储。成功保存后清除旧令牌，断开时清理两个存储，避免重新导入已断开的授权。迁移不读取其他应用的钥匙串，不上传凭据。
 
@@ -15,7 +15,7 @@ flutter build appbundle --release
 flutter build apk --release --split-per-abi
 ```
 
-构建前配置 Android SDK 路径，例如本机 `ANDROID_HOME=/opt/homebrew/share/android-commandlinetools`。保留发布命令的默认依赖准备流程，避免继承 UI 测试生成的插件注册文件；本机 Flutter SDK 下不要在跨平台发布时追加 `--no-pub`。
+Android 构建、依赖安装、分析和测试默认在 BERO VPS 的 `/home/codexdev/projects/ovh-ios/flutter` 执行，使用开发机已配置的 Android SDK；iOS 原生签名归档必须在 macOS/Xcode 执行。保留发布命令的默认依赖准备流程，避免继承 UI 测试生成的插件注册文件；本机 Flutter SDK 下不要在跨平台发布时追加 `--no-pub`。
 
 Release 不使用 `OVH_QA`，不自动连接测试后端，也不接受测试证书。
 
@@ -54,4 +54,4 @@ iOS 的 ExportOptions 使用现有开发者团队 `4MGNRHR56T`。本地归档/�
 
 演示环境仅包含合成 EU/CA/US 账户、实例与操作，不控制真实服务器。审核可用演示页面公开的测试访问密钥，不需要真实 OVH 登录。提交前应核对这些页面的可访问性、当前名称和隐私说明。
 
-更新说明：修复系统资源不随账户切换的问题，增加实例选择、身份校验和未接入监控提示；对齐 React / SwiftUI 的常用页面、黑白卡片、导航、搜索、胶囊控件、深色模式、实例流量、快照和设置；全新的 Flutter 跨平台客户端；应用更名为 OVH CP；白底蓝标 cp 图标；iOS 原版连接迁移；保留仪表盘资源、实例主入口、配对和刷新修复。
+更新说明（1.4.0 候选）：同步 gokele/ovh v0.4.3；新增预发布机型搜索、预约抢购、按配置精确暂停监控、OVH 官方订单与系统模板自定义重装配置；修复 OVH 业务错误触发误断开，保留账户隔离与实例资源显示。验证及上游限制见 [同步记录](../上游同步-20261021.md)。

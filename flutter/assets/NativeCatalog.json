@@ -1,5 +1,5 @@
 {
-  "commit": "1011569d1d8935eeb028dcf2b48f9ff193b959e3",
+  "commit": "c22fbf0f605da8b79bbc75bc1dc8562bd12163da",
   "operations": [
     {
       "id": "GET /health",
@@ -229,21 +229,21 @@
           "label": "下单账户",
           "kind": "text",
           "location": "body",
-          "required": false
+          "required": true
         },
         {
           "key": "planCode",
           "label": "机型编码",
           "kind": "text",
           "location": "body",
-          "required": false
+          "required": true
         },
         {
           "key": "datacenter",
           "label": "数据中心",
           "kind": "text",
           "location": "body",
-          "required": false
+          "required": true
         },
         {
           "key": "options",
@@ -262,6 +262,13 @@
         {
           "key": "autoPay",
           "label": "自动付款",
+          "kind": "toggle",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "preorder",
+          "label": "预发布预约抢购",
           "kind": "toggle",
           "location": "body",
           "required": false
@@ -562,6 +569,40 @@
       "handler": "UpdateSubscription"
     },
     {
+      "id": "POST /monitor/subscriptions/:planCode/pause",
+      "title": "设置订阅暂停状态",
+      "group": "监控",
+      "scope": "panel",
+      "method": "POST",
+      "path": "/monitor/subscriptions/:planCode/pause",
+      "fields": [
+        {
+          "key": "optionsKey",
+          "label": "配置标识",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "paused",
+          "label": "暂停监控",
+          "kind": "toggle",
+          "location": "body",
+          "required": true
+        },
+        {
+          "key": "planCode",
+          "label": "机型编码",
+          "kind": "text",
+          "location": "path",
+          "required": true
+        }
+      ],
+      "danger": false,
+      "source": "monitor.go",
+      "handler": "PauseSubscription"
+    },
+    {
       "id": "POST /monitor/subscriptions/batch-add-all",
       "title": "监控全部机型",
       "group": "监控",
@@ -628,6 +669,13 @@
           "kind": "text",
           "location": "path",
           "required": true
+        },
+        {
+          "key": "optionsKey",
+          "label": "配置标识",
+          "kind": "text",
+          "location": "query",
+          "required": false
         }
       ],
       "danger": true,
@@ -1349,21 +1397,21 @@
           "label": "下单账户",
           "kind": "text",
           "location": "body",
-          "required": false
+          "required": true
         },
         {
           "key": "planCode",
           "label": "机型编码",
           "kind": "text",
           "location": "body",
-          "required": false
+          "required": true
         },
         {
           "key": "datacenter",
           "label": "数据中心",
           "kind": "text",
           "location": "body",
-          "required": false
+          "required": true
         },
         {
           "key": "options",
@@ -1565,6 +1613,14 @@
           "kind": "text",
           "location": "body",
           "required": false
+        },
+        {
+          "key": "customizations",
+          "label": "系统自定义设置",
+          "kind": "object",
+          "location": "body",
+          "required": false,
+          "children": []
         },
         {
           "key": "useProxmox9Zfs",
@@ -3814,7 +3870,15 @@
       "scope": "vps",
       "method": "POST",
       "path": "/vps-control/:service_name/snapshot/revert",
-      "fields": [],
+      "fields": [
+        {
+          "key": "confirm",
+          "label": "确认执行",
+          "kind": "toggle",
+          "location": "body",
+          "required": false
+        }
+      ],
       "danger": true,
       "source": "vps_control_snapshot.go",
       "handler": "RevertVpsSnapshot"
@@ -4606,6 +4670,18 @@
       "handler": "GetAccountRefunds"
     },
     {
+      "id": "GET /ovh/account/orders",
+      "title": "OVH 官方订单",
+      "group": "账户管理",
+      "scope": "panel",
+      "method": "GET",
+      "path": "/ovh/account/orders",
+      "fields": [],
+      "danger": false,
+      "source": "account.go",
+      "handler": "GetAccountOrders"
+    },
+    {
       "id": "GET /ovh/account/credit-balance",
       "title": "账户余额",
       "group": "账户管理",
@@ -4935,7 +5011,11 @@
     "fileSystem": "文件系统",
     "raidLevel": "RAID 级别",
     "arrays": "阵列数",
-    "spares": "备用磁盘数"
+    "spares": "备用磁盘数",
+    "preorder": "预发布预约抢购",
+    "paused": "暂停监控",
+    "optionsKey": "配置标识",
+    "customizations": "系统自定义设置"
   },
   "subsidiaries": [
     {

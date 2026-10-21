@@ -204,11 +204,11 @@ void main() {
     api.close();
   });
   test(
-    'All 226 operation descriptors resolve complete target and typed fields',
+    'All 228 operation descriptors resolve complete target and typed fields',
     () {
       final catalog = loadCatalog();
-      expect(catalog.operations.length, 226);
-      expect(catalog.operations.map((o) => o.id).toSet().length, 226);
+      expect(catalog.operations.length, 228);
+      expect(catalog.operations.map((o) => o.id).toSet().length, 228);
       for (final op in catalog.operations) {
         final values = <String, dynamic>{};
         for (final f in op.fields) {

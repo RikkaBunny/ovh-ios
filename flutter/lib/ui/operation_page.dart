@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import '../core/models.dart';
+import '../core/upstream_compat.dart';
 import 'common.dart';
 
 class OperationRow extends StatelessWidget {
@@ -54,6 +55,10 @@ class _OperationPageState extends State<OperationPage> {
   bool busy = false, started = false, configLoaded = false, succeeded = false;
   List<String> notices = [];
   final Map<String, List<String>> suggestions = {};
+  List<Json> installationTemplates = [];
+  dynamic get installationQuestions => installationTemplates
+      .where((t) => t['templateName'] == values['templateName'])
+      .firstOrNull?['customizeQuestions'];
   int revision = 0;
   Timer? expiryTimer;
   Operation get op => widget.operation;
@@ -61,6 +66,19 @@ class _OperationPageState extends State<OperationPage> {
       .where(
         (f) => !widget.target.bindings.containsKey(f.key) && f.key != 'confirm',
       )
+      .map(
+        (f) => f.key == 'customizations'
+            ? FieldSpec({
+                'key': f.key,
+                'label': f.label,
+                'kind': 'object',
+                'location': f.location,
+                'required': false,
+                'children': installationQuestionFields(installationQuestions),
+              })
+            : f,
+      )
+      .where((f) => f.key != 'customizations' || f.children.isNotEmpty)
       .toList();
   @override
   void didChangeDependencies() {
@@ -139,6 +157,9 @@ class _OperationPageState extends State<OperationPage> {
           )).value;
           final rows = data is List ? data : array(object(data)[item.$3]);
           if (mounted && ticket == store.session) {
+            if (item.$1 == 'templateName') {
+              installationTemplates = rows.map(object).toList();
+            }
             setState(
               () => suggestions[item.$1] = rows
                   .map(
@@ -207,6 +228,13 @@ class _OperationPageState extends State<OperationPage> {
   Future<void> submit() async {
     if (op.path == '/settings' && !op.read && !configLoaded) return;
     try {
+      if (op.path.endsWith('/install') &&
+          fields.any((f) => f.key == 'customizations')) {
+        values['customizations'] = normalizedCustomizations(
+          installationQuestions,
+          object(values['customizations']),
+        );
+      }
       op.resolve(effectiveValues, widget.target);
       if (op.read) {
         await execute();
@@ -281,6 +309,9 @@ class _OperationPageState extends State<OperationPage> {
                           choices: _choices(field),
                           onChanged: (v) => setState(() {
                             values[field.key] = v;
+                            if (field.key == 'templateName') {
+                              values.remove('customizations');
+                            }
                             if (field.key == 'zone') {
                               final site = store.catalog.subsidiaries
                                   .where((s) => s['code'] == v)
@@ -573,7 +604,11 @@ class _FieldEditorState extends State<FieldEditor> {
         controller: controller,
         obscureText: field.kind == 'secret' || secretField(field.key),
         autocorrect: false,
-        maxLines: field.kind == 'list' ? 4 : 1,
+        maxLines: field.kind == 'multiline'
+            ? 6
+            : field.kind == 'list'
+            ? 4
+            : 1,
         keyboardType: field.kind == 'number'
             ? const TextInputType.numberWithOptions(decimal: true, signed: true)
             : null,

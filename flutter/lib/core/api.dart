@@ -75,20 +75,35 @@ class PanelApi {
       query: query,
     ),
   );
+  bool hasPanelAuthentication(http.Request request) =>
+      request.headers.containsKey('X-API-Key') ||
+      request.headers.containsKey('Authorization');
+
   Future<ApiResult> send(http.Request request) async {
     final response = await http.Response.fromStream(
       await client.send(request).timeout(const Duration(seconds: 60)),
     ).timeout(const Duration(seconds: 60));
-    if (response.statusCode == 401) {
-      throw const PanelException('设备授权已失效，请重新连接', 401);
-    }
     dynamic value;
     try {
       value = response.bodyBytes.isEmpty
           ? null
           : jsonDecode(utf8.decode(response.bodyBytes));
     } catch (_) {
+      if (response.statusCode == 401 && hasPanelAuthentication(request)) {
+        throw const PanelException('设备授权已失效，请重新连接', 401, true);
+      }
       throw const PanelException('面板数据格式无法识别，请检查地址或版本');
+    }
+    if (response.statusCode == 401 && hasPanelAuthentication(request)) {
+      final data = object(value), code = text(object(value)['code']);
+      if (const {
+            'NO_API_KEY',
+            'INVALID_API_KEY',
+            'INVALID_DEVICE_TOKEN',
+          }.contains(code) ||
+          (code.isEmpty && data['success'] == null)) {
+        throw const PanelException('设备授权已失效，请重新连接', 401, true);
+      }
     }
     if (response.statusCode < 200 || response.statusCode >= 300) {
       throw PanelException(

@@ -1,5 +1,7 @@
 import 'dart:convert';
 
+const appDisplayVersion = '1.4.0（16）';
+
 typedef Json = Map<String, dynamic>;
 Json object(dynamic value) =>
     value is Map ? Map<String, dynamic>.from(value) : {};
@@ -32,7 +34,12 @@ dynamic redacted(dynamic value) => value is Map
 class PanelException implements Exception {
   final String message;
   final int? status;
-  const PanelException(this.message, [this.status]);
+  final bool authenticationFailure;
+  const PanelException(
+    this.message, [
+    this.status,
+    this.authenticationFailure = false,
+  ]);
   @override
   String toString() => message;
 }
@@ -255,6 +262,9 @@ class Operation {
       final empty = value == null || value == '';
       if (empty && field.required) throw PanelException('请填写${field.label}');
       if (value == null || (empty && field.location != 'body')) continue;
+      if (field.kind == 'object' && value is! Map) {
+        throw PanelException('${field.label}必须是结构化配置');
+      }
       if (field.kind == 'number' && value is! num) {
         throw PanelException('${field.label}必须是数字');
       }

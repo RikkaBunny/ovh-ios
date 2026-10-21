@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import '../core/models.dart';
+import '../core/upstream_compat.dart';
 import 'common.dart';
 import 'operation_page.dart';
 
@@ -78,10 +79,14 @@ class _InventoryPageState extends State<InventoryPage> {
       }
     }
     final rows =
-        (plans.value is List
-                ? array(plans.value)
-                : array(object(plans.value)['servers']))
-            .map(object)
+        mergeStockPlans(
+              (plans.value is List
+                      ? array(plans.value)
+                      : array(object(plans.value)['servers']))
+                  .map(object)
+                  .toList(),
+              array(stock.value).map(object).toList(),
+            )
             .map((p) {
               final current = live[text(p['planCode'])];
               return current == null
@@ -99,14 +104,7 @@ class _InventoryPageState extends State<InventoryPage> {
                     };
             })
             .where((p) {
-              final content = [
-                'name',
-                'planCode',
-                'cpu',
-                'memory',
-                'storage',
-                'description',
-              ].map((k) => text(p[k])).join(' ');
+              final content = planSearchText(p);
               return content.toLowerCase().contains(search.toLowerCase()) &&
                   (family == '全部' || content.toUpperCase().contains(family)) &&
                   (!onlyAvailable ||
@@ -273,6 +271,10 @@ class PlanCard extends StatelessWidget {
             const PanelIcon(Icons.chevron_right, size: 19),
           ],
         ),
+        if (plan['prerelease'] == true) ...[
+          const SizedBox(height: 8),
+          const StatusBadge('预发布 · 可预约抢购', healthy: false),
+        ],
         const SizedBox(height: 6),
         Text(
           text(plan['planCode']),
@@ -292,7 +294,9 @@ class PlanCard extends StatelessWidget {
           ),
         const SizedBox(height: 12),
         Text(
-          price?.label ?? '— · 当前站点暂无报价',
+          plan['prerelease'] == true
+              ? '等待当前站点销售目录上架'
+              : price?.label ?? '— · 当前站点暂无报价',
           style: const TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
         ),
         ...['cpu', 'memory', 'storage', 'bandwidth']
@@ -374,11 +378,13 @@ class _PlanPageState extends State<PlanPage> {
     });
   }
 
-  Future<void> reload() => PanelScope.of(context).load(
-    stockPath,
-    account: widget.target.account,
-    query: {'options': options.join(',')},
-  );
+  Future<void> reload() => widget.plan['prerelease'] == true
+      ? Future.value()
+      : PanelScope.of(context).load(
+          stockPath,
+          account: widget.target.account,
+          query: {'options': options.join(',')},
+        );
   Future<void> queryPrice() async {
     if (quoteBusy) return;
     final store = PanelScope.of(context), connection = store.connection;
@@ -513,7 +519,10 @@ class _PlanPageState extends State<PlanPage> {
                   const SizedBox(height: 16),
                 ],
                 OutlinedButton(
-                  onPressed: quoteBusy || datacenter.isEmpty
+                  onPressed:
+                      quoteBusy ||
+                          datacenter.isEmpty ||
+                          widget.plan['prerelease'] == true
                       ? null
                       : queryPrice,
                   child: Text(quoteBusy ? '查询中…' : '查询当前配置价格'),
@@ -523,18 +532,26 @@ class _PlanPageState extends State<PlanPage> {
               ],
             ),
           ),
+          if (widget.plan['prerelease'] == true)
+            const Notice('本地预约抢购会等待当前账户的销售目录上架，不代表 OVH 已接受预订。'),
+          if (!preorderConfigurationMatches(widget.plan, options))
+            const Notice('所选配置不在实时库存的同一组合中，请调整内存和存储配置。'),
           FilledButton.icon(
             key: const Key('plan.order'),
-            onPressed: () => pushPage(
-              context,
-              OrderPage(
-                plan: widget.plan,
-                target: widget.target,
-                options: options,
-              ),
-            ),
+            onPressed: !preorderConfigurationMatches(widget.plan, options)
+                ? null
+                : () => pushPage(
+                    context,
+                    OrderPage(
+                      plan: widget.plan,
+                      target: widget.target,
+                      options: options,
+                    ),
+                  ),
             icon: const PanelIcon(Icons.add),
-            label: const Text('创建抢购任务'),
+            label: Text(
+              widget.plan['prerelease'] == true ? '创建预约抢购任务' : '创建抢购任务',
+            ),
           ),
           PanelCard(
             padding: EdgeInsets.zero,
@@ -588,12 +605,13 @@ class _OrderPageState extends State<OrderPage> {
         total < 1 ||
         total > 60 ||
         interval < 1 ||
-        interval > 86400) {
+        interval > 86400 ||
+        !preorderConfigurationMatches(widget.plan, widget.options)) {
       return;
     }
     final confirmed = await confirmAction(
       context,
-      '确认创建抢购任务',
+      widget.plan['prerelease'] == true ? '确认创建预约抢购任务' : '确认创建抢购任务',
       '${widget.target.name}\n${widget.plan['planCode']}\n${centers.join('、')} · $total 个任务\n${autoPay ? '成功下单后会使用默认支付方式自动扣款' : '下单后手动付款'}',
       danger: autoPay,
     );
@@ -619,6 +637,7 @@ class _OrderPageState extends State<OrderPage> {
               'options': widget.options,
               'retryInterval': interval,
               'autoPay': autoPay,
+              'preorder': widget.plan['prerelease'] == true,
             },
           );
           if (mounted) setState(() => done++);
@@ -643,6 +662,8 @@ class _OrderPageState extends State<OrderPage> {
           style: const TextStyle(fontWeight: FontWeight.w600),
         ),
         PlanCard(widget.plan),
+        if (widget.plan['prerelease'] == true)
+          const Notice('本地预约任务将等待当前账户销售目录上架后再尝试下单；预约不锁定价格或库存。'),
         PanelCard(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,

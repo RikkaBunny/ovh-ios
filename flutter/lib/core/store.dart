@@ -345,7 +345,7 @@ class PanelStore extends ChangeNotifier {
       } catch (error) {
         if (!valid()) return;
         if (error is PanelException &&
-            error.status == 401 &&
+            error.authenticationFailure &&
             (fetch == null || authenticatedFetch)) {
           await disconnect();
           return;
@@ -398,7 +398,7 @@ class PanelStore extends ChangeNotifier {
       }
       return result;
     } on PanelException catch (error) {
-      if (error.status == 401 && identical(connection, current)) {
+      if (error.authenticationFailure && identical(connection, current)) {
         await disconnect();
       }
       rethrow;

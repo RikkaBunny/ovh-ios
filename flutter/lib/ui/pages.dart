@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:share_plus/share_plus.dart';
 import '../core/models.dart';
+import '../core/upstream_compat.dart';
 import 'common.dart';
 import 'inventory.dart';
 import 'dashboard.dart';
@@ -236,7 +237,9 @@ class _QueuePageState extends State<QueuePage> with ReloadPage<QueuePage> {
                                 ),
                               ),
                               StatusBadge(
-                                queueLabel(text(q['status'])),
+                                q['preorder'] == true
+                                    ? '预约 · ${queueLabel(text(q['status']))}'
+                                    : queueLabel(text(q['status'])),
                                 healthy: q['status'] == 'running',
                               ),
                             ],
@@ -351,6 +354,33 @@ class MonitorPage extends StatefulWidget {
 class _MonitorPageState extends State<MonitorPage>
     with ReloadPage<MonitorPage> {
   String get root => widget.vps ? '/vps-monitor' : '/monitor';
+  String? changing, actionError;
+  Future<void> toggleSubscription(Json row) async {
+    final store = PanelScope.of(context),
+        session = PanelScope.of(context).session;
+    setState(() {
+      changing = subscriptionIdentity(row);
+      actionError = null;
+    });
+    try {
+      await store.execute(
+        store.catalog.op('POST', '/monitor/subscriptions/:planCode/pause'),
+        store.target.bind({
+          'planCode': row['planCode'],
+          'optionsKey': subscriptionOptionsKey(row['options']),
+        }),
+        {'paused': row['paused'] != true},
+      );
+      if (mounted && store.session == session) await reload();
+    } catch (e) {
+      if (mounted && store.session == session) {
+        setState(() => actionError = '$e');
+      }
+    } finally {
+      if (mounted) setState(() => changing = null);
+    }
+  }
+
   @override
   Future<void> reload() async {
     final store = PanelScope.of(context);
@@ -400,7 +430,7 @@ class _MonitorPageState extends State<MonitorPage>
               Expanded(
                 child: MetricTile(
                   '订阅数量',
-                  '${array(subs.value).length}',
+                  '${subs.value is List ? array(subs.value).length : array(object(subs.value)['subscriptions']).length}',
                   Icons.notifications_none,
                 ),
               ),
@@ -463,6 +493,7 @@ class _MonitorPageState extends State<MonitorPage>
           ),
           ...loadingState(subs),
           if (engine.error != null) Notice('监控状态：${engine.error}'),
+          if (actionError != null) Notice(actionError!),
           Row(
             children: [
               FilledButton.icon(
@@ -490,6 +521,7 @@ class _MonitorPageState extends State<MonitorPage>
             ),
           for (final row in rows)
             PanelCard(
+              key: ValueKey('subscription.${subscriptionIdentity(row)}'),
               child: InkWell(
                 onTap: () =>
                     pushPage(c, SubscriptionDetailPage(row, vps: widget.vps)),
@@ -562,6 +594,52 @@ class _MonitorPageState extends State<MonitorPage>
                         ),
                       ],
                     ),
+                    if (array(row['options']).isNotEmpty) ...[
+                      const SizedBox(height: 8),
+                      Text(
+                        array(row['options']).map(text).join(' · '),
+                        style: PanelDesign.mutedText(c, 11),
+                      ),
+                    ],
+                    if (!widget.vps) ...[
+                      const SizedBox(height: 10),
+                      if (row['paused'] == true)
+                        const StatusBadge('已暂停 · 保留订阅与历史', healthy: false),
+                      OutlinedButton.icon(
+                        key: ValueKey(
+                          'monitor.pause.${subscriptionIdentity(row)}',
+                        ),
+                        onPressed:
+                            changing != null ||
+                                !subscriptionCanAddress(
+                                  row,
+                                  (subs.value is List
+                                          ? array(subs.value)
+                                          : array(
+                                              object(
+                                                subs.value,
+                                              )['subscriptions'],
+                                            ))
+                                      .map(object)
+                                      .toList(),
+                                )
+                            ? null
+                            : () => toggleSubscription(row),
+                        icon: PanelIcon(
+                          row['paused'] == true
+                              ? Icons.play_arrow
+                              : Icons.pause,
+                          size: 16,
+                        ),
+                        label: Text(
+                          changing == subscriptionIdentity(row)
+                              ? '更新中…'
+                              : row['paused'] == true
+                              ? '恢复监控'
+                              : '暂停监控',
+                        ),
+                      ),
+                    ],
                     if (row['retired'] == true) ...[
                       const SizedBox(height: 10),
                       const Notice('该套餐已下架，请调整订阅。'),
@@ -601,7 +679,15 @@ class SubscriptionDetailPage extends StatelessWidget {
   @override
   Widget build(BuildContext c) {
     final store = PanelScope.of(c), root = vps ? '/vps-monitor' : '/monitor';
+    final state = store.state('$root/subscriptions').value;
+    final subscriptions =
+        (state is List ? array(state) : array(object(state)['subscriptions']))
+            .map(object)
+            .toList();
+    final unambiguous = vps || subscriptionIsUnique(item, subscriptions);
+    final exact = vps || subscriptionCanAddress(item, subscriptions);
     final target = store.target.bind({
+      if (!vps) 'optionsKey': subscriptionOptionsKey(item['options']),
       'planCode': item['planCode'],
       'plan_code': item['planCode'],
       'subscription_id': item['id'] ?? item['planCode'],
@@ -613,8 +699,17 @@ class SubscriptionDetailPage extends StatelessWidget {
       child: PageList(
         children: [
           PanelCard(child: DataView(item)),
+          if (!unambiguous)
+            const Notice(
+              '当前后端的编辑与历史接口只定位同机型的第一条订阅。为避免操作其他配置，此处只提供可精确定位的暂停和删除操作。',
+            ),
+          if (!exact) const Notice('当前后端无法精确定位这条全部配置订阅，已禁用可能影响其他配置的操作。'),
           for (final op in store.catalog.operations.where(
-            (o) => o.path.startsWith('$root/subscriptions/:'),
+            (o) =>
+                o.path.startsWith('$root/subscriptions/:') &&
+                (unambiguous ||
+                    (o.method != 'PUT' && !o.path.endsWith('/history'))) &&
+                (exact || (o.method != 'DELETE' && !o.path.endsWith('/pause'))),
           ))
             PanelCard(
               padding: EdgeInsets.zero,
@@ -1374,7 +1469,7 @@ class ConnectionPage extends StatelessWidget {
             icon: const PanelIcon(Icons.tune, size: 15),
             label: const Text('管理账户与通知'),
           ),
-          const SectionHeading('关于', 'OVH CP · 1.3.0（14）'),
+          const SectionHeading('关于', 'OVH CP · $appDisplayVersion'),
           PanelCard(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -1408,7 +1503,7 @@ class ConnectionPage extends StatelessWidget {
                   onPressed: () => showLicensePage(
                     context: c,
                     applicationName: 'OVH CP',
-                    applicationVersion: '1.3.0（14）',
+                    applicationVersion: appDisplayVersion,
                   ),
                   child: const Row(
                     children: [

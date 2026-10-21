@@ -65,6 +65,7 @@ titles = {
  'bios-settings':'BIOS 设置','bios-settings/sgx':'SGX 配置','info':'实例信息','status':'运行状态','datacenter':'数据中心',
  'start':'开机','stop':'关机','password':'重置密码','current-os':'当前操作系统','reinstall':'重装系统',
  'snapshot':'快照','snapshot/revert':'恢复快照','automated-backup':'自动备份',
+ '/ovh/account/orders':'OVH 官方订单',
  '/health':'连接状态','/settings':'API 设置','/verify-auth':'验证 API 凭据','/endpoint-config':'区域配置',
  '/logs':'详细日志','/logs/flush':'同步日志','/stats':'系统状态','/queue':'抢购队列','/queue/timings':'抢购耗时',
  '/queue/clear':'清空抢购队列','/purchase-history':'抢购历史','/purchase-history/refresh-status':'刷新订单付款状态',
@@ -101,6 +102,8 @@ def field(key, typ='string', location='body', required=False):
     if key in choices: f['choices']=choices[key]
     return f
 
+labels.update({'preorder':'预发布预约抢购','paused':'暂停监控','optionsKey':'配置标识','customizations':'系统自定义设置'})
+
 accountFields=[field(k,t) for k,t in [('name','string'),('endpoint','string'),('zone','string'),('appKey','string'),('appSecret','string'),('consumerKey','string'),('iam','string'),('setDefault','bool'),('proxyUrl','string'),('fingerprint','string')]]
 configFields=[field(k,t) for k,t in [('appKey','string'),('appSecret','string'),('consumerKey','string'),('endpoint','string'),('zone','string'),('iam','string'),('tgToken','string'),('tgChatId','string'),('notifyWebhookUrl','string'),('defaultRetryInterval','int'),('quickOrderRetryInterval','int')]]
 operations=[]
@@ -128,6 +131,7 @@ for r in routes:
         elif p.startswith('/app/devices/'): title='配对设备'
         elif p.startswith('/vps-monitor/check/'): title='检查 VPS 库存'
         elif p.startswith('/ovh/contact-change-requests/'): title='联系人变更'+{'accept':'接受','refuse':'拒绝','resend-email':'重发邮件'}.get(p.split('/')[-1],'详情')
+        elif p.endswith('/subscriptions/:planCode/pause'): title='设置订阅暂停状态'
         elif '/subscriptions/' in p and ':' in p: title=('VPS ' if p.startswith('/vps') else '服务器')+('库存变化历史' if p.endswith('/history') else '监控订阅')
         else: title=titles.get(p,p)
         group='账户管理' if p.startswith('/ovh/') else 'OVH 账户' if p.startswith('/accounts') else 'App 配对' if p.startswith('/app') else '缓存管理' if p.startswith(('/cache','/catalog')) else '通知通道' if p.startswith(('/telegram','/notify','/monitor/test')) else '后端系统' if p.startswith(('/version','/system','/health')) else '抢购' if p.startswith(('/queue','/servers','/availability','/purchase')) else '监控' if p.startswith(('/monitor','/vps-monitor')) else '日志' if p.startswith('/logs') else 'API 设置'
@@ -147,6 +151,7 @@ for r in routes:
     if p.endswith('/install'):
         for f in fs:
             if f['key']=='templateName': f['required']=True
+            if f['key']=='customizations': f.update(kind='object',children=[])
     if p.endswith('/rescue'):
         for f in fs:
             if f['key']=='sshKey': f.update(kind='text',label='SSH 公钥')
@@ -167,6 +172,12 @@ for r in routes:
     if p=='/monitor/interval': fs=[field('interval','int',required=True)]
     if p.endswith('/monitoring') and m=='PUT': fs=[field('monitoring','bool',required=True)]
     if p.endswith('/tasks/:task_id/schedule'): fs=[f for f in fs if f['key']!='startDate']
+    if p in ['/queue','/queue/quick-order'] and m=='POST':
+        for f in fs:
+            if f['key'] in ['account_id','planCode','datacenter']: f['required']=True
+    if p.endswith('/subscriptions/:planCode/pause'):
+        for f in fs:
+            if f['key']=='paused': f['required']=True
     fs += [field(k,location='path',required=True) for k in re.findall(r'[:*](\w+)',p) if k!='service_name']
     fs += [field(k,location='query') for k in r['query'] if k not in ['account','ipBlock'] and not any(f['key']==k for f in fs) or k=='ipBlock' and 'ip_block' not in p and not any(f['key']==k for f in fs)]
     if not asset and p=='/cache/clear': fs[0]['choices']=['memory','sqlite','all']

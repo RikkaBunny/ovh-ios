@@ -128,6 +128,11 @@
         "key": "autoPay",
         "type": "bool",
         "required": false
+      },
+      {
+        "key": "preorder",
+        "type": "bool",
+        "required": false
       }
     ],
     "query": []
@@ -313,6 +318,25 @@
   },
   {
     "method": "POST",
+    "path": "/monitor/subscriptions/:planCode/pause",
+    "handler": "PauseSubscription",
+    "file": "monitor.go",
+    "fields": [
+      {
+        "key": "optionsKey",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "paused",
+        "type": "*bool",
+        "required": false
+      }
+    ],
+    "query": []
+  },
+  {
+    "method": "POST",
     "path": "/monitor/subscriptions/batch-add-all",
     "handler": "BatchAddAll",
     "file": "monitor.go",
@@ -354,7 +378,9 @@
     "handler": "RemoveSubscription",
     "file": "monitor.go",
     "fields": [],
-    "query": []
+    "query": [
+      "optionsKey"
+    ]
   },
   {
     "method": "GET",
@@ -861,6 +887,11 @@
       {
         "key": "customHostname",
         "type": "string",
+        "required": false
+      },
+      {
+        "key": "customizations",
+        "type": "map[string]interface{}",
         "required": false
       },
       {
@@ -2167,7 +2198,13 @@
     "path": "/vps-control/:service_name/snapshot/revert",
     "handler": "RevertVpsSnapshot",
     "file": "vps_control_snapshot.go",
-    "fields": [],
+    "fields": [
+      {
+        "key": "confirm",
+        "type": "bool",
+        "required": false
+      }
+    ],
     "query": []
   },
   {
@@ -2639,6 +2676,14 @@
     "method": "GET",
     "path": "/ovh/account/refunds",
     "handler": "GetAccountRefunds",
+    "file": "account.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/ovh/account/orders",
+    "handler": "GetAccountOrders",
     "file": "account.go",
     "fields": [],
     "query": []
