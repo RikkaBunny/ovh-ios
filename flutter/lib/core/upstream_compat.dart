@@ -149,3 +149,24 @@ bool versionAtLeast(String value, int major, int minor, int patch) {
   }
   return true;
 }
+
+// v0.4.5 added configuration selectors to edit/pause, not to history or
+// empty-selector deletion. Keep these capabilities separate for v0.4.12.
+bool subscriptionOperationSupported(
+  Operation op,
+  Json row,
+  List<Json> subscriptions, {
+  required bool editAndPauseSelectors,
+}) {
+  if (op.path.endsWith('/history')) {
+    return subscriptionIsUnique(row, subscriptions);
+  }
+  if (op.method == 'DELETE') return subscriptionCanAddress(row, subscriptions);
+  if (op.method == 'PUT') {
+    return editAndPauseSelectors || subscriptionIsUnique(row, subscriptions);
+  }
+  if (op.path.endsWith('/pause')) {
+    return editAndPauseSelectors || subscriptionCanAddress(row, subscriptions);
+  }
+  return true;
+}

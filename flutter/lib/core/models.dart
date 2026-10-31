@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-const appDisplayVersion = '1.5.0（17）';
+const appDisplayVersion = '1.5.0（18）';
 
 typedef Json = Map<String, dynamic>;
 Json object(dynamic value) =>

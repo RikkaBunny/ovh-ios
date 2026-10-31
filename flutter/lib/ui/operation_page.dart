@@ -792,6 +792,23 @@ class ResourceResults extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final store = PanelScope.of(context), data = object(value);
+    final contacts = operation.path.startsWith('/ovh/contact-change-requests');
+    final payload = contacts && data.containsKey('data') ? data['data'] : value;
+    if (operation.read &&
+        operation.path == '/ovh/contact-change-requests/:task_id') {
+      return PanelCard(
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          children: [
+            DataView(payload),
+            for (final action in store.catalog.operations.where(
+              (o) => !o.read && o.path.startsWith('${operation.path}/'),
+            ))
+              OperationRow(action, target),
+          ],
+        ),
+      );
+    }
     if (operation.path == '/ovh/support/tickets/:ticket_id') {
       final ticket = object(data['ticket']);
       return Column(
@@ -812,8 +829,8 @@ class ResourceResults extends StatelessWidget {
         ],
       );
     }
-    final rows = value is List
-        ? value as List
+    final rows = payload is List
+        ? payload
         : [
             'tickets',
             'tasks',
@@ -896,6 +913,7 @@ class ResourceResults extends StatelessWidget {
                 bindings[field.key] ??
                 record[field.key] ??
                 record[aliases[field.key]] ??
+                (contacts && field.key == 'task_id' ? record['id'] : null) ??
                 (row is Map ? null : row);
             if (v == null) {
               valid = false;

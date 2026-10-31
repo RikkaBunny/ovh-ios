@@ -258,7 +258,16 @@ void main() {
       http.Request? saved;
       final store = storeWith((r) async {
         if (r.method == 'PUT') saved = r;
-        return http.Response('{}', 200);
+        return http.Response(
+          jsonEncode(
+            r.method == 'GET' && r.url.path == '/api/queue'
+                ? [
+                    {'id': 'q1', 'accountId': 'EU', 'status': 'paused'},
+                  ]
+                : {},
+          ),
+          200,
+        );
       });
       await tester.pumpWidget(
         harness(

@@ -18,11 +18,15 @@ class _OfficialChatPageState extends State<OfficialChatPage> {
   String? error;
   bool busy = false;
   int revision = 0;
+  int? panelSession;
   @override
   void didChangeDependencies() {
     super.didChangeDependencies();
     final store = PanelScope.of(context);
-    if (store.selectedAccount != widget.target.account ||
+    final changed = panelSession != null && panelSession != store.session;
+    panelSession = store.session;
+    if (changed ||
+        store.selectedAccount != widget.target.account ||
         store.connection == null) {
       revision++;
       if (Platform.isIOS) channel.invokeMethod<void>('close');
@@ -80,10 +84,15 @@ class _OfficialChatPageState extends State<OfficialChatPage> {
       } else {
         await launchUrl(url, mode: LaunchMode.externalApplication);
       }
-    } catch (_) {
-      if (mounted) {
+    } catch (failure) {
+      if (mounted &&
+          request == revision &&
+          session == store.session &&
+          store.selectedAccount == widget.target.account) {
         setState(
-          () => error = '无法打开官方客服，请检查 GET /me、POST /auth/token 权限及后端版本。',
+          () => error = failure is PlatformException
+              ? '无法打开官方客服：iOS 客服窗口未能显示，请返回后重试。'
+              : '无法打开官方客服，请检查 GET /me、POST /auth/token 权限及后端版本。',
         );
       }
     } finally {

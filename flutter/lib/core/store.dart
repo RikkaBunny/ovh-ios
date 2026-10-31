@@ -82,7 +82,7 @@ class PanelStore extends ChangeNotifier {
   int session = 0;
   int mutations = 0;
   int accountRevision = 0;
-  bool get exactSubscriptions =>
+  bool get supportsSubscriptionEditAndPauseSelectors =>
       versionAtLeast(text(object(state('/version').value)['version']), 0, 4, 5);
   final Map<String, ResourceState> _resources = {};
   final Map<String, String> _resourceSelections = {};
@@ -386,11 +386,44 @@ class PanelStore extends ChangeNotifier {
         throw const PanelException('该任务已下单，不能再次启动或编辑');
       }
     }
+    if (operation.path.startsWith('/monitor/subscriptions/:')) {
+      final value = state('/monitor/subscriptions').value;
+      if (value != null) {
+        final rows =
+            (value is List
+                    ? array(value)
+                    : array(object(value)['subscriptions']))
+                .map(object)
+                .toList();
+        final plan = text(target.bindings['planCode']);
+        final matches = rows.where((r) => text(r['planCode']) == plan);
+        final row = matches
+            .where(
+              (r) =>
+                  !target.bindings.containsKey('optionsKey') ||
+                  subscriptionOptionsKey(r['options']) ==
+                      text(target.bindings['optionsKey']),
+            )
+            .firstOrNull;
+        if (row == null) throw const PanelException('该订阅配置已变更或删除，请返回列表重新选择');
+        if (!subscriptionOperationSupported(
+          operation,
+          row,
+          rows,
+          editAndPauseSelectors: supportsSubscriptionEditAndPauseSelectors,
+        )) {
+          throw const PanelException('当前后端无法精确定位此操作，已阻止请求，避免影响其他订阅配置');
+        }
+      }
+    }
     final ticket = session, resolved = operation.resolve(values, target);
     final chosen = target.service != null
         ? target.account
         : text(values['account_id'], text(values['accountId'], target.account));
     try {
+      if (operation.path == '/queue/:id' && operation.method == 'PUT') {
+        await _prepareQueueEdit(current, ticket, target);
+      }
       final result = await api.request(
         current,
         resolved.path,
@@ -416,6 +449,55 @@ class PanelStore extends ChangeNotifier {
       }
       rethrow;
     }
+  }
+
+  Future<void> _prepareQueueEdit(
+    Connection current,
+    int ticket,
+    Target target,
+  ) async {
+    void checkConnection() {
+      if (session != ticket || !identical(connection, current)) {
+        throw const PanelException('连接已改变，请重新进入页面');
+      }
+    }
+
+    final response = await api.request(current, '/queue');
+    checkConnection();
+    if (response.value is! List) throw const PanelException('未能读取当前队列，未保存编辑');
+    final rows = array(response.value).map(object).toList();
+    // Supersede any older overview read before publishing this fresh snapshot.
+    final resource = state('/queue');
+    resource.revision++;
+    resource.pending = null;
+    resource.loading = false;
+    resource.forced = false;
+    resource.error = null;
+    resource.notices = response.notices;
+    resource.updated = DateTime.now();
+    resource.value = rows;
+    notifyListeners();
+    final id = text(target.bindings['id']);
+    final row = rows.where((r) => text(r['id']) == id).firstOrNull;
+    if (row == null) throw const PanelException('该任务已删除，请返回队列重新选择');
+    if (queueOrdered(row)) throw const PanelException('该任务已下单，不能再次启动或编辑');
+    if (text(row['accountId']) != target.account) {
+      throw const PanelException('任务账户已改变，未保存编辑');
+    }
+    if (!{'running', 'pending', 'paused', 'failed'}.contains(row['status'])) {
+      throw const PanelException('无法确认当前任务状态，未保存编辑');
+    }
+    if (row['status'] == 'running' || row['status'] == 'pending') {
+      await api.request(
+        current,
+        '/queue/${Uri.encodeComponent(id)}/status',
+        method: 'PUT',
+        body: {'status': 'paused'},
+      );
+      checkConnection();
+      row['status'] = 'paused';
+    }
+    notifyListeners();
   }
 
   @override

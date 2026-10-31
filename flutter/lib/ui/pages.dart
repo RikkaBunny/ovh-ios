@@ -628,7 +628,7 @@ class _MonitorPageState extends State<MonitorPage>
                         ),
                         onPressed:
                             changing != null ||
-                                !store.exactSubscriptions &&
+                                !store.supportsSubscriptionEditAndPauseSelectors &&
                                     !subscriptionCanAddress(
                                       row,
                                       (subs.value is List
@@ -710,14 +710,17 @@ class SubscriptionDetailPage extends StatelessWidget {
         )
         .firstOrNull;
     final displayItem = current ?? item;
-    final unambiguous =
+    bool supported(Operation op) =>
         vps ||
-        store.exactSubscriptions ||
-        subscriptionIsUnique(displayItem, subscriptions);
-    final exact =
-        vps ||
-        store.exactSubscriptions ||
-        subscriptionCanAddress(displayItem, subscriptions);
+        subscriptionOperationSupported(
+          op,
+          displayItem,
+          subscriptions,
+          editAndPauseSelectors:
+              store.supportsSubscriptionEditAndPauseSelectors,
+        );
+    final unique = vps || subscriptionIsUnique(displayItem, subscriptions);
+    final deletable = vps || subscriptionCanAddress(displayItem, subscriptions);
     final target = store.target.bind({
       if (!vps) 'optionsKey': subscriptionOptionsKey(displayItem['options']),
       'planCode': item['planCode'],
@@ -732,18 +735,15 @@ class SubscriptionDetailPage extends StatelessWidget {
         children: [
           PanelCard(child: DataView(displayItem)),
           if (current == null) const Notice('该订阅配置已变更或删除，请返回列表重新选择。'),
-          if (!unambiguous)
-            const Notice(
-              '当前后端的编辑与历史接口只定位同机型的第一条订阅。为避免操作其他配置，此处只提供可精确定位的暂停和删除操作。',
-            ),
-          if (!exact) const Notice('当前后端无法精确定位这条全部配置订阅，已禁用可能影响其他配置的操作。'),
+          if (!unique) const Notice('同机型有多条配置，当前后端历史接口无法区分配置，已隐藏历史入口。'),
+          if (!unique && !store.supportsSubscriptionEditAndPauseSelectors)
+            const Notice('当前后端不支持按配置编辑这条订阅，请先更新后端。'),
+          if (!deletable) const Notice('当前后端无法精确删除这条全部配置订阅，已隐藏删除入口，避免删除其他配置。'),
           for (final op in store.catalog.operations.where(
             (o) =>
                 current != null &&
                 o.path.startsWith('$root/subscriptions/:') &&
-                (unambiguous ||
-                    (o.method != 'PUT' && !o.path.endsWith('/history'))) &&
-                (exact || (o.method != 'DELETE' && !o.path.endsWith('/pause'))),
+                supported(o),
           ))
             PanelCard(
               padding: EdgeInsets.zero,

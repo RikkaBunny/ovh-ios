@@ -20,9 +20,13 @@ import SafariServices
       .setMethodCallHandler { [weak self] call, result in
         guard let self else { result(nil); return }
         if call.method == "close" {
-          self.officialChat?.dismiss(animated: true)
+          let view = self.officialChat
           self.officialChat = nil
-          result(nil)
+          if view?.presentingViewController != nil {
+            view?.dismiss(animated: true) { result(nil) }
+          } else {
+            result(nil)
+          }
           return
         }
         guard call.method == "open", let args = call.arguments as? [String: Any],
@@ -32,14 +36,25 @@ import SafariServices
               url.port == nil || url.port == 443 else {
           result(FlutterError(code: "chat_url", message: "Invalid official chat destination", details: nil)); return
         }
-        guard var presenter = self.window?.rootViewController else {
+        let sceneWindows = UIApplication.shared.connectedScenes
+          .compactMap { $0 as? UIWindowScene }
+          .filter { $0.activationState == .foregroundActive }
+          .flatMap { $0.windows }
+        let window = sceneWindows.first(where: { $0.isKeyWindow })
+          ?? sceneWindows.first(where: { !$0.isHidden && $0.windowLevel == .normal })
+          ?? self.window
+        guard var presenter = window?.rootViewController else {
           result(FlutterError(code: "chat_window", message: "No active window", details: nil)); return
         }
-        while let presented = presenter.presentedViewController { presenter = presented }
+        while let presented = presenter.presentedViewController, !presented.isBeingDismissed {
+          presenter = presented
+        }
+        guard presenter.viewIfLoaded?.window != nil, !presenter.isBeingDismissed else {
+          result(FlutterError(code: "chat_window", message: "Window is not ready", details: nil)); return
+        }
         let view = SFSafariViewController(url: url)
         self.officialChat = view
-        presenter.present(view, animated: true)
-        result(nil)
+        presenter.present(view, animated: true) { result(nil) }
       }
     FlutterMethodChannel(name: "ovh_cp/system_symbol", binaryMessenger: engineBridge.applicationRegistrar.messenger())
       .setMethodCallHandler { call, result in

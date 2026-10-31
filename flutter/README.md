@@ -1,14 +1,14 @@
 # OVH CP · Flutter 客户端
 
-独立的 Flutter/Dart 版本，支持 iPhone、iPad 和 Android，当前开发版本 `1.5.0+17`。连接与 React 网页、SwiftUI 客户端相同的 gokele/ovh 后端，沿用黑白主色、灰色分隔、圆角卡片、胶囊按钮和状态色。业务页面全部由 Flutter 绘制；WebView 仅用于 OVH 返回的 HTTPS 远程屏幕；官方聊天经用户点击授权后，在独立的 iOS 官方网页窗口打开。
+独立的 Flutter/Dart 版本，支持 iPhone、iPad 和 Android，当前开发版本 `1.5.0+18`。连接与 React 网页、SwiftUI 客户端相同的 gokele/ovh 后端，沿用黑白主色、灰色分隔、圆角卡片、胶囊按钮和状态色。业务页面全部由 Flutter 绘制；WebView 仅用于 OVH 返回的 HTTPS 远程屏幕；官方聊天经用户点击授权后，在独立的 iOS 官方网页窗口打开。
 
 发布版名为 `OVH CP`。iOS 沿用原版 Bundle ID `com.hejingcheng.ovhpocket`，作为现有应用更新；Android Application ID 为 `com.hejingcheng.ovh_flutter`。新版图标基于 OVH 官方标识生成，见 [图标与提示词](../BrandAssets/ovh-cp/README.md)。iOS 升级会迁移原 SwiftUI 连接、账户选择与外观。正式构建与签名说明见 [publishing](publishing/README.md)。
 
 ## 本轮更新
 
-1.5.0（17）同步 gokele/ovh v0.4.12：新增队列任务完整编辑、优惠码、OVH 官方在线客服与工单；对齐服务续费能力、整单撤回、救援邮箱/启动项确认及官方订单付款流程。新后端支持精确定位空配置的监控订阅；已下单任务禁止编辑与重新启动。
+1.5.0（18）同步 gokele/ovh v0.4.12：新增队列任务完整编辑、优惠码、OVH 官方在线客服与工单；对齐服务续费能力、整单撤回、救援邮箱/启动项确认及官方订单付款流程。新版后端支持按配置编辑与暂停监控；空配置删除与多配置历史仍保留保护，避免操作其他订阅。已下单任务禁止编辑与重新启动。
 
-2026-10-31 按本次要求，在 Mac 完成分析、56 项 Flutter 测试、iPhone 模拟器交互验证与 iOS Release 归档/商店签名 IPA 导出。本版本未上传、提交审核或公开发布，Android 安装包和官网未更新。见 [同步记录](上游同步-20261031.md) 与 [构建记录](publishing/BUILD-20261031.md)。此前 1.4.0 的上传及提交留在 [历史记录](publishing/RELEASE-20261022.md)。
+Build 18 修复四项审查问题：监控按操作区分能力并在提交层拦截有歧义的请求；运行任务先核对最新状态、暂停再保存，保存后保持暂停；恢复联系人变更列表、详情及后续操作；官方客服从活动 iOS Scene 打开，窗口错误不误报为 API 权限错误。2026-10-31 在 BERO VPS 完成分析与 67 项 Flutter 测试，Mac 完成 iPhone/iPad 客服窗口验证和 iOS Release 签名构建。本版本未上传、提交审核或公开发布，Android 安装包和官网未更新。见 [同步记录](上游同步-20261031.md) 与 [构建记录](publishing/BUILD-20261031-18.md)。此前 1.4.0 的上传及提交留在 [历史记录](publishing/RELEASE-20261022.md)。
 
 ## 界面预览
 
@@ -26,7 +26,7 @@
 |---|---|
 | 仪表盘 | 账户统计、活跃队列、CPU/内存/存储圆环、当前账户实例；资源位于活跃队列下方 |
 | 服务器 | 当前账户的独立服务器和 VPS；硬件、IP、流量图、电源、维护、快照和高级操作 |
-| 队列 | 当前/全部账户、搜索、状态筛选、完整编辑、暂停/恢复/删除及批量操作；已下单任务保护 |
+| 队列 | 当前/全部账户、搜索、状态筛选、完整编辑（先暂停后保存）、暂停/恢复/删除及批量操作；已下单任务保护 |
 | 监控 | 服务器订阅、变化历史、引擎启停、检查间隔、全目录订阅、通知与自动抢购 |
 | 更多 | 服务器库存、VPS 补货、账户资料、账单/订单、官方客服/工单、历史、日志、API 设置、设备配对 |
 | 库存详情 | 区域库存、选配、目录月费/安装费、购物车报价、多机房数量和创建抢购任务 |
@@ -63,9 +63,9 @@ flutter build ios --release --no-codesign
 flutter build apk --debug
 ```
 
-只构建 arm64 测试包：`flutter build apk --debug --target-platform=android-arm64 --split-per-abi`。ABI 拆分构建会按 Flutter 规则调整 Android versionCode，源码版本仍为 `1.5.0+17`。
+只构建 arm64 测试包：`flutter build apk --debug --target-platform=android-arm64 --split-per-abi`。ABI 拆分构建会按 Flutter 规则调整 Android versionCode，源码版本仍为 `1.5.0+18`。
 
-正式签名与发布入口见 [发布说明](publishing/README.md)。Android Release 必须提供私有上传密钥，缺少配置时拒绝构建；正式包不使用调试签名。仓库不包含私钥、生产密钥或真实令牌。当前候选源码为 1.5.0（17），本轮已导出 iOS 商店签名安装包，尚未上传或提交审核。Android 白底图标正式 APK 已更新到 [安卓下载网站](https://ovh.gamelife.life/)。Google Play 后台当前未开通，因此尚未上架。
+正式签名与发布入口见 [发布说明](publishing/README.md)。Android Release 必须提供私有上传密钥，缺少配置时拒绝构建；正式包不使用调试签名。仓库不包含私钥、生产密钥或真实令牌。当前候选源码为 1.5.0（18），本轮已导出 iOS 商店签名安装包，尚未上传或提交审核。Android 白底图标正式 APK 已更新到 [安卓下载网站](https://ovh.gamelife.life/)。Google Play 后台当前未开通，因此尚未上架。
 
 ## 测试
 
@@ -91,6 +91,14 @@ OVH_SCREENSHOT_DIR=artifacts/screenshots/phone flutter drive \
 OVH_CAPTURE_DIR=artifacts/screenshots/latest flutter drive \
   --driver=test_driver/latest_driver.dart \
   --target=integration_test/latest_acceptance_test.dart -d QA模拟器ID
+```
+
+iOS 客服窗口与错误提示验证（不申请真实聊天令牌）：
+
+```sh
+OVH_CAPTURE_DIR=artifacts/screenshots/chat flutter drive \
+  --driver=test_driver/latest_driver.dart \
+  --target=integration_test/chat_window_test.dart -d QA模拟器ID
 ```
 
 `OVH_QA=true` 仅在 Debug 下生效，自动连接 localhost:16443，并且仅对这个地址接受本机测试证书。Release 不启用测试自动连接，也不接受此 TLS 例外。
