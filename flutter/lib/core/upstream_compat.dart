@@ -134,3 +134,18 @@ Json normalizedCustomizations(dynamic questions, Json answers) {
   }
   return result;
 }
+
+// A completed purchase must never be resumed as another purchase.
+bool queueOrdered(Json row) =>
+    const {'completed', 'success'}.contains(row['status']);
+
+bool versionAtLeast(String value, int major, int minor, int patch) {
+  final match = RegExp(r'^v?(\d+)\.(\d+)\.(\d+)(?:$|[-+])').firstMatch(value);
+  if (match == null) return false;
+  final current = [for (var i = 1; i <= 3; i++) int.parse(match[i]!)],
+      minimum = [major, minor, patch];
+  for (var i = 0; i < 3; i++) {
+    if (current[i] != minimum[i]) return current[i] > minimum[i];
+  }
+  return true;
+}

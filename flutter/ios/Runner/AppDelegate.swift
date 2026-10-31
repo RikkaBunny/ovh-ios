@@ -1,9 +1,12 @@
 import Flutter
 import UIKit
 import Security
+import SafariServices
 
 @main
 @objc class AppDelegate: FlutterAppDelegate, FlutterImplicitEngineDelegate {
+  private var officialChat: SFSafariViewController?
+
   override func application(
     _ application: UIApplication,
     didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?
@@ -13,6 +16,31 @@ import Security
 
   func didInitializeImplicitFlutterEngine(_ engineBridge: FlutterImplicitEngineBridge) {
     GeneratedPluginRegistrant.register(with: engineBridge.pluginRegistry)
+    FlutterMethodChannel(name: "ovh_cp/official_chat", binaryMessenger: engineBridge.applicationRegistrar.messenger())
+      .setMethodCallHandler { [weak self] call, result in
+        guard let self else { result(nil); return }
+        if call.method == "close" {
+          self.officialChat?.dismiss(animated: true)
+          self.officialChat = nil
+          result(nil)
+          return
+        }
+        guard call.method == "open", let args = call.arguments as? [String: Any],
+              let value = args["url"] as? String, let url = URL(string: value),
+              url.scheme == "https", url.host == "agent-chat.ovhcloud.com",
+              url.path == "/sn_va_web_client_app_embed.do", url.user == nil,
+              url.port == nil || url.port == 443 else {
+          result(FlutterError(code: "chat_url", message: "Invalid official chat destination", details: nil)); return
+        }
+        guard var presenter = self.window?.rootViewController else {
+          result(FlutterError(code: "chat_window", message: "No active window", details: nil)); return
+        }
+        while let presented = presenter.presentedViewController { presenter = presented }
+        let view = SFSafariViewController(url: url)
+        self.officialChat = view
+        presenter.present(view, animated: true)
+        result(nil)
+      }
     FlutterMethodChannel(name: "ovh_cp/system_symbol", binaryMessenger: engineBridge.applicationRegistrar.messenger())
       .setMethodCallHandler { call, result in
         guard call.method == "render", let args = call.arguments as? [String: Any],

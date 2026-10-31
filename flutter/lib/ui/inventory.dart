@@ -596,6 +596,7 @@ class _OrderPageState extends State<OrderPage> {
   final Set<String> centers = {};
   int quantity = 1, interval = 60, done = 0;
   bool autoPay = false, busy = false;
+  String coupon = '';
   String? error;
   int get total => centers.length * quantity;
   Future<void> submit() async {
@@ -638,6 +639,7 @@ class _OrderPageState extends State<OrderPage> {
               'retryInterval': interval,
               'autoPay': autoPay,
               'preorder': widget.plan['prerelease'] == true,
+              'coupon': coupon.trim(),
             },
           );
           if (mounted) setState(() => done++);
@@ -710,6 +712,12 @@ class _OrderPageState extends State<OrderPage> {
                 decoration: const InputDecoration(labelText: '重试间隔（秒）'),
                 onChanged: (v) =>
                     setState(() => interval = int.tryParse(v) ?? 0),
+              ),
+              TextFormField(
+                key: const Key('order.coupon'),
+                enabled: !busy && done == 0,
+                decoration: const InputDecoration(labelText: '优惠码（可选）'),
+                onChanged: (v) => coupon = v,
               ),
               SwitchListTile(
                 contentPadding: EdgeInsets.zero,

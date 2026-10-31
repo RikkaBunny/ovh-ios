@@ -58,10 +58,10 @@ void main() {
   setUp(() => SharedPreferences.setMockInitialValues({}));
 
   test(
-    'v0.4.3 exposes new native operations and required preorder identity',
+    'v0.4.12 exposes new native operations and required preorder identity',
     () {
       final catalog = loadCatalog();
-      expect(catalog.commit, 'c22fbf0f605da8b79bbc75bc1dc8562bd12163da');
+      expect(catalog.commit, '707671a0b053f9e9da4044b17283d73006e502de');
       expect(catalog.op('GET', '/ovh/account/orders').title, 'OVH 官方订单');
       expect(
         catalog

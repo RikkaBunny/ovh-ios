@@ -55,7 +55,11 @@ class _QueuePageState extends State<QueuePage> with ReloadPage<QueuePage> {
     final store = PanelScope.of(context), connection = store.connection;
     if (connection == null || busy) return;
     final targets = rows
-        .where((q) => selected.contains(text(q['id'])))
+        .where(
+          (q) =>
+              selected.contains(text(q['id'])) &&
+              (action == '删除' || !queueOrdered(q)),
+        )
         .toList();
     if (!await confirmAction(
       context,
@@ -106,6 +110,7 @@ class _QueuePageState extends State<QueuePage> with ReloadPage<QueuePage> {
           (q) =>
               (allAccounts || q['accountId'] == store.selectedAccount) &&
               (status == '全部' ||
+                  (status == '成功' && queueOrdered(q)) ||
                   q['status'] ==
                       {
                         '运行中': 'running',
@@ -315,22 +320,34 @@ class QueueDetailPage extends StatelessWidget {
       child: PageList(
         children: [
           PanelCard(child: DataView(item)),
-          PanelCard(
-            padding: EdgeInsets.zero,
-            child: OperationRow(
-              store.catalog.op('PUT', '/queue/:id/status'),
-              target,
-              seed: {'status': item['status']},
+          if (queueOrdered(item)) const Notice('该任务已下单，不能再次启动。如需再买，请新建任务。'),
+          if (!queueOrdered(item))
+            PanelCard(
+              padding: EdgeInsets.zero,
+              child: OperationRow(
+                store.catalog.op('PUT', '/queue/:id/status'),
+                target,
+                seed: {'status': item['status']},
+              ),
             ),
-          ),
-          PanelCard(
-            padding: EdgeInsets.zero,
-            child: OperationRow(
-              store.catalog.op('PUT', '/queue/:id/interval'),
-              target,
-              seed: {'retryInterval': item['retryInterval']},
+          if (!queueOrdered(item))
+            PanelCard(
+              padding: EdgeInsets.zero,
+              child: OperationRow(
+                store.catalog.op('PUT', '/queue/:id'),
+                target,
+                seed: item,
+              ),
             ),
-          ),
+          if (!queueOrdered(item))
+            PanelCard(
+              padding: EdgeInsets.zero,
+              child: OperationRow(
+                store.catalog.op('PUT', '/queue/:id/interval'),
+                target,
+                seed: {'retryInterval': item['retryInterval']},
+              ),
+            ),
           PanelCard(
             padding: EdgeInsets.zero,
             child: OperationRow(
@@ -611,18 +628,19 @@ class _MonitorPageState extends State<MonitorPage>
                         ),
                         onPressed:
                             changing != null ||
-                                !subscriptionCanAddress(
-                                  row,
-                                  (subs.value is List
-                                          ? array(subs.value)
-                                          : array(
-                                              object(
-                                                subs.value,
-                                              )['subscriptions'],
-                                            ))
-                                      .map(object)
-                                      .toList(),
-                                )
+                                !store.exactSubscriptions &&
+                                    !subscriptionCanAddress(
+                                      row,
+                                      (subs.value is List
+                                              ? array(subs.value)
+                                              : array(
+                                                  object(
+                                                    subs.value,
+                                                  )['subscriptions'],
+                                                ))
+                                          .map(object)
+                                          .toList(),
+                                    )
                             ? null
                             : () => toggleSubscription(row),
                         icon: PanelIcon(
@@ -692,8 +710,14 @@ class SubscriptionDetailPage extends StatelessWidget {
         )
         .firstOrNull;
     final displayItem = current ?? item;
-    final unambiguous = vps || subscriptionIsUnique(displayItem, subscriptions);
-    final exact = vps || subscriptionCanAddress(displayItem, subscriptions);
+    final unambiguous =
+        vps ||
+        store.exactSubscriptions ||
+        subscriptionIsUnique(displayItem, subscriptions);
+    final exact =
+        vps ||
+        store.exactSubscriptions ||
+        subscriptionCanAddress(displayItem, subscriptions);
     final target = store.target.bind({
       if (!vps) 'optionsKey': subscriptionOptionsKey(displayItem['options']),
       'planCode': item['planCode'],
@@ -904,9 +928,32 @@ class _AccountPageState extends State<AccountPage>
           PanelCard(
             padding: EdgeInsets.zero,
             child: Column(
+              children: [
+                OperationRow(
+                  store.catalog.op('GET', '/ovh/support/tickets'),
+                  store.target,
+                ),
+                OperationRow(
+                  store.catalog.op('POST', '/ovh/support/tickets'),
+                  store.target,
+                ),
+                OperationRow(
+                  store.catalog.op('POST', '/ovh/support/chat/session'),
+                  store.target,
+                ),
+              ],
+            ),
+          ),
+          PanelCard(
+            padding: EdgeInsets.zero,
+            child: Column(
               children: store.catalog.operations
                   .where(
-                    (o) => o.group == '账户管理' && o.path != '/ovh/account/info',
+                    (o) =>
+                        o.group == '账户管理' &&
+                        o.path != '/ovh/account/info' &&
+                        !o.path.contains(':') &&
+                        !o.path.startsWith('/ovh/support/'),
                   )
                   .map((o) => OperationRow(o, store.target))
                   .toList(),

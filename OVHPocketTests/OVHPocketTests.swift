@@ -366,7 +366,7 @@ final class OVHPocketTests: XCTestCase {
 
     func testAllNativeDescriptorsHaveValidAndDistinctInputLocations() throws {
         let operations = NativeCatalog.shared.operations
-        XCTAssertEqual(operations.count,228)
+        XCTAssertEqual(operations.count,238)
         XCTAssertEqual(Set(operations.map(\.id)).count,operations.count)
         for op in operations {
             XCTAssertEqual(Set(op.fields.map(\.id)).count,op.fields.count,op.id)

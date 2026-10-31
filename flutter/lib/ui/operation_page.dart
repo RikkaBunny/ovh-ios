@@ -5,6 +5,9 @@ import 'package:qr_flutter/qr_flutter.dart';
 import 'package:webview_flutter/webview_flutter.dart';
 import '../core/models.dart';
 import '../core/upstream_compat.dart';
+import '../core/managed_actions.dart';
+import 'managed_action_page.dart';
+import 'official_chat_page.dart';
 import 'common.dart';
 
 class OperationRow extends StatelessWidget {
@@ -54,6 +57,7 @@ class _OperationPageState extends State<OperationPage> {
   String? error;
   bool busy = false, started = false, configLoaded = false, succeeded = false;
   List<String> notices = [];
+  bool uncertain = false;
   final Map<String, List<String>> suggestions = {};
   List<Json> installationTemplates = [];
   dynamic get installationQuestions => installationTemplates
@@ -85,6 +89,7 @@ class _OperationPageState extends State<OperationPage> {
     super.didChangeDependencies();
     if (!started) {
       started = true;
+      if (managedAction(op) || op.path == '/ovh/support/chat/session') return;
       WidgetsBinding.instance.addPostFrameCallback((_) {
         if (mounted) initialize();
       });
@@ -112,6 +117,65 @@ class _OperationPageState extends State<OperationPage> {
     }
     if (connection == null) return;
     final ticket = store.session;
+    if (op.path == '/ovh/support/tickets' && !op.read) {
+      setState(() => busy = true);
+      try {
+        final options = object(
+          (await store.api.request(
+            connection,
+            '/ovh/support/options',
+            account: widget.target.account,
+          )).value,
+        );
+        if (!mounted || store.session != ticket) return;
+        if (options['accountId'] != widget.target.account) {
+          throw const PanelException('工单分类返回了不同账户');
+        }
+        for (final pair in [
+          ('category', 'categories'),
+          ('product', 'products'),
+          ('subcategory', 'subcategories'),
+        ]) {
+          suggestions[pair.$1] = array(options[pair.$2]).map(text).toList();
+        }
+        configLoaded = true;
+      } catch (e) {
+        error = '$e';
+      } finally {
+        if (mounted) setState(() => busy = false);
+      }
+    }
+    if (op.path == '/ovh/support/tickets/:ticket_id' && !op.read) {
+      setState(() => busy = true);
+      try {
+        final resolved = store.catalog
+            .op('GET', op.path)
+            .resolve({}, widget.target);
+        final current = object(
+          (await store.api.request(
+            connection,
+            resolved.path,
+            account: widget.target.account,
+          )).value,
+        );
+        if (!mounted || store.session != ticket) return;
+        if (current['accountId'] != widget.target.account) {
+          throw const PanelException('工单返回的账户不符');
+        }
+        final record = object(current['ticket']);
+        suggestions['action'] = record['state'] == 'closed'
+            ? ['reopen']
+            : record['state'] == 'open'
+            ? ['reply', if (record['canBeClosed'] == true) 'close']
+            : [];
+        values['action'] = suggestions['action']!.firstOrNull;
+        configLoaded = true;
+      } catch (e) {
+        error = '$e';
+      } finally {
+        if (mounted) setState(() => busy = false);
+      }
+    }
     if (op.path == '/settings' && !op.read ||
         op.path == '/accounts/:id' && op.method == 'PUT') {
       setState(() => busy = true);
@@ -137,7 +201,7 @@ class _OperationPageState extends State<OperationPage> {
       }
     }
     if (mounted) setState(() {});
-    if (op.read && fields.isEmpty) await execute();
+    if (op.read && fields.every((f) => !f.required)) await execute();
     if (widget.target.service != null) {
       final root =
           '${op.scope == 'vps' ? '/vps-control' : '/server-control'}/${Uri.encodeComponent(widget.target.service!)}';
@@ -178,9 +242,34 @@ class _OperationPageState extends State<OperationPage> {
     }
   }
 
+  Future<void> loadSupportServices(String product) async {
+    final store = PanelScope.of(context),
+        connection = PanelScope.of(context).connection;
+    if (connection == null) return;
+    final session = store.session;
+    try {
+      final result = await store.api.request(
+        connection,
+        '/ovh/support/services',
+        account: widget.target.account,
+        query: {'product': product},
+      );
+      if (mounted && store.session == session && values['product'] == product) {
+        setState(
+          () => suggestions['serviceName'] = array(
+            result.value,
+          ).map(text).toList(),
+        );
+      }
+    } catch (_) {
+      /* Service names can still be entered manually. */
+    }
+  }
+
   Json get effectiveValues {
     final edited = {...values};
     if (op.fields.any((f) => f.key == 'confirm')) edited['confirm'] = true;
+    if (op.path == '/queue/:id' && op.method == 'PUT') return edited;
     if (op.path == '/settings' && !op.read) return {...original, ...edited};
     if (op.method == 'PUT' && original.isNotEmpty) {
       edited.removeWhere(
@@ -218,7 +307,10 @@ class _OperationPageState extends State<OperationPage> {
       }
     } catch (e) {
       if (mounted && revision == ticket && session == store.session) {
-        setState(() => error = '$e');
+        setState(() {
+          error = '$e';
+          if (op.path.startsWith('/ovh/support/') && !op.read) uncertain = true;
+        });
       }
     } finally {
       if (mounted && ticket == revision) setState(() => busy = false);
@@ -228,6 +320,16 @@ class _OperationPageState extends State<OperationPage> {
   Future<void> submit() async {
     if (op.path == '/settings' && !op.read && !configLoaded) return;
     try {
+      if (op.path.startsWith('/ovh/support/tickets') &&
+          !op.read &&
+          !configLoaded) {
+        throw const PanelException('请先读取当前账户的工单分类');
+      }
+      if (op.path == '/ovh/support/tickets/:ticket_id' &&
+          values['action'] != 'close' &&
+          text(values['body']).trim().isEmpty) {
+        throw const PanelException('请填写回复或重开工单的理由');
+      }
       if (op.path.endsWith('/install') &&
           fields.any((f) => f.key == 'customizations')) {
         values['customizations'] = normalizedCustomizations(
@@ -266,6 +368,12 @@ class _OperationPageState extends State<OperationPage> {
 
   @override
   Widget build(BuildContext context) {
+    if (managedAction(op)) {
+      return ManagedActionPage(operation: op, target: widget.target);
+    }
+    if (op.path == '/ovh/support/chat/session') {
+      return OfficialChatPage(target: widget.target);
+    }
     final store = PanelScope.of(context);
     final data = object(result), code = text(data['code']);
     final rawExpiry = data['expiresAt'];
@@ -278,11 +386,15 @@ class _OperationPageState extends State<OperationPage> {
       child: PageList(
         refresh: op.read ? execute : null,
         children: [
+          if (op.path.startsWith('/ovh/support/') && !op.read)
+            const Notice('提交内容会发送到当前 OVH 账户的官方支持系统，请勿填写密码、私钥或令牌。'),
           Text(
             op.globalTarget ??
                 '${widget.target.name}${widget.target.service == null ? '' : ' · ${widget.target.service}'}',
             style: TextStyle(color: PanelDesign.muted(context), fontSize: 12),
           ),
+          if (op.path == '/queue/:id' && op.method == 'PUT')
+            const Notice('保存时会暂停此任务的当前抢购尝试，账户和机型保持不变。'),
           if (op.danger)
             Notice(
               op.path.endsWith('/install') || op.path.endsWith('/reinstall')
@@ -309,6 +421,12 @@ class _OperationPageState extends State<OperationPage> {
                           choices: _choices(field),
                           onChanged: (v) => setState(() {
                             values[field.key] = v;
+                            if (op.path == '/ovh/support/tickets' &&
+                                field.key == 'product') {
+                              values.remove('serviceName');
+                              suggestions.remove('serviceName');
+                              loadSupportServices(text(v));
+                            }
                             if (field.key == 'templateName') {
                               values.remove('customizations');
                             }
@@ -331,13 +449,20 @@ class _OperationPageState extends State<OperationPage> {
             FilledButton(
               key: const Key('operation.submit'),
               onPressed:
-                  busy || (op.path == '/settings' && !op.read && !configLoaded)
+                  busy ||
+                      uncertain ||
+                      (succeeded && op.path.startsWith('/ovh/support/')) ||
+                      (op.path.startsWith('/ovh/support/tickets') &&
+                          !op.read &&
+                          !configLoaded) ||
+                      (op.path == '/settings' && !op.read && !configLoaded)
                   ? null
                   : submit,
               child: Text(op.read ? '查询' : op.title),
             ),
           if (op.path == '/settings' && !op.read && !configLoaded)
             OutlinedButton(onPressed: initialize, child: const Text('重新读取设置')),
+          if (uncertain) const Notice('提交结果未能确认，请刷新工单或到 OVH 官网核对，避免重复发送。'),
           if (succeeded)
             const Text('✓ 请求已成功提交', style: TextStyle(color: Color(0xff168b58))),
           if (code.isNotEmpty && op.path == '/app/pairing-codes')
@@ -412,8 +537,12 @@ class _OperationPageState extends State<OperationPage> {
       };
     }
     return {
-      for (final choice in [...field.choices, ...?suggestions[field.key]])
-        choice: choice,
+      for (final choice
+          in (op.path.startsWith('/ovh/support/') &&
+                  suggestions.containsKey(field.key)
+              ? suggestions[field.key]!
+              : [...field.choices, ...?suggestions[field.key]]))
+        choice: store.catalog.label(choice),
     };
   }
 }
@@ -663,9 +792,30 @@ class ResourceResults extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final store = PanelScope.of(context), data = object(value);
+    if (operation.path == '/ovh/support/tickets/:ticket_id') {
+      final ticket = object(data['ticket']);
+      return Column(
+        children: [
+          PanelCard(child: DataView(ticket)),
+          for (final message in array(data['messages']))
+            PanelCard(child: DataView(message)),
+          if (ticket['ticketId'] != null)
+            PanelCard(
+              child: OperationRow(
+                store.catalog.op('POST', '/ovh/support/tickets/:ticket_id'),
+                target.bind({'ticket_id': ticket['ticketId']}),
+                seed: {
+                  'action': ticket['state'] == 'closed' ? 'reopen' : 'reply',
+                },
+              ),
+            ),
+        ],
+      );
+    }
     final rows = value is List
         ? value as List
         : [
+            'tickets',
             'tasks',
             'domains',
             'ips',
@@ -720,6 +870,7 @@ class ResourceResults extends StatelessWidget {
             ops = store.catalog.operations.where(
               (o) =>
                   o.id != operation.id &&
+                  !(operation.path == '/ovh/support/tickets' && !o.read) &&
                   o.scope == operation.scope &&
                   ((o.path == operation.path && !o.read) ||
                       o.path.startsWith('${operation.path}/:') ||
@@ -732,6 +883,8 @@ class ResourceResults extends StatelessWidget {
           final bindings = {...target.bindings};
           var valid = true;
           const aliases = {
+            'ticket_id': 'ticketId',
+            'order_id': 'orderId',
             'task_id': 'taskId',
             'boot_id': 'bootId',
             'intervention_id': 'id',

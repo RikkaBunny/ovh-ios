@@ -133,6 +133,11 @@
         "key": "preorder",
         "type": "bool",
         "required": false
+      },
+      {
+        "key": "coupon",
+        "type": "string",
+        "required": false
       }
     ],
     "query": []
@@ -151,6 +156,40 @@
     "handler": "RemoveQueueItem",
     "file": "queue.go",
     "fields": [],
+    "query": []
+  },
+  {
+    "method": "PUT",
+    "path": "/queue/:id",
+    "handler": "UpdateQueueItem",
+    "file": "queue.go",
+    "fields": [
+      {
+        "key": "datacenter",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "options",
+        "type": "[]string",
+        "required": false
+      },
+      {
+        "key": "retryInterval",
+        "type": "int",
+        "required": false
+      },
+      {
+        "key": "autoPay",
+        "type": "bool",
+        "required": false
+      },
+      {
+        "key": "coupon",
+        "type": "string",
+        "required": false
+      }
+    ],
     "query": []
   },
   {
@@ -314,7 +353,9 @@
         "required": false
       }
     ],
-    "query": []
+    "query": [
+      "optionsKey"
+    ]
   },
   {
     "method": "POST",
@@ -324,7 +365,7 @@
     "fields": [
       {
         "key": "optionsKey",
-        "type": "string",
+        "type": "*string",
         "required": false
       },
       {
@@ -773,6 +814,11 @@
         "key": "autoPay",
         "type": "bool",
         "required": false
+      },
+      {
+        "key": "coupon",
+        "type": "string",
+        "required": false
       }
     ],
     "query": []
@@ -839,6 +885,11 @@
     "handler": "PostRetraction",
     "file": "server_control_retraction.go",
     "fields": [
+      {
+        "key": "orderId",
+        "type": "int64",
+        "required": false
+      },
       {
         "key": "reason",
         "type": "string",
@@ -1006,6 +1057,16 @@
         "key": "confirm",
         "type": "bool",
         "required": false
+      },
+      {
+        "key": "useDefaultEmail",
+        "type": "bool",
+        "required": false
+      },
+      {
+        "key": "expectedBoot",
+        "type": "*int64",
+        "required": false
       }
     ],
     "query": []
@@ -1019,6 +1080,11 @@
       {
         "key": "confirm",
         "type": "bool",
+        "required": false
+      },
+      {
+        "key": "expectedBoot",
+        "type": "*int64",
         "required": false
       }
     ],
@@ -2681,12 +2747,168 @@
     "query": []
   },
   {
+    "method": "POST",
+    "path": "/ovh/support/chat/session",
+    "handler": "OfficialChatSession",
+    "file": "support_chat.go",
+    "fields": [
+      {
+        "key": "product",
+        "type": "string",
+        "required": false
+      }
+    ],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/ovh/support/options",
+    "handler": "GetSupportOptions",
+    "file": "support.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/ovh/support/services",
+    "handler": "GetSupportServices",
+    "file": "support.go",
+    "fields": [],
+    "query": [
+      "product"
+    ]
+  },
+  {
+    "method": "GET",
+    "path": "/ovh/support/tickets",
+    "handler": "ListSupportTickets",
+    "file": "support.go",
+    "fields": [],
+    "query": [
+      "page",
+      "status",
+      "subject"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/ovh/support/tickets",
+    "handler": "CreateSupportTicket",
+    "file": "support.go",
+    "fields": [
+      {
+        "key": "subject",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "body",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "category",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "product",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "subcategory",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "serviceName",
+        "type": "string",
+        "required": false
+      }
+    ],
+    "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/ovh/support/tickets/:ticket_id",
+    "handler": "GetSupportTicket",
+    "file": "support.go",
+    "fields": [],
+    "query": []
+  },
+  {
+    "method": "POST",
+    "path": "/ovh/support/tickets/:ticket_id",
+    "handler": "UpdateSupportTicket",
+    "file": "support.go",
+    "fields": [
+      {
+        "key": "action",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "body",
+        "type": "string",
+        "required": false
+      }
+    ],
+    "query": []
+  },
+  {
     "method": "GET",
     "path": "/ovh/account/orders",
     "handler": "GetAccountOrders",
     "file": "account.go",
     "fields": [],
     "query": []
+  },
+  {
+    "method": "GET",
+    "path": "/ovh/account/orders/:order_id/payment",
+    "handler": "GetOrderPaymentOptions",
+    "file": "account_payment.go",
+    "fields": [],
+    "query": [
+      "account"
+    ]
+  },
+  {
+    "method": "POST",
+    "path": "/ovh/account/orders/:order_id/pay",
+    "handler": "PayAccountOrder",
+    "file": "account_payment.go",
+    "fields": [
+      {
+        "key": "confirm",
+        "type": "bool",
+        "required": false
+      },
+      {
+        "key": "paymentMethodId",
+        "type": "int64",
+        "required": false
+      },
+      {
+        "key": "paymentType",
+        "type": "string",
+        "required": false
+      },
+      {
+        "key": "amount",
+        "type": "*float64",
+        "required": false
+      },
+      {
+        "key": "currency",
+        "type": "string",
+        "required": false
+      }
+    ],
+    "query": [
+      "account"
+    ]
   },
   {
     "method": "GET",

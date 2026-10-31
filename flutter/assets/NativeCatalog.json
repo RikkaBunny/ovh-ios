@@ -1,5 +1,5 @@
 {
-  "commit": "c22fbf0f605da8b79bbc75bc1dc8562bd12163da",
+  "commit": "707671a0b053f9e9da4044b17283d73006e502de",
   "operations": [
     {
       "id": "GET /health",
@@ -272,6 +272,13 @@
           "kind": "toggle",
           "location": "body",
           "required": false
+        },
+        {
+          "key": "coupon",
+          "label": "优惠码",
+          "kind": "text",
+          "location": "body",
+          "required": false
         }
       ],
       "danger": false,
@@ -292,7 +299,7 @@
     },
     {
       "id": "DELETE /queue/:id",
-      "title": "删除抢购任务",
+      "title": "删除编辑抢购任务",
       "group": "抢购",
       "scope": "panel",
       "method": "DELETE",
@@ -309,6 +316,61 @@
       "danger": true,
       "source": "queue.go",
       "handler": "RemoveQueueItem"
+    },
+    {
+      "id": "PUT /queue/:id",
+      "title": "修改编辑抢购任务",
+      "group": "抢购",
+      "scope": "panel",
+      "method": "PUT",
+      "path": "/queue/:id",
+      "fields": [
+        {
+          "key": "datacenter",
+          "label": "数据中心",
+          "kind": "text",
+          "location": "body",
+          "required": true
+        },
+        {
+          "key": "options",
+          "label": "配置选项",
+          "kind": "list",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "retryInterval",
+          "label": "重试间隔（秒）",
+          "kind": "number",
+          "location": "body",
+          "required": true
+        },
+        {
+          "key": "autoPay",
+          "label": "自动付款",
+          "kind": "toggle",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "coupon",
+          "label": "优惠码",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "id",
+          "label": "编号",
+          "kind": "text",
+          "location": "path",
+          "required": true
+        }
+      ],
+      "danger": false,
+      "source": "queue.go",
+      "handler": "UpdateQueueItem"
     },
     {
       "id": "PUT /queue/:id/status",
@@ -562,6 +624,13 @@
           "kind": "text",
           "location": "path",
           "required": true
+        },
+        {
+          "key": "optionsKey",
+          "label": "配置标识",
+          "kind": "text",
+          "location": "query",
+          "required": false
         }
       ],
       "danger": false,
@@ -1440,6 +1509,13 @@
           "kind": "toggle",
           "location": "body",
           "required": false
+        },
+        {
+          "key": "coupon",
+          "label": "优惠码",
+          "kind": "text",
+          "location": "body",
+          "required": false
         }
       ],
       "danger": false,
@@ -1542,6 +1618,13 @@
       "method": "POST",
       "path": "/server-control/:service_name/retraction",
       "fields": [
+        {
+          "key": "orderId",
+          "label": "订单号",
+          "kind": "number",
+          "location": "body",
+          "required": false
+        },
         {
           "key": "reason",
           "label": "原因",
@@ -1862,7 +1945,7 @@
       "method": "GET",
       "path": "/server-control/:service_name/rescue",
       "fields": [],
-      "danger": false,
+      "danger": true,
       "source": "server_control_rescue.go",
       "handler": "GetRescueStatus"
     },
@@ -1901,9 +1984,23 @@
           "kind": "toggle",
           "location": "body",
           "required": false
+        },
+        {
+          "key": "useDefaultEmail",
+          "label": "使用账户联系邮箱",
+          "kind": "toggle",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "expectedBoot",
+          "label": "确认的启动配置",
+          "kind": "number",
+          "location": "body",
+          "required": false
         }
       ],
-      "danger": false,
+      "danger": true,
       "source": "server_control_rescue.go",
       "handler": "EnterRescue"
     },
@@ -1921,9 +2018,16 @@
           "kind": "toggle",
           "location": "body",
           "required": false
+        },
+        {
+          "key": "expectedBoot",
+          "label": "确认的启动配置",
+          "kind": "number",
+          "location": "body",
+          "required": false
         }
       ],
-      "danger": false,
+      "danger": true,
       "source": "server_control_rescue.go",
       "handler": "ExitRescue"
     },
@@ -4287,7 +4391,7 @@
         },
         {
           "key": "accountId",
-          "label": "账户",
+          "label": "账户编号",
           "kind": "text",
           "location": "query",
           "required": false
@@ -4628,7 +4732,7 @@
         },
         {
           "key": "accountId",
-          "label": "账户",
+          "label": "账户编号",
           "kind": "text",
           "location": "body",
           "required": false
@@ -4670,6 +4774,285 @@
       "handler": "GetAccountRefunds"
     },
     {
+      "id": "POST /ovh/support/chat/session",
+      "title": "官方在线客服",
+      "group": "账户管理",
+      "scope": "panel",
+      "method": "POST",
+      "path": "/ovh/support/chat/session",
+      "fields": [
+        {
+          "key": "product",
+          "label": "产品",
+          "kind": "text",
+          "location": "body",
+          "required": true,
+          "choices": [
+            "dedicated",
+            "vps"
+          ]
+        }
+      ],
+      "danger": false,
+      "source": "support_chat.go",
+      "handler": "OfficialChatSession"
+    },
+    {
+      "id": "GET /ovh/support/options",
+      "title": "工单分类",
+      "group": "账户管理",
+      "scope": "panel",
+      "method": "GET",
+      "path": "/ovh/support/options",
+      "fields": [],
+      "danger": false,
+      "source": "support.go",
+      "handler": "GetSupportOptions"
+    },
+    {
+      "id": "GET /ovh/support/services",
+      "title": "关联服务",
+      "group": "账户管理",
+      "scope": "panel",
+      "method": "GET",
+      "path": "/ovh/support/services",
+      "fields": [
+        {
+          "key": "product",
+          "label": "产品",
+          "kind": "text",
+          "location": "query",
+          "required": false,
+          "choices": [
+            "dedicated",
+            "vps",
+            "dedicated-billing",
+            "dedicated-other",
+            "publiccloud",
+            "network",
+            "domain",
+            "hosting",
+            "storage",
+            "dedicatedcloud",
+            "iaas",
+            "cdn",
+            "exchange",
+            "mail",
+            "ssl",
+            "vac",
+            "housing",
+            "adsl",
+            "fax",
+            "sms",
+            "voip",
+            "telecom-billing",
+            "telecom-other",
+            "web-billing",
+            "web-other"
+          ]
+        }
+      ],
+      "danger": false,
+      "source": "support.go",
+      "handler": "GetSupportServices"
+    },
+    {
+      "id": "GET /ovh/support/tickets",
+      "title": "支持工单",
+      "group": "账户管理",
+      "scope": "panel",
+      "method": "GET",
+      "path": "/ovh/support/tickets",
+      "fields": [
+        {
+          "key": "page",
+          "label": "页码",
+          "kind": "number",
+          "location": "query",
+          "required": false
+        },
+        {
+          "key": "status",
+          "label": "状态",
+          "kind": "text",
+          "location": "query",
+          "required": false,
+          "choices": [
+            "open",
+            "closed"
+          ]
+        },
+        {
+          "key": "subject",
+          "label": "标题",
+          "kind": "text",
+          "location": "query",
+          "required": false
+        }
+      ],
+      "danger": false,
+      "source": "support.go",
+      "handler": "ListSupportTickets"
+    },
+    {
+      "id": "POST /ovh/support/tickets",
+      "title": "支持工单",
+      "group": "账户管理",
+      "scope": "panel",
+      "method": "POST",
+      "path": "/ovh/support/tickets",
+      "fields": [
+        {
+          "key": "subject",
+          "label": "标题",
+          "kind": "text",
+          "location": "body",
+          "required": true
+        },
+        {
+          "key": "body",
+          "label": "正文",
+          "kind": "multiline",
+          "location": "body",
+          "required": true
+        },
+        {
+          "key": "category",
+          "label": "分类",
+          "kind": "text",
+          "location": "body",
+          "required": true,
+          "choices": [
+            "assistance",
+            "billing",
+            "incident"
+          ]
+        },
+        {
+          "key": "product",
+          "label": "产品",
+          "kind": "text",
+          "location": "body",
+          "required": true,
+          "choices": [
+            "dedicated",
+            "vps",
+            "dedicated-billing",
+            "dedicated-other",
+            "publiccloud",
+            "network",
+            "domain",
+            "hosting",
+            "storage",
+            "dedicatedcloud",
+            "iaas",
+            "cdn",
+            "exchange",
+            "mail",
+            "ssl",
+            "vac",
+            "housing",
+            "adsl",
+            "fax",
+            "sms",
+            "voip",
+            "telecom-billing",
+            "telecom-other",
+            "web-billing",
+            "web-other"
+          ]
+        },
+        {
+          "key": "subcategory",
+          "label": "子分类",
+          "kind": "text",
+          "location": "body",
+          "required": false,
+          "choices": [
+            "alerts",
+            "autorenew",
+            "bill",
+            "down",
+            "inProgress",
+            "new",
+            "other",
+            "perfs",
+            "start",
+            "usage"
+          ]
+        },
+        {
+          "key": "serviceName",
+          "label": "服务名称",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        }
+      ],
+      "danger": false,
+      "source": "support.go",
+      "handler": "CreateSupportTicket"
+    },
+    {
+      "id": "GET /ovh/support/tickets/:ticket_id",
+      "title": "工单详情",
+      "group": "账户管理",
+      "scope": "panel",
+      "method": "GET",
+      "path": "/ovh/support/tickets/:ticket_id",
+      "fields": [
+        {
+          "key": "ticket_id",
+          "label": "工单编号",
+          "kind": "text",
+          "location": "path",
+          "required": true
+        }
+      ],
+      "danger": false,
+      "source": "support.go",
+      "handler": "GetSupportTicket"
+    },
+    {
+      "id": "POST /ovh/support/tickets/:ticket_id",
+      "title": "工单详情",
+      "group": "账户管理",
+      "scope": "panel",
+      "method": "POST",
+      "path": "/ovh/support/tickets/:ticket_id",
+      "fields": [
+        {
+          "key": "action",
+          "label": "工单操作",
+          "kind": "text",
+          "location": "body",
+          "required": true,
+          "choices": [
+            "reply",
+            "close",
+            "reopen"
+          ]
+        },
+        {
+          "key": "body",
+          "label": "正文",
+          "kind": "multiline",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "ticket_id",
+          "label": "工单编号",
+          "kind": "text",
+          "location": "path",
+          "required": true
+        }
+      ],
+      "danger": false,
+      "source": "support.go",
+      "handler": "UpdateSupportTicket"
+    },
+    {
       "id": "GET /ovh/account/orders",
       "title": "OVH 官方订单",
       "group": "账户管理",
@@ -4680,6 +5063,81 @@
       "danger": false,
       "source": "account.go",
       "handler": "GetAccountOrders"
+    },
+    {
+      "id": "GET /ovh/account/orders/:order_id/payment",
+      "title": "订单付款信息",
+      "group": "账户管理",
+      "scope": "panel",
+      "method": "GET",
+      "path": "/ovh/account/orders/:order_id/payment",
+      "fields": [
+        {
+          "key": "order_id",
+          "label": "订单号",
+          "kind": "text",
+          "location": "path",
+          "required": true
+        }
+      ],
+      "danger": false,
+      "source": "account_payment.go",
+      "handler": "GetOrderPaymentOptions"
+    },
+    {
+      "id": "POST /ovh/account/orders/:order_id/pay",
+      "title": "确认订单付款",
+      "group": "账户管理",
+      "scope": "panel",
+      "method": "POST",
+      "path": "/ovh/account/orders/:order_id/pay",
+      "fields": [
+        {
+          "key": "confirm",
+          "label": "确认执行",
+          "kind": "toggle",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "paymentMethodId",
+          "label": "已绑定支付方式",
+          "kind": "number",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "paymentType",
+          "label": "支付类型",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "amount",
+          "label": "金额",
+          "kind": "number",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "currency",
+          "label": "币种",
+          "kind": "text",
+          "location": "body",
+          "required": false
+        },
+        {
+          "key": "order_id",
+          "label": "订单号",
+          "kind": "text",
+          "location": "path",
+          "required": true
+        }
+      ],
+      "danger": true,
+      "source": "account_payment.go",
+      "handler": "PayAccountOrder"
     },
     {
       "id": "GET /ovh/account/credit-balance",
@@ -4838,7 +5296,7 @@
   ],
   "labels": {
     "account_id": "下单账户",
-    "accountId": "账户",
+    "accountId": "账户编号",
     "name": "名称",
     "endpoint": "API 区域",
     "zone": "账户站点",
@@ -4949,7 +5407,7 @@
     "running": "运行中",
     "lastStatus": "上次库存",
     "level": "级别",
-    "message": "内容",
+    "message": "回复内容",
     "source": "来源",
     "orderId": "订单号",
     "orderUrl": "订单链接",
@@ -4957,7 +5415,7 @@
     "retryCount": "尝试次数",
     "failureCount": "失败次数",
     "purchaseTime": "下单时间",
-    "orderStatus": "订单付款状态",
+    "orderStatus": "订单状态",
     "price": "价格",
     "cpu": "处理器",
     "memory": "内存",
@@ -4974,12 +5432,12 @@
     "snapshot": "快照",
     "backup": "备份",
     "firstname": "名",
-    "customerCode": "客户号",
+    "customerCode": "客户编号",
     "nichandle": "账户 ID",
     "country": "国家",
     "refundId": "退款 ID",
     "date": "日期",
-    "subject": "主题",
+    "subject": "标题",
     "body": "正文",
     "pdfUrl": "PDF 文件",
     "value": "数值",
@@ -5012,6 +5470,61 @@
     "raidLevel": "RAID 级别",
     "arrays": "阵列数",
     "spares": "备用磁盘数",
+    "coupon": "优惠码",
+    "category": "分类",
+    "product": "产品",
+    "subcategory": "子分类",
+    "page": "页码",
+    "ticket_id": "工单编号",
+    "order_id": "订单号",
+    "paymentMethodId": "已绑定支付方式",
+    "paymentType": "支付类型",
+    "amount": "金额",
+    "currency": "币种",
+    "action": "工单操作",
+    "useDefaultEmail": "使用账户联系邮箱",
+    "expectedBoot": "确认的启动配置",
+    "renewalModes": "可用续费模式",
+    "renewalPeriod": "当前续费周期（月）",
+    "renewalType": "自动续费",
+    "renewalManualUnsupported": "不支持手动续费",
+    "renewalManualPayment": "手动付款",
+    "eligible": "可以撤回",
+    "orderDate": "下单时间",
+    "retractionDate": "撤回截止时间",
+    "expirationDate": "截止时间",
+    "rescueConfigured": "已配置救援启动",
+    "currentBoot": "下次启动项编号",
+    "boots": "可用启动项",
+    "ticketId": "工单编号",
+    "messages": "往来消息",
+    "canBeClosed": "允许关闭",
+    "priceText": "订单金额",
+    "methods": "可用支付方式",
+    "attempted": "已有付款请求",
+    "accountName": "账户名称",
+    "paymentStatusError": "付款状态查询失败",
+    "assistance": "技术支持",
+    "billing": "账务",
+    "incident": "故障",
+    "dedicated": "独立服务器",
+    "vps": "VPS",
+    "other": "其他",
+    "autorenew": "自动续费",
+    "bill": "账单",
+    "down": "服务中断",
+    "inProgress": "处理中",
+    "new": "新服务",
+    "perfs": "性能",
+    "start": "启动",
+    "usage": "使用",
+    "alerts": "告警",
+    "open": "进行中",
+    "closed": "已关闭",
+    "reply": "回复",
+    "close": "关闭工单",
+    "reopen": "重新打开",
+    "manual": "手动续费",
     "preorder": "预发布预约抢购",
     "paused": "暂停监控",
     "optionsKey": "配置标识",

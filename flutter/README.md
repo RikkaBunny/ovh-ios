@@ -1,12 +1,14 @@
 # OVH CP · Flutter 客户端
 
-独立的 Flutter/Dart 版本，支持 iPhone、iPad 和 Android，当前提交审核版本 `1.4.0+16`。连接与 React 网页、SwiftUI 客户端相同的 gokele/ovh 后端，沿用黑白主色、灰色分隔、圆角卡片、胶囊按钮和状态色。业务页面全部由 Flutter 绘制；WebView 仅用于 OVH 返回的 HTTPS 远程屏幕。
+独立的 Flutter/Dart 版本，支持 iPhone、iPad 和 Android，当前开发版本 `1.5.0+17`。连接与 React 网页、SwiftUI 客户端相同的 gokele/ovh 后端，沿用黑白主色、灰色分隔、圆角卡片、胶囊按钮和状态色。业务页面全部由 Flutter 绘制；WebView 仅用于 OVH 返回的 HTTPS 远程屏幕；官方聊天经用户点击授权后，在独立的 iOS 官方网页窗口打开。
 
 发布版名为 `OVH CP`。iOS 沿用原版 Bundle ID `com.hejingcheng.ovhpocket`，作为现有应用更新；Android Application ID 为 `com.hejingcheng.ovh_flutter`。新版图标基于 OVH 官方标识生成，见 [图标与提示词](../BrandAssets/ovh-cp/README.md)。iOS 升级会迁移原 SwiftUI 连接、账户选择与外观。正式构建与签名说明见 [publishing](publishing/README.md)。
 
 ## 本轮更新
 
-1.4.0（16）新增预发布机型搜索与预约抢购、按配置精确暂停/恢复监控、OVH 官方订单和模板自定义重装配置，并修复 OVH 业务错误导致误断开。开发与通用检查在 BERO VPS 执行；2026-10-22 已在 Mac/Xcode 完成 iOS 签名归档、上传及提交审核，设置为通过后自动发布。见 [发布记录](publishing/RELEASE-20261022.md)。详情见 [上游同步记录](上游同步-20261021.md)。
+1.5.0（17）同步 gokele/ovh v0.4.12：新增队列任务完整编辑、优惠码、OVH 官方在线客服与工单；对齐服务续费能力、整单撤回、救援邮箱/启动项确认及官方订单付款流程。新后端支持精确定位空配置的监控订阅；已下单任务禁止编辑与重新启动。
+
+2026-10-31 按本次要求，在 Mac 完成分析、56 项 Flutter 测试、iPhone 模拟器交互验证与 iOS Release 归档/商店签名 IPA 导出。本版本未上传、提交审核或公开发布，Android 安装包和官网未更新。见 [同步记录](上游同步-20261031.md) 与 [构建记录](publishing/BUILD-20261031.md)。此前 1.4.0 的上传及提交留在 [历史记录](publishing/RELEASE-20261022.md)。
 
 ## 界面预览
 
@@ -24,16 +26,16 @@
 |---|---|
 | 仪表盘 | 账户统计、活跃队列、CPU/内存/存储圆环、当前账户实例；资源位于活跃队列下方 |
 | 服务器 | 当前账户的独立服务器和 VPS；硬件、IP、流量图、电源、维护、快照和高级操作 |
-| 队列 | 当前/全部账户、搜索、状态筛选、重试间隔、暂停/恢复/删除及批量操作 |
+| 队列 | 当前/全部账户、搜索、状态筛选、完整编辑、暂停/恢复/删除及批量操作；已下单任务保护 |
 | 监控 | 服务器订阅、变化历史、引擎启停、检查间隔、全目录订阅、通知与自动抢购 |
-| 更多 | 服务器库存、VPS 补货、账户资料、账单、历史、日志、API 设置、设备配对 |
+| 更多 | 服务器库存、VPS 补货、账户资料、账单/订单、官方客服/工单、历史、日志、API 设置、设备配对 |
 | 库存详情 | 区域库存、选配、目录月费/安装费、购物车报价、多机房数量和创建抢购任务 |
 | API 设置 | 账户管理、完整配置更新、通知、缓存、后端系统、浅色/深色/系统外观 |
 | 连接 | 摄像头扫码、二维码图片识别、粘贴配对链接、8 位配对码或旧访问密钥 |
 
-接口目录与 SwiftUI 使用同一份 `NativeCatalog.json`，当前对应上游 `c22fbf0f605da8b79bbc75bc1dc8562bd12163da`（v0.4.3）、228 项业务操作。较少使用的接口通过有类型的 Flutter 表单、结果卡片和关联操作接入。复杂操作的布局与网页专用弹窗有差异，功能依赖相应后端版本、账户权限和 OVH 实际可用能力。
+接口目录与 SwiftUI 使用同一份 `NativeCatalog.json`，当前对应上游 `707671a0b053f9e9da4044b17283d73006e502de`（v0.4.12）、238 项业务操作。较少使用的接口通过有类型的 Flutter 表单、结果卡片和关联操作接入。复杂操作的布局与网页专用弹窗有差异，功能依赖相应后端版本、账户权限和 OVH 实际可用能力。
 
-两端共享后端的账户、订阅、队列、历史和设置。App 不保存另一套 OVH 账户数据库。通过 `POST /api/app/pair` 配对，独立令牌保存在 iOS Keychain / Android 安全存储；Bearer 与旧 X-API-Key 互斥。普通 API 不跟随重定向；公开 EU/CA/US 库存不发送面板凭据。401 清除本机连接，重新配对。
+两端共享后端的账户、订阅、队列、历史和设置。App 不保存另一套 OVH 账户数据库。通过 `POST /api/app/pair` 配对，独立令牌保存在 iOS Keychain / Android 安全存储；Bearer 与旧 X-API-Key 互斥。普通 API 不跟随重定向；公开 EU/CA/US 库存不发送面板凭据。面板设备授权确实失效时清除连接；OVH 业务接口的 401 不会误删有效配对。
 
 同一读取请求合并执行；下拉刷新等待真实完成。失败保留上次数据和成功时间，账户/连接切换阻止迟到响应覆盖新数据。设置先读取完整配置，更新时保留其他字段；读取失败禁止保存。重装、终止等操作需输入服务名称确认。抢购任务明确展示账户、机房、数量和自动付款选项。
 
@@ -61,9 +63,9 @@ flutter build ios --release --no-codesign
 flutter build apk --debug
 ```
 
-只构建 arm64 测试包：`flutter build apk --debug --target-platform=android-arm64 --split-per-abi`。ABI 拆分构建会按 Flutter 规则调整 Android versionCode，源码版本仍为 `1.3.0+15`。
+只构建 arm64 测试包：`flutter build apk --debug --target-platform=android-arm64 --split-per-abi`。ABI 拆分构建会按 Flutter 规则调整 Android versionCode，源码版本仍为 `1.5.0+17`。
 
-正式签名与发布入口见 [发布说明](publishing/README.md)。Android Release 必须提供私有上传密钥，缺少配置时拒绝构建；正式包不使用调试签名。仓库不包含私钥、生产密钥或真实令牌。当前候选源码为 1.4.0（16），本轮未生成 iOS 安装包或提交审核。Android 白底图标正式 APK 已更新到 [安卓下载网站](https://ovh.gamelife.life/)。Google Play 后台当前未开通，因此尚未上架。
+正式签名与发布入口见 [发布说明](publishing/README.md)。Android Release 必须提供私有上传密钥，缺少配置时拒绝构建；正式包不使用调试签名。仓库不包含私钥、生产密钥或真实令牌。当前候选源码为 1.5.0（17），本轮已导出 iOS 商店签名安装包，尚未上传或提交审核。Android 白底图标正式 APK 已更新到 [安卓下载网站](https://ovh.gamelife.life/)。Google Play 后台当前未开通，因此尚未上架。
 
 ## 测试
 
@@ -83,9 +85,17 @@ OVH_SCREENSHOT_DIR=artifacts/screenshots/phone flutter drive \
   -d QA模拟器ID --dart-define=OVH_QA=true
 ```
 
+1.5.0 新增流程使用内存合成响应，不连接测试服务器，可在现有 iPhone 模拟器运行：
+
+```sh
+OVH_CAPTURE_DIR=artifacts/screenshots/latest flutter drive \
+  --driver=test_driver/latest_driver.dart \
+  --target=integration_test/latest_acceptance_test.dart -d QA模拟器ID
+```
+
 `OVH_QA=true` 仅在 Debug 下生效，自动连接 localhost:16443，并且仅对这个地址接受本机测试证书。Release 不启用测试自动连接，也不接受此 TLS 例外。
 
-检查覆盖凭据、区域、228 项描述解析、价格、库存、刷新并发、失败保留、账户隔离、危险操作确认和配置保留。模拟器验证资源位置、库存任务参数、监控、US VPS、Keychain 令牌恢复及滚动到断开按钮。真实 OVH 重装/付款/KVM、实体相机及硬件接口逐项验证不属于此次合成测试的结果。详见 [验证记录](验证记录.md)。
+检查覆盖凭据、区域、238 项描述解析、价格、库存、刷新并发、失败保留、账户隔离、危险操作确认和配置保留。模拟器验证资源位置、库存任务参数、监控、US VPS、Keychain 令牌恢复及滚动到断开按钮。真实 OVH 重装/付款/KVM、实体相机及硬件接口逐项验证不属于此次合成测试的结果。详见 [验证记录](验证记录.md)。
 
 ## 维护
 

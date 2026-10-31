@@ -1,6 +1,6 @@
 import 'dart:convert';
 
-const appDisplayVersion = '1.4.0（16）';
+const appDisplayVersion = '1.5.0（17）';
 
 typedef Json = Map<String, dynamic>;
 Json object(dynamic value) =>
@@ -261,7 +261,10 @@ class Operation {
           : values[field.key];
       final empty = value == null || value == '';
       if (empty && field.required) throw PanelException('请填写${field.label}');
-      if (value == null || (empty && field.location != 'body')) continue;
+      if (value == null ||
+          (empty && field.location != 'body' && field.key != 'optionsKey')) {
+        continue;
+      }
       if (field.kind == 'object' && value is! Map) {
         throw PanelException('${field.label}必须是结构化配置');
       }
@@ -283,6 +286,11 @@ class Operation {
           value is num &&
           (value < 1 || value > 86400 || value != value.round())) {
         throw const PanelException('间隔必须在 1～86400 秒之间');
+      }
+      if (field.key == 'page' &&
+          value is num &&
+          (value < 0 || value > 100000 || value != value.round())) {
+        throw const PanelException('工单页码必须是有效的非负整数');
       }
       if (field.location == 'path') {
         route = route

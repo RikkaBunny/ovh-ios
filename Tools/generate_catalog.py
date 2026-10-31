@@ -102,6 +102,10 @@ def field(key, typ='string', location='body', required=False):
     if key in choices: f['choices']=choices[key]
     return f
 
+titles.update({'/ovh/support/options':'工单分类', '/ovh/support/services':'关联服务', '/ovh/support/tickets':'支持工单', '/ovh/support/tickets/:ticket_id':'工单详情', '/ovh/support/chat/session':'官方在线客服', '/ovh/account/orders/:order_id/payment':'订单付款信息', '/ovh/account/orders/:order_id/pay':'确认订单付款'})
+labels.update({'coupon':'优惠码', 'subject':'标题', 'body':'正文', 'category':'分类', 'product':'产品', 'subcategory':'子分类', 'page':'页码', 'ticket_id':'工单编号', 'order_id':'订单号', 'orderId':'订单号', 'paymentMethodId':'已绑定支付方式', 'paymentType':'支付类型', 'amount':'金额', 'currency':'币种', 'action':'工单操作', 'message':'回复内容', 'useDefaultEmail':'使用账户联系邮箱', 'expectedBoot':'确认的启动配置'})
+choices.update({'category':['assistance','billing','incident'], 'product':['dedicated','vps','dedicated-billing','dedicated-other','publiccloud','network','domain','hosting','storage','dedicatedcloud','iaas','cdn','exchange','mail','ssl','vac','housing','adsl','fax','sms','voip','telecom-billing','telecom-other','web-billing','web-other'], 'subcategory':['alerts','autorenew','bill','down','inProgress','new','other','perfs','start','usage'], 'action':['reply','close','reopen']})
+labels.update({'renewalModes':'可用续费模式', 'renewalPeriod':'当前续费周期（月）', 'renewalType':'自动续费', 'renewalManualUnsupported':'不支持手动续费', 'renewalManualPayment':'手动付款', 'eligible':'可以撤回', 'orderDate':'下单时间', 'retractionDate':'撤回截止时间', 'expirationDate':'截止时间', 'rescueConfigured':'已配置救援启动', 'currentBoot':'下次启动项编号', 'boots':'可用启动项', 'ticketId':'工单编号', 'messages':'往来消息', 'canBeClosed':'允许关闭', 'priceText':'订单金额', 'methods':'可用支付方式', 'attempted':'已有付款请求', 'customerCode':'客户编号', 'accountName':'账户名称', 'accountId':'账户编号', 'paymentStatusError':'付款状态查询失败', 'orderStatus':'订单状态', 'assistance':'技术支持', 'billing':'账务', 'incident':'故障', 'dedicated':'独立服务器', 'vps':'VPS', 'other':'其他', 'autorenew':'自动续费', 'bill':'账单', 'down':'服务中断', 'inProgress':'处理中', 'new':'新服务', 'perfs':'性能', 'start':'启动', 'usage':'使用', 'alerts':'告警', 'open':'进行中', 'closed':'已关闭', 'reply':'回复', 'close':'关闭工单', 'reopen':'重新打开', 'automatic':'自动续费', 'manual':'手动续费'})
 labels.update({'preorder':'预发布预约抢购','paused':'暂停监控','optionsKey':'配置标识','customizations':'系统自定义设置'})
 
 accountFields=[field(k,t) for k,t in [('name','string'),('endpoint','string'),('zone','string'),('appKey','string'),('appSecret','string'),('consumerKey','string'),('iam','string'),('setDefault','bool'),('proxyUrl','string'),('fingerprint','string')]]
@@ -122,10 +126,12 @@ for r in routes:
         else: title=titles.get(base,titles.get(base.split('/')[0],base))
         group='电源' if base.split('/')[0] in ['reboot','start','stop','rescue','boot','boot-mode','monitoring','console','ipmi-types','install','reinstall','templates','current-os'] else '维护' if base.split('/')[0] in ['tasks','hardware','hardware-raid-profiles','hardware-disk-info','partition-schemes','interventions','planned-interventions','retraction'] else '概览' if base in ['info','status','hardware','network-specs','ips','serviceinfo','network-interfaces','mrtg','statistics','network-stats','datacenter'] else '高级'
     else:
-        if p.startswith('/accounts/:id'):
+        if p in titles:
+            title=titles[p]
+        elif p.startswith('/accounts/:id'):
             suffix=p.split('/:id')[-1]
             title={'':'OVH 账户','/verify':'验证凭据','/set-default':'设为默认账户','/proxy-test':'测试代理连通','/proxy-check':'检测代理出口'}.get(suffix,'账户操作')
-        elif p.startswith('/queue/:id'): title={'/queue/:id':'抢购任务','/queue/:id/status':'任务状态','/queue/:id/interval':'任务重试间隔'}[p]
+        elif p.startswith('/queue/:id'): title={'/queue/:id':'编辑抢购任务','/queue/:id/status':'任务状态','/queue/:id/interval':'任务重试间隔'}[p]
         elif p.startswith('/servers/') and p.endswith('/price'): title='配置价格'
         elif p.startswith('/availability/'): title='实时库存'
         elif p.startswith('/app/devices/'): title='配对设备'
@@ -175,6 +181,19 @@ for r in routes:
     if p in ['/queue','/queue/quick-order'] and m=='POST':
         for f in fs:
             if f['key'] in ['account_id','planCode','datacenter']: f['required']=True
+    if p == '/ovh/support/chat/session':
+        fs=[dict(field('product',required=True),choices=['dedicated','vps'])]
+    if p == '/ovh/support/tickets' and m=='POST':
+        for f in fs:
+            if f['key'] in ['subject','body','category','product']: f['required']=True
+            if f['key']=='body': f['kind']='multiline'
+    if p == '/ovh/support/tickets/:ticket_id' and m=='POST':
+        for f in fs:
+            if f['key']=='action': f['required']=True
+            if f['key']=='body': f['kind']='multiline'
+    if p == '/queue/:id' and m=='PUT':
+        for f in fs:
+            if f['key'] in ['datacenter','retryInterval']: f['required']=True
     if p.endswith('/subscriptions/:planCode/pause'):
         for f in fs:
             if f['key']=='paused': f['required']=True
@@ -182,7 +201,10 @@ for r in routes:
     fs += [field(k,location='query') for k in r['query'] if k not in ['account','ipBlock'] and not any(f['key']==k for f in fs) or k=='ipBlock' and 'ip_block' not in p and not any(f['key']==k for f in fs)]
     if not asset and p=='/cache/clear': fs[0]['choices']=['memory','sqlite','all']
     if p=='/queue/:id/status': fs[0]['choices']=['running','paused']
-    danger= m=='DELETE' or any(x in base for x in ['terminate','retraction','install','snapshot/revert','hardware/replace','ola/reset','ola/ungroup'])
+    for f in fs:
+        if f['key']=='page': f['kind']='number'
+        if p=='/ovh/support/tickets' and f['key']=='status': f['choices']=['open','closed']
+    danger= p.endswith('/pay') or p.endswith('/rescue') or p.endswith('/rescue/exit') or m=='DELETE' or any(x in base for x in ['terminate','retraction','install','snapshot/revert','hardware/replace','ola/reset','ola/ungroup'])
     prefix= '' if m=='GET' else '删除' if m=='DELETE' else '修改' if m=='PUT' else '创建' if base.endswith(('subscriptions','snapshot','accounts','secondary-dns','virtual-mac')) else ''
     operations.append(dict(id=m+' '+p,title=prefix+title,group=group,scope=scope,method=m,path=p,fields=fs,danger=danger,source=r['file'],handler=r['handler']))
 

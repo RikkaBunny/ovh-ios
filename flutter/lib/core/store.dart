@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'api.dart';
 import 'models.dart';
 import 'instance_metrics.dart';
+import 'upstream_compat.dart';
 
 abstract class Credentials {
   Future<Connection?> read();
@@ -81,6 +82,8 @@ class PanelStore extends ChangeNotifier {
   int session = 0;
   int mutations = 0;
   int accountRevision = 0;
+  bool get exactSubscriptions =>
+      versionAtLeast(text(object(state('/version').value)['version']), 0, 4, 5);
   final Map<String, ResourceState> _resources = {};
   final Map<String, String> _resourceSelections = {};
   PanelStore(this.catalog, {PanelApi? api, Credentials? credentials})
@@ -211,6 +214,7 @@ class PanelStore extends ChangeNotifier {
     }
     final account = selectedAccount;
     await Future.wait([
+      load('/version'),
       load('/stats'),
       load('/queue'),
       if (account.isNotEmpty)
@@ -373,6 +377,15 @@ class PanelStore extends ChangeNotifier {
   ) async {
     final current = connection;
     if (current == null) throw const PanelException('请先连接面板');
+    if (operation.path.startsWith('/queue/:id') && operation.method == 'PUT') {
+      final currentTask = array(state('/queue').value)
+          .map(object)
+          .where((q) => text(q['id']) == text(target.bindings['id']))
+          .firstOrNull;
+      if (currentTask != null && queueOrdered(currentTask)) {
+        throw const PanelException('该任务已下单，不能再次启动或编辑');
+      }
+    }
     final ticket = session, resolved = operation.resolve(values, target);
     final chosen = target.service != null
         ? target.account

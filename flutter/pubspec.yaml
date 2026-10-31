@@ -1,7 +1,7 @@
 name: ovh_flutter
 description: OVH CP Flutter client for the gokele/ovh self-hosted console.
 publish_to: none
-version: 1.4.0+16
+version: 1.5.0+17
 
 environment:
   sdk: '>=3.10.0 <4.0.0'
