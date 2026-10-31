@@ -1,6 +1,6 @@
 # OVH CP · Flutter 客户端 / SwiftUI 参考实现
 
-当前开发版本为 [Flutter 客户端 OVH CP 1.5.0（18）](flutter/README.md)，iOS、iPad 和 Android 共用 Flutter/Dart 界面，接口基线为 gokele/ovh v0.4.12、238 项操作。Build 18 修复监控配置误删保护、iOS 官方客服窗口、运行中队列编辑和联系人变更入口；BERO VPS 的分析及 67 项 Flutter 测试通过，Mac 完成 iPhone/iPad 客服窗口验证与 iOS 签名构建。尚未上传或提交审核，见 [同步记录](flutter/上游同步-20261031.md) 和 [Build 18 构建记录](flutter/publishing/BUILD-20261031-18.md)。此前 1.4.0（16）的上传与提交情况保留在 [历史发布记录](flutter/publishing/RELEASE-20261022.md)，不代表当前审核状态。已提供的 Android 安装包继续从 [官网下载](https://ovh.gamelife.life/)；网站源码见 [website](website/README.md)。
+当前开发版本为 [Flutter 客户端 OVH CP 1.5.0（18）](flutter/README.md)，iOS、iPad 和 Android 共用 Flutter/Dart 界面，接口基线为 gokele/ovh v0.4.12、238 项操作。Build 18 修复监控配置误删保护、iOS 官方客服窗口、运行中队列编辑和联系人变更入口；BERO VPS 的分析及 67 项 Flutter 测试通过，Mac 完成 iPhone/iPad 客服窗口验证与 iOS 签名构建。2026-11-01 已上传并提交 iOS 审核，当前等待审核、通过后自动发布；GitHub Release 已公开，见 [本次发布记录](flutter/publishing/RELEASE-20261101.md)、[同步记录](flutter/上游同步-20261031.md) 和 [Build 18 构建记录](flutter/publishing/BUILD-20261031-18.md)。此前 1.4.0（16）的上传与提交情况保留在 [历史发布记录](flutter/publishing/RELEASE-20261022.md)，不代表当前审核状态。已提供的 Android 安装包继续从 [官网下载](https://ovh.gamelife.life/)；网站源码见 [website](website/README.md)。
 
 SwiftUI 源码版本 1.2.0（9），最低 iOS 17，支持 iPhone 和 iPad。网站继续使用 React；此版本的业务页面全部使用 SwiftUI，共用现有 gokele/ovh Go 后端。已移除“完整控制台”网页入口。WebKit 仅用于 OVH 返回的 KVM 远程屏幕，不加载管理面板，也不注入面板令牌。
 

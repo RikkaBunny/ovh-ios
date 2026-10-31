@@ -38,3 +38,6 @@ __pycache__/
 /验证记录.md
 /NativeScreenshots/Build7/
 /NativeScreenshots/Build8/
+
+# Release staging contains generated source archives and deployment payloads.
+/.publish/

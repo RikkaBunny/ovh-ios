@@ -1,13 +1,22 @@
-App: OVH CP 1.4.0 (16), Bundle ID com.hejingcheng.ovhpocket.
+App: OVH CP 1.5.0 (18), Bundle ID com.hejingcheng.ovhpocket.
 
-This update synchronizes the mobile client with gokele/ovh v0.4.3. It adds prerelease catalog search and preorder selection, configuration-specific monitor pause/resume, official OVH order history, and template-specific reinstall configuration. It improves request error handling so an OVH business API error does not incorrectly disconnect a valid panel session. Some functions depend on the connected self-hosted backend version and OVH account permissions. The app still connects to the same user-hosted backend as the web console. Business screens use Flutter; only the OVH remote KVM screen uses a WebView. There are no new analytics, advertising, payment, or tracking SDKs in this update.
+This update synchronizes the client with gokele/ovh v0.4.12 (238 catalog operations). It adds queue editing with a fresh status check and pause-before-save, coupons, support tickets, an official OVH chat entry, order payment status/confirmation, and improved renewal, withdrawal and rescue workflows. It fixes the iOS chat presentation window, contact-change response parsing, and guards ambiguous monitor configuration operations. Availability depends on the user's self-hosted backend version, account region and OVH API permissions.
 
-For review, use the isolated demonstration backend:
+Business screens use Flutter with native iOS integration. Web content is limited to official OVH chat and remote KVM; the app is not a wrapper of the web console. There are no new analytics, advertising or tracking SDKs. The app has no paid subscriptions or in-app purchases.
+
+Use the isolated demonstration backend for review:
 Panel URL: https://ovh-review.hejingcheng.com
 Panel access key: OVH-AppReview-2026
 
-The value above is a public test credential for synthetic servers, not an OVH account credential. No OVH login, two-factor code, subscription, payment or real infrastructure is required. Choose 'use legacy access key' on the initial page to enter it. The review website also generates temporary QR pairing codes at https://ovh-review.hejingcheng.com/review .
+This is a public test credential for synthetic servers, not an OVH account credential. No real OVH login, two-factor code, purchase, payment or infrastructure is required. Choose 'use legacy access key' on the connection page. Alternatively, https://ovh-review.hejingcheng.com/review generates a temporary QR/8-character pairing code. Manual pairing and access-key entry work without a camera.
 
-Test the Dashboard, Servers, Queue, Monitor and More tabs, switch EU/CA/US demo accounts, and select different instances in Dashboard system resources. Each demo instance has its own synthetic CPU/memory/storage readings. Inspect dedicated servers and VPS, and use simulated controls. Reinstall/termination actions require typed service names; all demo effects are simulated. Disconnect is at the bottom of the connection settings. Scanning or selecting a pairing image is optional because manual pairing and access-key entry are available.
+Suggested review:
+1. Explore Dashboard, Servers, Queue, Monitor and More. Switch EU/CA/US demo accounts and instances to view separate synthetic CPU/memory/storage readings.
+2. In More, open inventory, create a synthetic queue task, then edit it. Saving first pauses a running task and keeps it paused.
+3. In account management, create a support ticket, view its messages, reply, close and reopen it. These messages stay in demo memory and are never sent to OVH.
+4. Inspect order 123456 payment information, renewal settings, rescue and withdrawal confirmation flows. All demo effects are simulated; no charge, reboot, withdrawal, real email or contact transfer occurs. Typed service-name confirmations are required for destructive controls.
+5. Disconnect is at the bottom of connection settings. Some configuration-specific monitoring actions are guarded when the connected demo backend does not advertise the required capability.
 
-OVH CP is provided by jingcheng he for self-hosted consoles and is not developed by OVHcloud. The user has confirmed authorization for the name and brand-based icon. Complete corresponding source and license are available at https://github.com/RikkaBunny/ovh-ios . Support and privacy URLs are publicly accessible. Android's separate ML Kit data disclosure does not apply to the iOS implementation.
+Official online chat requires a real OVH identity and cannot be authenticated by the synthetic demo. Its demo endpoint returns an explicit explanation rather than contacting OVH or inventing a chat token. Users connecting their own compatible backend and OVH account can use official chat. Other demo examples do not require this feature.
+
+OVH CP is provided by jingcheng he for self-hosted consoles, not developed by OVHcloud. Brand authorization was confirmed by the developer. Complete corresponding app source and license: https://github.com/RikkaBunny/ovh-ios/releases/tag/v1.5.0-cp.18 . Support and privacy URLs remain publicly accessible. Android's separate ML Kit disclosure does not apply to iOS.

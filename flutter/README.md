@@ -8,7 +8,7 @@
 
 1.5.0（18）同步 gokele/ovh v0.4.12：新增队列任务完整编辑、优惠码、OVH 官方在线客服与工单；对齐服务续费能力、整单撤回、救援邮箱/启动项确认及官方订单付款流程。新版后端支持按配置编辑与暂停监控；空配置删除与多配置历史仍保留保护，避免操作其他订阅。已下单任务禁止编辑与重新启动。
 
-Build 18 修复四项审查问题：监控按操作区分能力并在提交层拦截有歧义的请求；运行任务先核对最新状态、暂停再保存，保存后保持暂停；恢复联系人变更列表、详情及后续操作；官方客服从活动 iOS Scene 打开，窗口错误不误报为 API 权限错误。2026-10-31 在 BERO VPS 完成分析与 67 项 Flutter 测试，Mac 完成 iPhone/iPad 客服窗口验证和 iOS Release 签名构建。本版本未上传、提交审核或公开发布，Android 安装包和官网未更新。见 [同步记录](上游同步-20261031.md) 与 [构建记录](publishing/BUILD-20261031-18.md)。此前 1.4.0 的上传及提交留在 [历史记录](publishing/RELEASE-20261022.md)。
+Build 18 修复四项审查问题：监控按操作区分能力并在提交层拦截有歧义的请求；运行任务先核对最新状态、暂停再保存，保存后保持暂停；恢复联系人变更列表、详情及后续操作；官方客服从活动 iOS Scene 打开，窗口错误不误报为 API 权限错误。2026-10-31 在 BERO VPS 完成分析与 67 项 Flutter 测试，Mac 完成 iPhone/iPad 客服窗口验证和 iOS Release 签名构建。2026-11-01 已上传并提交 iOS 审核，当前等待审核、通过后自动发布；GitHub Release 已公开，见 [本次发布记录](publishing/RELEASE-20261101.md)。Android 安装包和官网未更新。见 [同步记录](上游同步-20261031.md) 与 [构建记录](publishing/BUILD-20261031-18.md)。此前 1.4.0 的上传及提交留在 [历史记录](publishing/RELEASE-20261022.md)。
 
 ## 界面预览
 
@@ -65,7 +65,7 @@ flutter build apk --debug
 
 只构建 arm64 测试包：`flutter build apk --debug --target-platform=android-arm64 --split-per-abi`。ABI 拆分构建会按 Flutter 规则调整 Android versionCode，源码版本仍为 `1.5.0+18`。
 
-正式签名与发布入口见 [发布说明](publishing/README.md)。Android Release 必须提供私有上传密钥，缺少配置时拒绝构建；正式包不使用调试签名。仓库不包含私钥、生产密钥或真实令牌。当前候选源码为 1.5.0（18），本轮已导出 iOS 商店签名安装包，尚未上传或提交审核。Android 白底图标正式 APK 已更新到 [安卓下载网站](https://ovh.gamelife.life/)。Google Play 后台当前未开通，因此尚未上架。
+正式签名与发布入口见 [发布说明](publishing/README.md)。Android Release 必须提供私有上传密钥，缺少配置时拒绝构建；正式包不使用调试签名。仓库不包含私钥、生产密钥或真实令牌。当前候选源码为 1.5.0（18），本轮 iOS 安装包已上传并提交审核，尚未获批公开发行。Android 白底图标正式 APK 已更新到 [安卓下载网站](https://ovh.gamelife.life/)。Google Play 后台当前未开通，因此尚未上架。
 
 ## 测试
 

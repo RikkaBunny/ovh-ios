@@ -32,6 +32,7 @@ class Handler(review.Handler):
     def handle_request(self):
         global METRICS_MODE, METRICS_REQUESTS
         u=urlsplit(self.path); path=unquote(u.path.removeprefix('/api')); query=parse_qs(u.query)
+        if path=='/health': return self.send_json(dict(status='ok', version='0.1.37', demo=True, reviewBuild=18))
         if u.path=='/qa/availability':
             state = inventory_request(query)
             if state['mode']=='error': return self.send_json(dict(error='QA stock temporarily unavailable'),503)
@@ -54,12 +55,12 @@ class Handler(review.Handler):
                 return self.send_json(dict(success=True, **{key:rows}))
             if path.endswith('/hardware') and refresh_state['marker']:
                 return self.send_json(dict(success=True,hardware=dict(processorName='QA CPU refresh '+str(refresh_state['marker']),memorySize=dict(value=32768,unit='MB'))))
-        if path in ['/accounts','/server-control/list','/vps-control/list','/app/devices'] or path.startswith('/app/devices/') or path.endswith(('/serviceinfo','/hardware','/current-os','/ips')):
+        if path in ['/accounts','/server-control/list','/vps-control/list','/app/devices'] or path.startswith('/app/devices/') or path.endswith(('/hardware','/current-os','/ips')):
             return super().handle_request()
         body={}
         if self.command!='GET':
             size=int(self.headers.get('Content-Length',0)); body=json.loads(self.rfile.read(size) or b'{}')
-        if handle_review_compat(self, path, query, body, SUBS):
+        if handle_review_compat(self, path, query, body, SUBS, QUEUE):
             return
         if path=='/qa/refresh':
             if self.command=='POST': REFRESH.update(mode=body.get('mode','ok'), delay=min(10,max(0,body.get('delay',0))), marker=body.get('marker',0), started={}, completed={})
